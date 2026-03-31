@@ -1,0 +1,198 @@
+{
+  "navbar": {
+    "home": "Home",
+    "association": "Association",
+    "aboutUs": "About us",
+    "ourPartners": "Our partners",
+    "videoGames": "Video games",
+    "contact": "Contact",
+    "membership": "Membership"
+  },
+  "footer": {
+    "aboutUs": "About us",
+    "aboutUsDesc": "We are the game developers association of the Valparaíso region in Chile. We are game developers making opportunities happen outside of the big metropolitan areas and making game development possible for everyone in Valparaíso.",
+    "quickAccess": "Quick access",
+    "home": "Home",
+    "aboutUsLink": "About us",
+    "ourPartners": "Our partners",
+    "videoGames": "Video games",
+    "contact": "Contact",
+    "socialNetworks": "Social networks",
+    "poweredBy": "Powered by"
+  },
+  "home": {
+    "header": {
+      "title": "Making the Chilean video game Industry of Valparaíso Grow",
+      "description": "We are an association dedicated to the Chilean talent born in the Region of Valparaíso! Discover unique experiences that reflect our culture and passion for video games and more.",
+      "joinButton": "Join the Association!"
+    },
+    "videoGames": {
+      "label": "— Great Games —",
+      "title": "Take a look at some of the best games of the region!",
+      "ctaHeading": "Discover the games being born in Valparaíso",
+      "description": "Many games are being made in the Valparaíso Region. Every title tells a unique story, designed in region known for its culture, art and resilience.",
+      "seeGamesButton": "See Video Games!"
+    },
+    "successStories": {
+      "label": "— Success stories —",
+      "title": "Success stories that put Valparaíso as an important player in game development!",
+      "tormentedSouls": {
+        "title": "Tormented Souls, the comeback of classic survival horror",
+        "description": "Codeveloped by Dual Effect and Abstract Digital and published by Pqube, Tormented Souls has sold over half a million copies worldwide and has become a classic survival horror indie game. The game was completely developed in Valparaíso, including all console versions."
+      },
+      "colorbound": {
+        "title": "Colorbound, from game jam to market!",
+        "description": "Colorbound is a game being developed by Panpipe Studio and published by Whitethorn Games, it won first place the Latin American Games Showcase Game Jam of 2025 with the name Fade. After winning, the game went on to sign a deal with Whitethorn Games and is coming out in 2026!"
+      }
+    },
+    "benefits": {
+      "label": "— Benefits of being a member —",
+      "title": "Every member of the association has the following benefits",
+      "press": {
+        "title": "Press",
+        "description": "Get info that will help you know of events and opportunities"
+      },
+      "networking": {
+        "title": "Networking",
+        "description": "Connect with the main companies and professional of the region"
+      },
+      "diffusion": {
+        "title": "Diffusion",
+        "description": "Get your project known with the help of the association."
+      },
+      "education": {
+        "title": "Education",
+        "description": "Get access to capacitation for your team of awesome game developers."
+      },
+      "consultancy": {
+        "title": "Consultancy",
+        "description": "Get advice from industry leaders and our international network."
+      },
+      "events": {
+        "title": "Events",
+        "description": "Get access to meetups, showcases, workshops and much more."
+      }
+    }
+  },
+  "joinGuild": {
+    "title": "Take your company from passion to professional!",
+    "description": "Be part of our association and take your talent to the next level. Get benefits like mentorships and get access to our networks.",
+    "joinButton": "Join the association!"
+  },
+  "aboutUs": {
+    "label": "— About us —",
+    "title": "We are a game developers association dedicated to help creators in Valparaíso make the best games and be seen!",
+    "whoWeAre": {
+      "title": "Who we are",
+      "description": "We are a group of game development companies focused on making a great ecosystem for game developers in the region and investors that want to come and benefit from the talent available here. We are also working on connecting with public institutions, other associations and investors to bring games from Valparaíso to the world!"
+    },
+    "ourAssociation": {
+      "title": "Our association",
+      "description": "GDV is a space dedicated to connect, help and promote game developers of Valparaíso. Our main goal is to promote local talent, bringing resources and opportunities to those who need them. From connecting with investors to learning how to publish your first game, GDV is the place where creators can grow into successful companies."
+    },
+    "values": {
+      "title": "Values",
+      "description": "We believe that games made in Valparaíso are amazing and we want to help creators as much as we can."
+    },
+    "objectives": {
+      "title": "Objectives",
+      "description": "We want to be the best place to make games in Chile."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "We want to be one of the biggest game development regions of Latin America."
+    },
+    "members": {
+      "label": "— Association leadership —",
+      "title": "Know our board, the current spokespersons of the game developers of Valparaíso",
+      "president": "President",
+      "finances": "Finances",
+      "secretary": "Secretary"
+    }
+  },
+  "games": {
+    "header": {
+      "title": "Chilean Video Games",
+      "description": "Explore a world of Chilean video games, where creativity and innovation come together to offer unique and fun experiences.",
+      "joinButton": "Join the Guild!"
+    },
+    "pageTitle": "Games from Valparaíso",
+    "searchPlaceholder": "search for a game"
+  },
+  "partners": {
+    "label": "— Our partners —",
+    "title": "Game developers from the Valparaíso region",
+    "header": {
+      "title": "Our Partners",
+      "description": "Our association, together with great partner companies, will propel Chilean talent to the highest levels of the video game industry",
+      "joinButton": "Join the Guild!"
+    }
+  },
+  "contact": {
+    "header": {
+      "title": "Contact Us",
+      "description": "If you have questions or doubts about our association, don't hesitate to contact us through the contact form on our website, tell us your concerns in detail and we will contact you as soon as possible.",
+      "joinButton": "Join the Association!"
+    },
+    "form": {
+      "title": "Contact Form",
+      "name": "Name",
+      "email": "Email",
+      "emailPlaceholder": "example@outlook.com",
+      "subject": "Subject",
+      "message": "Message",
+      "messagePlaceholder": "Message...",
+      "requiredFields": "All fields are required...",
+      "sendButton": "Send"
+    }
+  },
+  "gameCard": {
+    "seeMore": "See more"
+  },
+  "gamesData": {
+    "tormentedSouls": {
+      "title": "Tormented Souls",
+      "description": "Classic survival horror is back! Inspired by the original Resident Evil and Alone in the Dark series, Tormented Souls modernises with a fresh twist on the fixed perspective adventure - as Caroline Walker investigates the mysterious disappearance of twin girls in a terrifying mansion-turned-hospital."
+    },
+    "colorbound": {
+      "title": "Colorbound",
+      "description": "In Colorbound, color is more than just hue. As Anku, an Aymara boy with a unique gift, you'll harness the power of color to shape the environment itself, uncovering hidden paths to navigate challenging and complex puzzles."
+    },
+    "auraEchoes": {
+      "title": "Aura: Echoes of Pain",
+      "description": "A beautiful narrative 2D puzzle platforming journey of self discovery. The world was bright and full of life, but is now dark and barren. Travel across a desolated land to find meaning through memories of a better time, when life was happier and uncover the secret that brought darkness to the land."
+    },
+    "armAround": {
+      "title": "Arm Around!",
+      "description": "You are an arm. Yes, seriously, just a disembodied arm. And to be it you have to use your mouse. Oh, and everything is physics based. If it sounds hard it's because it is. Drag, jump, punch and arm around to... wait, what kind of a mission could a disembodied arm possibly have?"
+    },
+    "spellrain": {
+      "title": "Spellrain",
+      "description": "Survive the spellrain disaster that has turned the world into a magical land filled with cute monsters. Buy spells, craft armor and upgrade your base to restore peace in SPELLRAIN"
+    },
+    "astralRot": {
+      "title": "Astral Rot",
+      "description": "Astral Rot is a fixed camera, survival horror sci-fi game by the co-creators of Tormented Souls. You play as Adler, a space mining engineer, that will have to face impossible choices in order to save his brother and anyone in the asteroid that hasn't been infected by the Stardust Disease."
+    },
+    "mixForgotten": {
+      "title": "Mix the Forgotten",
+      "description": "A narrative puzzle crafting adventure set in a world where everyone and everything is something. Through Mix the Forgotten's surreal adventure you'll befriend everyone you can with the power of crafting and help them find meaning and move on to an unknown destination."
+    },
+    "bulboBelief": {
+      "title": "Bulbo's Belief System",
+      "description": "Bulbo's Belief System is a puzzle-platformer where knowledge is both a tool and an obstacle. Bulbo believes everything he's told, letting him see, move, and interact, but he can forget! Erase walls from existence, ignore gravity and manage conflicting beliefs to solve cute mind-bending challenges."
+    },
+    "spoonfool": {
+      "title": "Spoonfool Keep your Cool",
+      "description": "The Sun is getting closer to the Earth, so it's up to Spoonfool to restore it to its original position! Can they do it? And could they collect all the Moons?"
+    },
+    "lillyWilly": {
+      "title": "Lilly & Willy",
+      "description": "Lilly & Willy is a platformer about two sibling mice trying to escape from a lab full of traps and dangers — but only if they coordinate their moves!"
+    },
+    "frogward": {
+      "title": "Frogward",
+      "description": "You're a frog that has to keep moving to avoid being eaten by a crocodile! Hop across lily pads and platforms, use your tongue to launch yourself, and find the best route to escape the scary croc."
+    }
+  }
+}

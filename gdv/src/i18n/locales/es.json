@@ -1,0 +1,198 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "association": "Gremio",
+    "aboutUs": "Sobre nosotros",
+    "ourPartners": "Nuestros socios",
+    "videoGames": "Videojuegos",
+    "contact": "Contacto",
+    "membership": "Membresía"
+  },
+  "footer": {
+    "aboutUs": "Sobre nosotros",
+    "aboutUsDesc": "Somos la asociación de desarrolladores de videojuegos de la región de Valparaíso en Chile. Somos desarrolladores de videojuegos que hacen posible oportunidades fuera de las grandes áreas metropolitanas y hacemos posible el desarrollo de videojuegos para todos en Valparaíso.",
+    "quickAccess": "Acceso rápido",
+    "home": "Inicio",
+    "aboutUsLink": "Sobre nosotros",
+    "ourPartners": "Nuestros socios",
+    "videoGames": "Videojuegos",
+    "contact": "Contacto",
+    "socialNetworks": "Nuestras redes",
+    "poweredBy": "Desarrollado por"
+  },
+  "home": {
+    "header": {
+      "title": "Haciendo Crecer la Industria de Videojuegos Chilena de Valparaíso",
+      "description": "¡Somos una asociación dedicada al talento chileno nacido en la Región de Valparaíso! Descubre experiencias únicas que reflejan nuestra cultura y pasión por los videojuegos y más.",
+      "joinButton": "¡Únete a la Asociación!"
+    },
+    "videoGames": {
+      "label": "— Grandes Juegos —",
+      "title": "¡Echa un vistazo a algunos de los mejores juegos de la región!",
+      "ctaHeading": "Descubre los juegos que nacen en Valparaíso",
+      "description": "Muchos juegos se están creando en la Región de Valparaíso. Cada título cuenta una historia única, diseñada en una región conocida por su cultura, arte y resiliencia.",
+      "seeGamesButton": "¡Ver Videojuegos!"
+    },
+    "successStories": {
+      "label": "— Historias de éxito —",
+      "title": "¡Historias de éxito que posicionan a Valparaíso como un jugador importante en el desarrollo de videojuegos!",
+      "tormentedSouls": {
+        "title": "Tormented Souls, el regreso del survival horror clásico",
+        "description": "Codesarrollado por Dual Effect y Abstract Digital y publicado por Pqube, Tormented Souls ha vendido más de medio millón de copias en todo el mundo y se ha convertido en un juego indie clásico de survival horror. El juego fue completamente desarrollado en Valparaíso, incluyendo todas las versiones de consola."
+      },
+      "colorbound": {
+        "title": "Colorbound, ¡de game jam al mercado!",
+        "description": "Colorbound es un juego desarrollado por Panpipe Studio y publicado por Whitethorn Games. Ganó el primer lugar en el Latin American Games Showcase Game Jam de 2025 con el nombre Fade. Después de ganar, el juego firmó un contrato con Whitethorn Games y ¡saldrá en 2026!"
+      }
+    },
+    "benefits": {
+      "label": "— Beneficios de ser miembro —",
+      "title": "Cada miembro de la asociación tiene los siguientes beneficios",
+      "press": {
+        "title": "Prensa",
+        "description": "Obtén información que te ayudará a conocer eventos y oportunidades"
+      },
+      "networking": {
+        "title": "Networking",
+        "description": "Conéctate con las principales empresas y profesionales de la región"
+      },
+      "diffusion": {
+        "title": "Difusión",
+        "description": "Haz conocer tu proyecto con la ayuda de la asociación."
+      },
+      "education": {
+        "title": "Educación",
+        "description": "Obtén acceso a capacitación para tu equipo de increíbles desarrolladores de videojuegos."
+      },
+      "consultancy": {
+        "title": "Consultoría",
+        "description": "Obtén asesoramiento de líderes de la industria y nuestra red internacional."
+      },
+      "events": {
+        "title": "Eventos",
+        "description": "Obtén acceso a meetups, showcases, talleres y mucho más."
+      }
+    }
+  },
+  "joinGuild": {
+    "title": "¡Lleva tu empresa de la pasión a lo profesional!",
+    "description": "Forma parte de nuestra asociación y lleva tu talento al siguiente nivel. Obtén beneficios como mentorías y accede a nuestras redes.",
+    "joinButton": "¡Únete a la asociación!"
+  },
+  "aboutUs": {
+    "label": "— Sobre nosotros —",
+    "title": "¡Somos una asociación de desarrolladores de videojuegos dedicada a ayudar a los creadores de Valparaíso a hacer los mejores juegos y ser vistos!",
+    "whoWeAre": {
+      "title": "Quiénes somos",
+      "description": "Somos un grupo de empresas de desarrollo de videojuegos enfocadas en crear un gran ecosistema para desarrolladores de juegos en la región e inversores que quieran venir y beneficiarse del talento disponible aquí. ¡También estamos trabajando en conectarnos con instituciones públicas, otras asociaciones e inversores para llevar los juegos de Valparaíso al mundo!"
+    },
+    "ourAssociation": {
+      "title": "Nuestra asociación",
+      "description": "GDV es un espacio dedicado a conectar, ayudar y promover a los desarrolladores de videojuegos de Valparaíso. Nuestro objetivo principal es promover el talento local, brindando recursos y oportunidades a quienes las necesitan. Desde conectar con inversores hasta aprender cómo publicar tu primer juego, GDV es el lugar donde los creadores pueden convertirse en empresas exitosas."
+    },
+    "values": {
+      "title": "Valores",
+      "description": "Creemos que los juegos hechos en Valparaíso son increíbles y queremos ayudar a los creadores tanto como podamos."
+    },
+    "objectives": {
+      "title": "Objetivos",
+      "description": "Queremos ser el mejor lugar para hacer juegos en Chile."
+    },
+    "vision": {
+      "title": "Visión",
+      "description": "Queremos ser una de las regiones más grandes de desarrollo de videojuegos de América Latina."
+    },
+    "members": {
+      "label": "— Liderazgo de la asociación —",
+      "title": "Conoce nuestra junta directiva, los actuales portavoces de los desarrolladores de videojuegos de Valparaíso",
+      "president": "Presidente",
+      "finances": "Finanzas",
+      "secretary": "Secretario"
+    }
+  },
+  "games": {
+    "header": {
+      "title": "Videojuegos Chilenos",
+      "description": "Explora un mundo de videojuegos chilenos, donde la creatividad y la innovación se unen para ofrecer experiencias únicas y divertidas.",
+      "joinButton": "¡Únete al Gremio!"
+    },
+    "pageTitle": "Juegos de Valparaíso",
+    "searchPlaceholder": "buscar un juego"
+  },
+  "partners": {
+    "label": "— Nuestros socios —",
+    "title": "Desarrolladores de videojuegos de la región de Valparaíso",
+    "header": {
+      "title": "Nuestros Socios",
+      "description": "Nuestra asociación, junto con grandes empresas socias, impulsará el talento chileno a los más altos niveles de la industria de los videojuegos",
+      "joinButton": "¡Únete al Gremio!"
+    }
+  },
+  "contact": {
+    "header": {
+      "title": "Contáctanos",
+      "description": "Si tienes preguntas o dudas sobre nuestra asociación, no dudes en contactarnos a través del formulario de contacto en nuestro sitio web, cuéntanos tus inquietudes en detalle y nos pondremos en contacto contigo lo antes posible.",
+      "joinButton": "¡Únete a la Asociación!"
+    },
+    "form": {
+      "title": "Formulario de Contacto",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "ejemplo@outlook.com",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "messagePlaceholder": "Mensaje...",
+      "requiredFields": "Todos los campos son obligatorios...",
+      "sendButton": "Enviar"
+    }
+  },
+  "gameCard": {
+    "seeMore": "Ver más"
+  },
+  "gamesData": {
+    "tormentedSouls": {
+      "title": "Tormented Souls",
+      "description": "¡El survival horror clásico está de vuelta! Inspirado en las series originales de Resident Evil y Alone in the Dark, Tormented Souls moderniza con un giro fresco la aventura de perspectiva fija - mientras Caroline Walker investiga la misteriosa desaparición de dos gemelas en una terrorífica mansión convertida en hospital."
+    },
+    "colorbound": {
+      "title": "Colorbound",
+      "description": "En Colorbound, el color es más que solo tono. Como Anku, un niño aymara con un don único, aprovecharás el poder del color para dar forma al entorno mismo, descubriendo caminos ocultos para navegar desafiantes y complejos puzzles."
+    },
+    "auraEchoes": {
+      "title": "Aura: Echoes of Pain",
+      "description": "Un hermoso viaje narrativo de plataformas y puzzles 2D de autodescubrimiento. El mundo era brillante y lleno de vida, pero ahora está oscuro y árido. Viaja a través de una tierra desolada para encontrar significado a través de recuerdos de un tiempo mejor, cuando la vida era más feliz, y descubre el secreto que trajo oscuridad a la tierra."
+    },
+    "armAround": {
+      "title": "Arm Around!",
+      "description": "Eres un brazo. Sí, en serio, solo un brazo sin cuerpo. Y para serlo tienes que usar tu ratón. Ah, y todo está basado en física. Si suena difícil es porque lo es. Arrastra, salta, golpea y brazea para... espera, ¿qué tipo de misión podría tener un brazo sin cuerpo?"
+    },
+    "spellrain": {
+      "title": "Spellrain",
+      "description": "Sobrevive al desastre de spellrain que ha convertido el mundo en una tierra mágica llena de monstruos adorables. Compra hechizos, fabrica armaduras y mejora tu base para restaurar la paz en SPELLRAIN"
+    },
+    "astralRot": {
+      "title": "Astral Rot",
+      "description": "Astral Rot es un juego de survival horror de ciencia ficción con cámara fija de los co-creadores de Tormented Souls. Juegas como Adler, un ingeniero minero espacial, que tendrá que enfrentar decisiones imposibles para salvar a su hermano y a cualquiera en el asteroide que no haya sido infectado por la Enfermedad del Polvo Estelar."
+    },
+    "mixForgotten": {
+      "title": "Mix the Forgotten",
+      "description": "Una aventura narrativa de puzzles y crafteo ambientada en un mundo donde todos y todo es algo. A través de la aventura surrealista de Mix the Forgotten harás amistad con todos los que puedas con el poder del crafteo y los ayudarás a encontrar significado y seguir adelante hacia un destino desconocido."
+    },
+    "bulboBelief": {
+      "title": "Bulbo's Belief System",
+      "description": "Bulbo's Belief System es un puzzle-platformer donde el conocimiento es tanto una herramienta como un obstáculo. Bulbo cree todo lo que le dicen, permitiéndole ver, moverse e interactuar, ¡pero puede olvidar! Borra paredes de la existencia, ignora la gravedad y gestiona creencias conflictivas para resolver adorables desafíos que doblan la mente."
+    },
+    "spoonfool": {
+      "title": "Spoonfool Keep your Cool",
+      "description": "¡El Sol se está acercando a la Tierra, así que depende de Spoonfool restaurarlo a su posición original! ¿Podrán hacerlo? ¿Y podrán recolectar todas las Lunas?"
+    },
+    "lillyWilly": {
+      "title": "Lilly & Willy",
+      "description": "Lilly & Willy es un plataformas sobre dos ratones hermanos que intentan escapar de un laboratorio lleno de trampas y peligros — ¡pero solo si coordinan sus movimientos!"
+    },
+    "frogward": {
+      "title": "Frogward",
+      "description": "¡Eres una rana que tiene que seguir moviéndose para evitar ser devorada por un cocodrilo! Salta entre nenúfares y plataformas, usa tu lengua para impulsarte y encuentra la mejor ruta para escapar del aterrador cocodrilo."
+    }
+  }
+}
