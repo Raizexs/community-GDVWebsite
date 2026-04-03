@@ -42,7 +42,7 @@ export const Members = () => {
       </div>
 
       <div className="flex justify-center items-center">
-        <div className="grid md:grid-cols-4 grid-cols-1 gap-16">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-16">
           {members.map((m) => (
             <div className="w-60 flex items-center text-center flex-col">
               <div className="vgvalpo-gradient p-1 rounded-full mb-4">

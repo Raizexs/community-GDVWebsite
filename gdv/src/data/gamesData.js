@@ -1,11 +1,8 @@
 import steam from "../img/plataforms/steam.png";
 import itchio from "../img/icons/itchio-icon.png";
 
-// Platform objects for itch.io games
-const itchIo = { name: itchio, url: "" }; // Using itch.io icon for itch.io games
+const itchIo = { name: itchio, url: "" };
 
-// Centralized games data for the entire website
-// Uses translation keys for title and description
 export const gamesData = [
   {
     id: "tormentedSouls",
@@ -141,7 +138,6 @@ export const gamesData = [
   },
 ];
 
-// Utility function to shuffle games array to be fair to all games
 export const getShuffledGames = (
   games = gamesData,
   numberOfGames = games.length,

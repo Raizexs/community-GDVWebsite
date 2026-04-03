@@ -5,6 +5,7 @@
     "aboutUs": "Sobre nosotros",
     "ourPartners": "Nuestros socios",
     "videoGames": "Videojuegos",
+    "bitacora": "Bitácora",
     "contact": "Contacto",
     "membership": "Membresía"
   },
@@ -72,6 +73,12 @@
         "title": "Eventos",
         "description": "Obtén acceso a meetups, showcases, talleres y mucho más."
       }
+    },
+    "bitacora": {
+      "label": "— Bitácora Institucional —",
+      "title": "Conoce las últimas actividades y avances del gremio",
+      "description": "Mantente informado sobre eventos, travesías, hitos y actividades que impulsan el desarrollo de videojuegos en Valparaíso.",
+      "seeMoreButton": "Ver toda la Bitácora"
     }
   },
   "joinGuild": {
@@ -106,7 +113,7 @@
       "label": "— Liderazgo de la asociación —",
       "title": "Conoce nuestra junta directiva, los actuales portavoces de los desarrolladores de videojuegos de Valparaíso",
       "president": "Presidente",
-      "finances": "Finanzas",
+      "finances": "Tesorero",
       "secretary": "Secretario"
     }
   },
@@ -193,6 +200,89 @@
     "frogward": {
       "title": "Frogward",
       "description": "¡Eres una rana que tiene que seguir moviéndose para evitar ser devorada por un cocodrilo! Salta entre nenúfares y plataformas, usa tu lengua para impulsarte y encuentra la mejor ruta para escapar del aterrador cocodrilo."
+    }
+  },
+  "bitacora": {
+    "header": {
+      "title": "Bitácora Institucional",
+      "description": "Registro de actividades, travesías, hitos y eventos del Gremio de Desarrolladores de Videojuegos de Valparaíso.",
+      "allCategories": "Todas",
+      "categoriesLabel": "Filtrar por:"
+    },
+    "categories": {
+      "actividades": "Actividades",
+      "travesias": "Travesías",
+      "hitos": "Hitos",
+      "eventos": "Eventos"
+    },
+    "card": {
+      "readMore": "Leer más",
+      "featuredLabel": "Destacado"
+    },
+    "detail": {
+      "backToList": "← Volver a la Bitácora",
+      "publishedOn": "Publicado el",
+      "by": "por",
+      "gallery": "Galería de imágenes",
+      "carousel": {
+        "title": "Galería de Imágenes",
+        "previousImage": "Imagen anterior",
+        "nextImage": "Siguiente imagen",
+        "goToImage": "Ir a imagen",
+        "of": "de"
+      },
+      "tags": "Etiquetas:",
+      "relatedTitle": "Publicaciones relacionadas"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página",
+      "of": "de"
+    },
+    "emptyState": {
+      "title": "No hay publicaciones disponibles",
+      "description": "Pronto compartiremos las actividades y avances del Gremio GDV.",
+      "noResults": "No se encontraron resultados para esta categoría",
+      "clearFilters": "Limpiar filtros"
+    },
+    "entries": {
+      "entry001": {
+        "title": "FECICH PLAY: Nuevas Experiencias Narrativas",
+        "subtitle": "Showcase de más de 20 videojuegos chilenos en Quilpué",
+        "summary": "Una selección de más de 20 videojuegos chilenos históricos, estrenos 2025 y demos jugables, con más de la mitad desarrollados en Valparaíso.",
+        "content": "El Gremio de Desarrolladores de Videojuegos de Valparaíso (GDV) participó en FECICH PLAY: Nuevas Experiencias Narrativas, un evento histórico para la industria regional.\n\n## Sobre el evento\n\nFECICH PLAY presentó una selección curada de más de 20 videojuegos chilenos que incluyen:\n\n- Títulos históricos de la industria nacional\n- Estrenos 2025 esperados\n- Demos jugables de proyectos en desarrollo\n- Experiencias interactivas narrativas\n\n\n**Dato destacado:** Más de la mitad de los videojuegos exhibidos fueron desarrollados en la región de Valparaíso, y tres de ellos fueron realizados específicamente en Quilpué.\n\n## Detalles del evento\n\n**Fechas:** Miércoles 28 y jueves 29 de enero de 2025\n**Lugar:** Centro Cultural Daniel de la Vega, Quilpué\n**Entrada:** Liberada, acceso por orden de llegada\n\n## Organización y colaboración\n\nEl evento fue organizado por el Centro Cultural Quilpué Audiovisual junto a la Asociación Gremial de Desarrolladores de Videojuegos de la Región de Valparaíso (GDV).\n\n**Cofinanciamiento:** Programa Estratégico Regional Valparaíso Creativo, iniciativa Corfo.\n\n**Auspicio:** Municipalidad de Quilpué\n\n**Colaboradores:**\n- GDV Valparaíso\n- AEVG Chile\n- Videojuegos Chile\n\n## Impacto regional\n\nEste evento representó una oportunidad única para visibilizar el talento local de Valparaíso y fortalecer la industria de videojuegos en la región. Los asistentes pudieron interactuar directamente con desarrolladores locales y experimentar de primera mano el nivel de producción alcanzado por los estudios de la zona.",
+        "tags": ["fecich", "quilpué", "showcase", "videojuegos chilenos", "valparaíso creativo"],
+        "seo": {
+          "title": "FECICH PLAY 2025 - GDV Valparaíso en Quilpué",
+          "description": "Showcase de más de 20 videojuegos chilenos en Quilpué, con participación destacada de desarrolladores de Valparaíso.",
+          "keywords": ["fecich play", "videojuegos valparaiso", "quilpué", "gdv", "showcase gamedev"]
+        }
+      },
+      "entry002": {
+        "title": "Level Up 2025 | Lanzamiento del Clúster de Videojuegos",
+        "subtitle": "Presentación oficial del Clúster y anuncio del Festival Valdoza",
+        "summary": "GDV participó en el lanzamiento del Clúster de videojuegos en Mendoza y el anuncio del Festival Valdoza, iniciativa binacional Mendoza-Valparaíso.",
+        "content": "El Gremio de Desarrolladores de Videojuegos de Valparaíso participó en Level Up 2025, una jornada histórica realizada en el Mendoza TIC – Parque Tecnológico de Godoy Cruz.\n\n## Un hito para la industria regional\n\nEste encuentro marcó un antes y un después para el sector, con la presentación oficial del Clúster y el anuncio del Festival \"Valdoza\", una innovadora iniciativa binacional que conectará el talento de Mendoza (Argentina) y Valparaíso (Chile).\n\n## Objetivos del Clúster\n\nLa jornada reunió a desarrolladores, estudios y referentes clave del ecosistema creativo, fortaleciendo el trabajo articulado entre el sector público y privado.\n\n\n**Hito destacado:** Se concretó la firma de un convenio marco de trabajo con el diario Los Andes, un paso estratégico para potenciar la visibilidad y el desarrollo de la industria.\n\n## Festival Valdoza\n\nEl anuncio del Festival Valdoza representa una oportunidad única de colaboración transfronteriza:\n\n- Conexión de talento entre Mendoza y Valparaíso\n- Intercambio de conocimientos y experiencias\n- Visibilización binacional de la industria\n- Generación de oportunidades comerciales\n\n## Autoridades presentes\n\nEl evento contó con la participación de autoridades clave:\n\n**Rodolfo Vargas Arizu** - Ministro de Producción\n**Emilce Vega Espinoza** - Subsecretaria de Empleo y Capacitación\n**Federico Morábito** - Presidente de la Agencia de Innovación\n**Facundo Pajot** - Coordinador de Empleabilidad\n**Paula Astiz** - Industrias Culturales del CFI\n**Carolina Suárez** - Pro Mendoza\n**Sergio Marinkovic** - Cónsul Adjunto de Chile en Mendoza\n**Diego Gareca** - Secretario de Cultura\n\n## Impacto para Valparaíso\n\nLa participación de GDV en este evento estratégico refuerza la proyección internacional del gremio y abre nuevas oportunidades de colaboración para los desarrolladores de Valparaíso.",
+        "tags": ["level up", "clúster", "valdoza", "mendoza", "binacional", "festival"],
+        "seo": {
+          "title": "Level Up 2025 - GDV en lanzamiento de Clúster y Festival Valdoza",
+          "description": "GDV participó en el lanzamiento del Clúster de videojuegos y el anuncio del Festival Valdoza.",
+          "keywords": ["level up 2025", "cluster videojuegos", "valdoza", "gdv", "mendoza valparaiso"]
+        }
+      },
+      "entry003": {
+        "title": "Webinar Internacional: Propiedad Intelectual en Videojuegos",
+        "subtitle": "Consideraciones legales y comerciales del rol de la PI en la industria",
+        "summary": "GDV participó en webinar organizado por la OMPI sobre propiedad intelectual en videojuegos, con expertos internacionales.",
+        "content": "El Gremio de Desarrolladores de Videojuegos de Valparaíso participó en el Webinar Internacional sobre Consideraciones Legales y Comerciales del Rol de la Propiedad Intelectual en los Videojuegos.\n\n## Contexto de la industria\n\nLa industria de los videojuegos es hoy uno de los motores más dinámicos de la economía creativa global. Su expansión constante, el cruce entre tecnología, creación de contenido y modelos de negocio innovadores, y la necesidad de proteger los derechos de quienes desarrollan, producen y distribuyen estas obras hacen que la propiedad intelectual (PI) sea un tema central para cualquier estudio, desarrollador o profesional del sector.\n\n## Detalles del webinar\n\n**Fecha:** Miércoles 17 de diciembre de 2024\n**Hora:** 10:00 horas (Chile)\n**Formato:** Virtual\n**Duración:** 2,5 horas\n\n**Dirigido a:**\n- Profesionales de la industria de videojuegos\n- Emprendimientos creativos\n- Estudios independientes\n- Abogados y especialistas en PI\n- Instituciones de fomento\n- Actores del ecosistema tecnocreativo\n\n## Organización\n\n**Organiza:** Organización Mundial de la Propiedad Intelectual (OMPI)\n\n**Colaboran:**\n- Subsecretaría de Relaciones Económicas Internacionales (SUBREI)\n- Dirección Nacional de Propiedad Industrial (DNPI) de Uruguay\n- Programa Estratégico Nacional de Economía Creativa: Chilecreativo\n\n## Temas y panelistas\n\n**Estatus jurídico de los videojuegos en el entorno digital**\nGaetano Dimita - Profesor Adjunto de Entretenimiento Interactivo y Derecho de la Propiedad Intelectual, Queen Mary, Universidad de Londres, Reino Unido.\n\n**Desafíos y oportunidades legales: La propiedad intelectual en los videojuegos**\nVirginia Cervieri - Socia, Cervieri Monsuarez, Montevideo, Uruguay.\n\n**Consideraciones comerciales sobre la propiedad intelectual en los videojuegos**\nAndy Ramos - Socio, Propiedad Intelectual y Tecnología, Pérez-Llorca, Madrid, España.\n\n**Desafíos y oportunidades comerciales: La propiedad intelectual en los videojuegos**\nJulio Marambio - Presidente de Videojuegos Chile, CEO de Octeto Studios.\n\n## Valor para la comunidad GDV\n\nLa participación en este webinar permitió a los miembros del gremio comprender el marco legal de protección de PI en videojuegos, conocer mejores prácticas internacionales e identificar oportunidades comerciales relacionadas con PI.",
+        "tags": ["propiedad intelectual", "webinar", "ompi", "legal", "internacional"],
+        "seo": {
+          "title": "Webinar Internacional PI en Videojuegos - GDV Valparaíso",
+          "description": "GDV participó en webinar de la OMPI sobre propiedad intelectual en videojuegos.",
+          "keywords": ["propiedad intelectual videojuegos", "ompi", "gdv", "webinar internacional"]
+        }
+      }
     }
   }
 }

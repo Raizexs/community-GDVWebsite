@@ -5,7 +5,6 @@ import { FooterComponent } from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { SociosHeader } from "./components/sections/SociosHeader";
 
-// Partner company logos
 import AbstractDigital from "../../img/partners/Logo Abstract - color horizontal.png";
 import BabyTeam from "../../img/partners/BABYTEAM.png";
 import CangrejoIdeas from "../../img/partners/logo_cangrejo_color.png";
@@ -53,7 +52,6 @@ export const SociosPage = () => {
       },
     ];
 
-    // Randomize the order to be fair to all partners
     const shuffledSocios = [...sociosList].sort(() => Math.random() - 0.5);
     setSocios(shuffledSocios);
   };

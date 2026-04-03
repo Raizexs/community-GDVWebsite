@@ -10,7 +10,6 @@ export const GamePage = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Use centralized shuffled games data to be fair to all games
   const games = getShuffledGames();
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export const GamePage = () => {
   );
 
   const getRandomGames = (gamesList) => {
-    // Games are already shuffled from getShuffledGames, just return them
     return gamesList;
   };
 

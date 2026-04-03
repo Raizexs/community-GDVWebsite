@@ -26,7 +26,17 @@ export const HomeHeader = () => {
         className={`flex justify-center md:items-center md:text-center text-white flex-col px-8`}
       >
         <h1 className="mb-5 leading-tight uppercase text-4xl md:text-6xl md:w-9/12 font-bold">
-          {t("home.header.title")}
+          {currentLang === "es" ? (
+            <>
+              Haciendo Crecer la Industria de Videojuegos Chilena de{" "}
+              <span className="text-cyan-400">Valparaíso</span>
+            </>
+          ) : (
+            <>
+              Making the Chilean video game Industry of{" "}
+              <span className="text-cyan-400">Valparaíso</span> Grow
+            </>
+          )}
         </h1>
         <p className="md:w-7/12 mb-8">{t("home.header.description")}</p>
         <Link

@@ -10,6 +10,8 @@ import { AboutusPage } from "./pages/AboutusPage/AboutusPage";
 import { ErrorPage } from "./pages/ErrorPage/ErrorPage";
 import { SociosPage } from "./pages/SociosPage/SociosPage";
 import { ContactPage } from "./pages/ContactPage/ContactPage";
+import BitacoraPage from "./pages/BitacoraPage/BitacoraPage";
+import BitacoraDetailPage from "./pages/BitacoraPage/BitacoraDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
   {
     path: "/contact",
     element: <ContactPage />,
+  },
+  {
+    path: "/bitacora",
+    element: <BitacoraPage />,
+  },
+  {
+    path: "/bitacora/:slug",
+    element: <BitacoraDetailPage />,
   },
   {
     path: "*",

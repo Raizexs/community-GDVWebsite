@@ -1,267 +1,344 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* @import 'flowbite'; */
 
 * {
-    font-family: "Nunito Sans", serif;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  font-family: "Nunito Sans", serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 :root {
-    --vgvalpo-color1: #1B182B;
-    --vgvalpo-color2: #DE6161;
-    --vgvalpo-color3: #2657EB;
-    --vgvalpo-color4: #24C5D7;
-    --vgvalpo-color5: #0084FF;
-    --vgvalpo-color6: #8882a6;
-    --tesseract-color: #FFA400;
+  --vgvalpo-color1: #1b182b;
+  --vgvalpo-color2: #de6161;
+  --vgvalpo-color3: #2657eb;
+  --vgvalpo-color4: #24c5d7;
+  --vgvalpo-color5: #0084ff;
+  --vgvalpo-color6: #8882a6;
+  --tesseract-color: #ffa400;
 }
 
-.vgvalpo-bgcolor1 { background-color: var(--vgvalpo-color1); }
-.vgvalpo-bgcolor4 { background-color: var(--vgvalpo-color4); }
+.vgvalpo-bgcolor1 {
+  background-color: var(--vgvalpo-color1);
+}
+.vgvalpo-bgcolor4 {
+  background-color: var(--vgvalpo-color4);
+}
 
-.bg-facebook { background-color: #1778F3; }
-.bg-instagram { background: linear-gradient(233deg, #7F3ACE, #D8278D , #DBA748) border-box; }
-.bg-linkedin { background-color: #0288d0; }
-.bg-youtube { background-color: #BA0100; }
-.bg-discord { background-color: #5865F2; }
-.bg-twitter-x { background-color: #ffffff; }
+.bg-facebook {
+  background-color: #1778f3;
+}
+.bg-instagram {
+  background: linear-gradient(233deg, #7f3ace, #d8278d, #dba748) border-box;
+}
+.bg-linkedin {
+  background-color: #0288d0;
+}
+.bg-youtube {
+  background-color: #ba0100;
+}
+.bg-discord {
+  background-color: #5865f2;
+}
+.bg-twitter-x {
+  background-color: #ffffff;
+}
 
-.vgvalpo-bgcolor5 { 
-    background-color: var(--vgvalpo-color5); 
-    transition: .3s;
+.vgvalpo-bgcolor5 {
+  background-color: var(--vgvalpo-color5);
+  transition: 0.3s;
 }
 
 .vgvalpo-bgcolor5:hover {
-    background-color: #0062be;
-    transition: .3s;
+  background-color: #0062be;
+  transition: 0.3s;
 }
 
-.vgvalpo-textcolor4 { color: var(--vgvalpo-color4); }
-.vgvalpo-textcolor3 { color: var(--vgvalpo-color3); }
-.vgvalpo-textcolor6 { color: var(--vgvalpo-color6); }
-.vgvalpo-textcolor5 { color: var(--vgvalpo-color5); }
-.tesseract-text { color: var(--tesseract-color); }
+.vgvalpo-textcolor4 {
+  color: var(--vgvalpo-color4);
+}
+.vgvalpo-textcolor3 {
+  color: var(--vgvalpo-color3);
+}
+.vgvalpo-textcolor6 {
+  color: var(--vgvalpo-color6);
+}
+.vgvalpo-textcolor5 {
+  color: var(--vgvalpo-color5);
+}
+.tesseract-text {
+  color: var(--tesseract-color);
+}
 
-.home-header-img { 
-    background: linear-gradient(#000000ab, #000000ab), url(../img/riosdelluvia.jpg); 
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+.home-header-img {
+  background:
+    linear-gradient(#000000ab, #000000ab), url(../img/riosdelluvia.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .videogames-header-img {
-    background: linear-gradient(#000000ab, #000000ab), url(../img/carousel-img/ss_e1edd67ea7be1dd63b9edae48dd86b32e8fd67c1.1920x1080.jpg); 
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  background:
+    linear-gradient(#000000ab, #000000ab),
+    url(../img/carousel-img/ss_e1edd67ea7be1dd63b9edae48dd86b32e8fd67c1.1920x1080.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .aboutus-header-img {
-    background: linear-gradient(#000000ab, #000000ab), url(../img/night-forest-river-with-golden-fireflies-glowing-air-vector-cartoon-illustration-neon-blue-water-flo/2306.w063.n005.152B.p1.152.jpg); 
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  background:
+    linear-gradient(#000000ab, #000000ab),
+    url(../img/night-forest-river-with-golden-fireflies-glowing-air-vector-cartoon-illustration-neon-blue-water-flo/2306.w063.n005.152B.p1.152.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .socios-header-img {
-    background: linear-gradient(#000000ab, #000000ab), url(../img/futuristic-technology-concept-gradient-background/3069841.jpg); 
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  background:
+    linear-gradient(#000000ab, #000000ab),
+    url(../img/futuristic-technology-concept-gradient-background/3069841.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .contact-header-img {
-    background: linear-gradient(#000000ab, #000000ab), url(../img/game-medieval-wooden-castle-door-prison-cartoon-background-fire-with-torch-wall-treasure-chest-gate-/2307-w064-n002-562B-p1-562.jpg); 
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  background:
+    linear-gradient(#000000ab, #000000ab),
+    url(../img/game-medieval-wooden-castle-door-prison-cartoon-background-fire-with-torch-wall-treasure-chest-gate-/2307-w064-n002-562B-p1-562.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-.vgvalpo-gradient { background: linear-gradient(to left, var(--vgvalpo-color2), var(--vgvalpo-color3)); }
-.header-screen { height: 92vh; }
-.my-border-top { border-top: solid #342f52 1px; }
-.my-border-bottom { border-bottom: solid #342f52 1px; }
-.my-border { border: solid #342f52 1px; }
-.card-shadow { box-shadow: 0 6px 12px 0 #a49dc3; }
-
-.vgvalpo-gradient-btn { 
-    background: linear-gradient(to left, #DE6161, #2657EB);
-    transition: .3s; 
+.vgvalpo-gradient {
+  background: linear-gradient(
+    to left,
+    var(--vgvalpo-color2),
+    var(--vgvalpo-color3)
+  );
 }
 
-.vgvalpo-gradient-btn:hover { 
-    background: linear-gradient(to left, #b54f4f, #214ac7);
-    transition: .3s; 
+.vgvalpo-gradient-gdv-new {
+  background: linear-gradient(
+    135deg,
+    #FF1744 0%,
+    #FFD600 25%,
+    #7C4DFF 50%,
+    #00BCD4 100%
+  );
+}
+.header-screen {
+  height: 92vh;
+}
+.my-border-top {
+  border-top: solid #342f52 1px;
+}
+.my-border-bottom {
+  border-bottom: solid #342f52 1px;
+}
+.my-border {
+  border: solid #342f52 1px;
+}
+.card-shadow {
+  box-shadow: 0 6px 12px 0 #a49dc3;
+}
+
+.vgvalpo-gradient-btn {
+  background: linear-gradient(to left, #de6161, #2657eb);
+  transition: 0.3s;
+}
+
+.vgvalpo-gradient-btn:hover {
+  background: linear-gradient(to left, #b54f4f, #214ac7);
+  transition: 0.3s;
 }
 
 .section-bg {
-    background: url(../img/background.png); 
-    background-position: left;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background: url(../img/background.png);
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .section-bg2 {
-    
-    background: url(../img/scene-with-green-field-bush/y0qg_sxld_170312.jpg); 
-    background-position: left;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background: url(../img/scene-with-green-field-bush/y0qg_sxld_170312.jpg);
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.vg-link { transition: .3s; }
+.vg-link {
+  transition: 0.3s;
+}
 
 .vg-link:hover {
-    color: var(--vgvalpo-color4);
-    transition: .3s;
+  color: var(--vgvalpo-color4);
+  transition: 0.3s;
 }
 
-.bg-game1 { 
-    background: url(../img/NocturiaGame.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-game1 {
+  background: url(../img/NocturiaGame.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-game2 { 
-    background: url(../img/game01.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-game2 {
+  background: url(../img/game01.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-game3 { 
-    background: url(../img/DandiWorldGame.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-game3 {
+  background: url(../img/DandiWorldGame.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-game4 { 
-    background: url(../img/HeadsantchersGame.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-game4 {
+  background: url(../img/HeadsantchersGame.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-/* New game-specific background images */
-.bg-tormented-souls { 
-    background: url(../img/TormentedSouls_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-tormented-souls {
+  background: url(../img/TormentedSouls_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-colorbound { 
-    background: url(../img/Colorbound_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-colorbound {
+  background: url(../img/Colorbound_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-aura-echoes { 
-    background: url(../img/AuraEchoesofPain_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-aura-echoes {
+  background: url(../img/AuraEchoesofPain_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-arm-around { 
-    background: url(../img/ArmAround_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-arm-around {
+  background: url(../img/ArmAround_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-spellrain { 
-    background: url(../img/Spellrain_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-spellrain {
+  background: url(../img/Spellrain_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-astral-rot { 
-    background: url(../img/AstralRot_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-astral-rot {
+  background: url(../img/AstralRot_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-mix-forgotten { 
-    background: url(../img/MixTheForgotten_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-mix-forgotten {
+  background: url(../img/MixTheForgotten_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-bulbo-belief { 
-    background: url(../img/BulbosBeliefSystem_header.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-bulbo-belief {
+  background: url(../img/BulbosBeliefSystem_header.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-spoonfool { 
-    background: url(../img/Spoonfool.png);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-spoonfool {
+  background: url(../img/Spoonfool.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-lilly-willy { 
-    background: url(../img/Lilly&Willy.png);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-lilly-willy {
+  background: url(../img/Lilly&Willy.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-frogward { 
-    background: url(../img/Frogward.png);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-frogward {
+  background: url(../img/Frogward.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.bg-contact { 
-    background: url(../img/team-working-animation-project.jpg);  
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+.bg-contact {
+  background: url(../img/team-working-animation-project.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .cta-games-bg {
-    background: linear-gradient(to left, #0000006e, #0000006e), url(../img/underground-cave-with-water-blue-crystals/155Z_2107.w026.n002.611B.p1.611.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 25rem;
+  background:
+    linear-gradient(to left, #0000006e, #0000006e),
+    url(../img/underground-cave-with-water-blue-crystals/155Z_2107.w026.n002.611B.p1.611.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 25rem;
 }
 
 .cta-gremio-bg {
-    background: linear-gradient(to left, #0000006e, #0000006e), url(../img/dark-rocky-cave-with-water-blue-crystals/2205_w026_n002_1963b_p1_1963.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 25rem;
+  background:
+    linear-gradient(to left, #0000006e, #0000006e),
+    url(../img/dark-rocky-cave-with-water-blue-crystals/2205_w026_n002_1963b_p1_1963.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 25rem;
 }
 
 .games-bg {
-    background:url(../img/bgwhitegradient.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background: url(../img/bgwhitegradient.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .socios-card {
-    border-top: solid 3px #ffffff;
-    border-bottom: solid 3px #ffffff;
-    transition: .3s;
+  border-top: solid 3px #ffffff;
+  border-bottom: solid 3px #ffffff;
+  transition: 0.3s;
 }
 
 .socios-card:hover {
-    border-bottom: solid 3px #2657EB;
+  border-bottom: solid 3px #2657eb;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
 }

@@ -20,11 +20,9 @@ export const VideoGames = () => {
     };
   }, [i18n]);
 
-  // Use centralized shuffled games data to be fair to all games
   const games = getShuffledGames();
 
   const getRandomGames = (gamesList, numberOfGames) => {
-    // Games are already shuffled from getShuffledGames, just slice the number needed
     return gamesList.slice(0, numberOfGames);
   };
 

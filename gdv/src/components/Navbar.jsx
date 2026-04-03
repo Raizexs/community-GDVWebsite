@@ -60,6 +60,9 @@ export const NavbarComponent = () => {
             <Link to={"/videogames"} className="text-white vg-link">
               {t("navbar.videoGames")}
             </Link>
+            <Link to={"/bitacora"} className="text-white vg-link">
+              {t("navbar.bitacora")}
+            </Link>
             <Link to={"/contact"} className="text-white vg-link">
               {t("navbar.contact")}
             </Link>
@@ -95,20 +98,31 @@ export const NavbarComponent = () => {
             className="text-white py-4 block w-full text-left flex items-center hover:bg-white/10 px-3 rounded-lg transition-colors"
           >
             {t("navbar.association")}{" "}
-            <i className={`bi bi-chevron-down text-xs ml-1 transition-transform ${isOpenOption ? "rotate-180" : ""}`}></i>
+            <i
+              className={`bi bi-chevron-down text-xs ml-1 transition-transform ${isOpenOption ? "rotate-180" : ""}`}
+            ></i>
           </button>
           {isOpenOption && (
             <div className="md:hidden z-20 w-full vgvalpo-bgcolor1 px-4 py-2 my-border rounded-md">
-              <Link to={"/aboutus"} className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg">
+              <Link
+                to={"/aboutus"}
+                className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg"
+              >
                 {t("navbar.aboutUs")}
               </Link>
-              <Link to={"/socios"} className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg">
+              <Link
+                to={"/socios"}
+                className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg"
+              >
                 {t("navbar.ourPartners")}
               </Link>
             </div>
           )}
           <Link to={"/videogames"} className="text-white py-4 block vg-link">
             {t("navbar.videoGames")}
+          </Link>
+          <Link to={"/bitacora"} className="text-white py-4 block vg-link">
+            {t("navbar.bitacora")}
           </Link>
           <Link to={"/contact"} className="text-white py-4 mb-4 block vg-link">
             {t("navbar.contact")}

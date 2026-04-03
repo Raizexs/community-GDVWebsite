@@ -5,6 +5,7 @@
     "aboutUs": "About us",
     "ourPartners": "Our partners",
     "videoGames": "Video games",
+    "bitacora": "Log",
     "contact": "Contact",
     "membership": "Membership"
   },
@@ -72,6 +73,12 @@
         "title": "Events",
         "description": "Get access to meetups, showcases, workshops and much more."
       }
+    },
+    "bitacora": {
+      "label": "— Institutional Log —",
+      "title": "Check out the latest guild activities and progress",
+      "description": "Stay informed about events, journeys, milestones and activities driving video game development in Valparaíso.",
+      "seeMoreButton": "View Full Log"
     }
   },
   "joinGuild": {
@@ -106,7 +113,7 @@
       "label": "— Association leadership —",
       "title": "Know our board, the current spokespersons of the game developers of Valparaíso",
       "president": "President",
-      "finances": "Finances",
+      "finances": "Treasurer",
       "secretary": "Secretary"
     }
   },
@@ -193,6 +200,89 @@
     "frogward": {
       "title": "Frogward",
       "description": "You're a frog that has to keep moving to avoid being eaten by a crocodile! Hop across lily pads and platforms, use your tongue to launch yourself, and find the best route to escape the scary croc."
+    }
+  },
+  "bitacora": {
+    "header": {
+      "title": "Institutional Log",
+      "description": "Record of activities, journeys, milestones and events of the Valparaíso Video Game Developers Guild.",
+      "allCategories": "All",
+      "categoriesLabel": "Filter by:"
+    },
+    "categories": {
+      "actividades": "Activities",
+      "travesias": "Journeys",
+      "hitos": "Milestones",
+      "eventos": "Events"
+    },
+    "card": {
+      "readMore": "Read more",
+      "featuredLabel": "Featured"
+    },
+    "detail": {
+      "backToList": "← Back to Log",
+      "publishedOn": "Published on",
+      "by": "by",
+      "gallery": "Image gallery",
+      "carousel": {
+        "title": "Image Gallery",
+        "previousImage": "Previous image",
+        "nextImage": "Next image",
+        "goToImage": "Go to image",
+        "of": "of"
+      },
+      "tags": "Tags:",
+      "relatedTitle": "Related posts"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "of": "of"
+    },
+    "emptyState": {
+      "title": "No posts available",
+      "description": "We will soon share the activities and progress of GDV Guild.",
+      "noResults": "No results found for this category",
+      "clearFilters": "Clear filters"
+    },
+    "entries": {
+      "entry001": {
+        "title": "FECICH PLAY: New Narrative Experiences",
+        "subtitle": "Showcase of more than 20 Chilean video games in Quilpué",
+        "summary": "A selection of more than 20 historic Chilean video games, 2025 releases and playable demos, with more than half developed in Valparaíso.",
+        "content": "The Valparaíso Video Game Developers Guild (GDV) participated in FECICH PLAY: New Narrative Experiences, a historic event for the regional industry.\n\n## About the event\n\nFECICH PLAY presented a curated selection of more than 20 Chilean video games that include:\n\n- Historic titles from the national industry\n- Anticipated 2025 releases\n- Playable demos of projects in development\n- Interactive narrative experiences\n\n\n**Highlight:** More than half of the video games on display were developed in the Valparaíso region, and three of them were made specifically in Quilpué.\n\n## Event details\n\n**Dates:** Wednesday, January 28 and Thursday, January 29, 2025\n**Location:** Daniel de la Vega Cultural Center, Quilpué\n**Admission:** Free, first come first served\n\n## Organization and collaboration\n\nThe event was organized by the Quilpué Audiovisual Cultural Center together with the Association of Video Game Developers of the Valparaíso Region (GDV).\n\n**Co-financing:** Strategic Regional Program Valparaíso Creativo, Corfo initiative.\n\n**Sponsor:** Municipality of Quilpué\n\n**Collaborators:**\n- GDV Valparaíso\n- AEVG Chile\n- Video Games Chile\n\n## Regional impact\n\nThis event represented a unique opportunity to visualize the local talent of Valparaíso and strengthen the video game industry in the region. Attendees were able to interact directly with local developers and experience firsthand the level of production achieved by studios in the area.",
+        "tags": ["fecich", "quilpué", "showcase", "chilean video games", "valparaiso creativo"],
+        "seo": {
+          "title": "FECICH PLAY 2025 - GDV Valparaíso in Quilpué",
+          "description": "Showcase of more than 20 Chilean video games in Quilpué, with featured participation of Valparaíso developers.",
+          "keywords": ["fecich play", "valparaiso video games", "quilpué", "gdv", "showcase gamedev"]
+        }
+      },
+      "entry002": {
+        "title": "Level Up 2025 | Launch of the Video Game Cluster",
+        "subtitle": "Official presentation of the Cluster and announcement of the Valdoza Festival",
+        "summary": "GDV participated in the launch of the video game cluster in Mendoza and the announcement of the Valdoza Festival, a binational Mendoza-Valparaíso initiative.",
+        "content": "The Valparaíso Video Game Developers Guild participated in Level Up 2025, a historic event held at Mendoza TIC - Godoy Cruz Technology Park.\n\n## A milestone for the regional industry\n\nThis meeting marked a before and after for the sector, with the official presentation of the Cluster and the announcement of the \"Valdoza\" Festival, an innovative binational initiative that will connect the talent of Mendoza (Argentina) and Valparaíso (Chile).\n\n## Cluster objectives\n\nThe event brought together developers, studios and key players in the creative ecosystem, strengthening articulated work between the public and private sectors.\n\n\n**Key milestone:** The signing of a framework agreement with the newspaper Los Andes was formalized, a strategic step to enhance the visibility and development of the industry.\n\n## Valdoza Festival\n\nThe announcement of the Valdoza Festival represents a unique opportunity for cross-border collaboration:\n\n- Connection of talent between Mendoza and Valparaíso\n- Exchange of knowledge and experiences\n- Binational visibility of the industry\n- Generation of commercial opportunities\n\n## Attending authorities\n\nThe event featured the participation of key authorities:\n\n**Rodolfo Vargas Arizu** - Minister of Production\n**Emilce Vega Espinoza** - Undersecretary of Employment and Training\n**Federico Morábito** - President of the Innovation Agency\n**Facundo Pajot** - Employability Coordinator\n**Paula Astiz** - Cultural Industries at CFI\n**Carolina Suárez** - Pro Mendoza\n**Sergio Marinkovic** - Deputy Consul of Chile in Mendoza\n**Diego Gareca** - Secretary of Culture\n\n## Impact for Valparaíso\n\nGDV's participation in this strategic event strengthens the international projection of the guild and opens new opportunities for collaboration for Valparaíso developers.",
+        "tags": ["level up", "cluster", "valdoza", "mendoza", "binational", "festival"],
+        "seo": {
+          "title": "Level Up 2025 - GDV in Cluster Launch and Valdoza Festival",
+          "description": "GDV participated in the launch of the video game cluster and the announcement of the Valdoza Festival.",
+          "keywords": ["level up 2025", "video game cluster", "valdoza", "gdv", "mendoza valparaiso"]
+        }
+      },
+      "entry003": {
+        "title": "International Webinar: Intellectual Property in Video Games",
+        "subtitle": "Legal and commercial considerations of IP's role in the industry",
+        "summary": "GDV participated in a webinar organized by the WIPO on intellectual property in video games, with international experts.",
+        "content": "The Valparaíso Video Game Developers Guild participated in the International Webinar on Legal and Commercial Considerations of the Role of Intellectual Property in Video Games.\n\n## Industry context\n\nThe video game industry is today one of the most dynamic engines of the global creative economy. Its constant expansion, the intersection between technology, content creation and innovative business models, and the need to protect the rights of those who develop, produce and distribute these works make intellectual property (IP) a central issue for any studio, developer or industry professional.\n\n## Webinar details\n\n**Date:** Wednesday, December 17, 2024\n**Time:** 10:00 AM (Chile time)\n**Format:** Virtual\n**Duration:** 2.5 hours\n\n**Targeted at:**\n- Video game industry professionals\n- Creative ventures\n- Independent studios\n- Lawyers and IP specialists\n- Development institutions\n- Actors in the tech-creative ecosystem\n\n## Organization\n\n**Organized by:** World Intellectual Property Organization (WIPO)\n\n**Collaborating organizations:**\n- Undersecretariat of International Economic Relations (SUBREI)\n- National Directorate of Industrial Property (DNPI) of Uruguay\n- National Strategic Program of Creative Economy: Chilecreativo\n\n## Topics and panelists\n\n**Legal status of video games in the digital environment**\nGaetano Dimita - Assistant Professor of Interactive Entertainment and Intellectual Property Law, Queen Mary, University of London, United Kingdom.\n\n**Challenges and legal opportunities: Intellectual property in video games**\nVirginia Cervieri - Partner, Cervieri Monsuarez, Montevideo, Uruguay.\n\n**Commercial considerations on intellectual property in video games**\nAndy Ramos - Partner, Intellectual Property and Technology, Pérez-Llorca, Madrid, Spain.\n\n**Challenges and commercial opportunities: Intellectual property in video games**\nJulio Marambio - President of Video Games Chile, CEO of Octeto Studios.\n\n## Value for the GDV community\n\nParticipation in this webinar allowed guild members to understand the legal framework for IP protection in video games, learn international best practices and identify business opportunities related to IP.",
+        "tags": ["intellectual property", "webinar", "wipo", "legal", "international"],
+        "seo": {
+          "title": "International Webinar on IP in Video Games - GDV Valparaíso",
+          "description": "GDV participated in a WIPO webinar on intellectual property in video games.",
+          "keywords": ["intellectual property video games", "wipo", "gdv", "international webinar"]
+        }
+      }
     }
   }
 }
