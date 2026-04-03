@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavbarComponent } from "../../components/Navbar";
 import { FooterComponent } from "../../components/Footer";
 import { VideoGames } from "./components/sections/VideoGames";
@@ -7,11 +7,10 @@ import { SuccessStoriesSection } from "./components/sections/SuccessStoriesSecti
 import { Benefits } from "./components/sections/Benefits";
 import { BitacoraSection } from "./components/sections/BitacoraSection";
 import { Jointheguild } from "../../components/Jointheguild";
+import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 
 export const HomePage = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollRestoration();
 
   return (
     <div className="relative">
