@@ -13,17 +13,24 @@ export const ContactPage = () => {
     email: "",
     subject: "",
     message: "",
+    website: "",
   });
 
   const contactApiUrl =
-    process.env.REACT_APP_CONTACT_API_URL || "http://localhost:8080/api/contact";
+    process.env.REACT_APP_CONTACT_API_URL ||
+    "http://localhost:8080/api/contact";
   const turnstileSiteKey = process.env.REACT_APP_TURNSTILE_SITE_KEY || "";
-  const turnstileTheme = (process.env.REACT_APP_TURNSTILE_THEME || "light").toLowerCase();
+  const turnstileTheme = (
+    process.env.REACT_APP_TURNSTILE_THEME || "light"
+  ).toLowerCase();
+  const turnstileAction =
+    process.env.REACT_APP_TURNSTILE_ACTION || "contact_form";
   const captchaTheme = ["light", "dark", "auto"].includes(turnstileTheme)
     ? turnstileTheme
     : "light";
   const captchaEnabled = Boolean(turnstileSiteKey);
   const widgetIdRef = useRef(null);
+  const formStartedAtRef = useRef(Date.now());
   const captchaScriptId = "cf-turnstile-script";
   const captchaContainerId = "turnstile-widget";
 
@@ -72,14 +79,24 @@ export const ContactPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, subject, message, captchaToken }),
+        body: JSON.stringify({
+          name,
+          email,
+          subject,
+          message,
+          captchaToken,
+          website: formData.website,
+          formStartedAt: formStartedAtRef.current,
+        }),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
         const errorMessage =
-          result?.error || result?.details?.error || t("contact.form.submitError");
+          result?.error ||
+          result?.details?.error ||
+          t("contact.form.submitError");
         throw new Error(errorMessage);
       }
 
@@ -87,7 +104,14 @@ export const ContactPage = () => {
         type: "success",
         message: t("contact.form.success"),
       });
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: "",
+      });
+      formStartedAtRef.current = Date.now();
       if (captchaEnabled) {
         resetCaptcha();
       }
@@ -110,13 +134,18 @@ export const ContactPage = () => {
 
     const renderCaptcha = () => {
       const captchaContainer = document.getElementById(captchaContainerId);
-      if (!window.turnstile || !captchaContainer || widgetIdRef.current !== null) {
+      if (
+        !window.turnstile ||
+        !captchaContainer ||
+        widgetIdRef.current !== null
+      ) {
         return;
       }
 
       widgetIdRef.current = window.turnstile.render(`#${captchaContainerId}`, {
         sitekey: turnstileSiteKey,
         theme: captchaTheme,
+        action: turnstileAction,
         callback: (token) => setCaptchaToken(token || ""),
         "expired-callback": () => setCaptchaToken(""),
         "error-callback": () => {
@@ -142,7 +171,8 @@ export const ContactPage = () => {
 
     const script = document.createElement("script");
     script.id = captchaScriptId;
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.src =
+      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
     script.async = true;
     script.defer = true;
     script.addEventListener("load", renderCaptcha);
@@ -151,7 +181,7 @@ export const ContactPage = () => {
     return () => {
       script.removeEventListener("load", renderCaptcha);
     };
-  }, [captchaEnabled, captchaTheme, t, turnstileSiteKey]);
+  }, [captchaEnabled, captchaTheme, t, turnstileAction, turnstileSiteKey]);
 
   return (
     <div className="">
@@ -168,7 +198,10 @@ export const ContactPage = () => {
                 {t("contact.form.title")}
               </p>
               <div className="mb-3">
-                <label htmlFor="name" className="block mb-2 text-base font-bold">
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-base font-bold"
+                >
                   {t("contact.form.name")}
                 </label>
                 <input
@@ -182,7 +215,10 @@ export const ContactPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="email" className="block mb-2 text-base font-bold">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-base font-bold"
+                >
                   {t("contact.form.email")}
                 </label>
                 <input
@@ -197,7 +233,10 @@ export const ContactPage = () => {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="subject" className="block mb-2 text-base font-bold">
+                <label
+                  htmlFor="subject"
+                  className="block mb-2 text-base font-bold"
+                >
                   {t("contact.form.subject")}
                 </label>
                 <input
@@ -211,7 +250,10 @@ export const ContactPage = () => {
                 />
               </div>
               <div className="mb-2">
-                <label htmlFor="message" className="block mb-2 text-base font-bold">
+                <label
+                  htmlFor="message"
+                  className="block mb-2 text-base font-bold"
+                >
                   {t("contact.form.message")}
                 </label>
                 <textarea
@@ -224,6 +266,18 @@ export const ContactPage = () => {
                   placeholder={t("contact.form.messagePlaceholder")}
                   required
                 ></textarea>
+              </div>
+              <div className="hidden" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
               </div>
 
               {alert.message ? (

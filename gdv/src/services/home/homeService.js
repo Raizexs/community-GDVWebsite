@@ -62,7 +62,9 @@ function localizedText(raw, esCandidates, enCandidates) {
 
 function isTitleLike(value, candidates) {
   const normalized = normalizeName(value);
-  return candidates.some((candidate) => normalized.includes(normalizeName(candidate)));
+  return candidates.some((candidate) =>
+    normalized.includes(normalizeName(candidate)),
+  );
 }
 
 function splitList(value) {
@@ -108,22 +110,28 @@ function normalizeMediaSource(rawValue, cacheToken) {
 
   let value = mediaRaw.trim();
   if (!value) return null;
+  if (value.toLowerCase() === "null") return null;
 
   value = value.replace(/\s+null$/i, "");
+  if (!value || value.toLowerCase() === "null") return null;
   if (value.startsWith("data:")) return value;
   if (value.includes(";base64,")) {
-    return value.startsWith("image/") ? `data:${value}` : `data:image/png;${value}`;
+    return value.startsWith("image/")
+      ? `data:${value}`
+      : `data:image/png;${value}`;
   }
 
   if (/^https?:\/\//i.test(value)) {
     const proxyBase = getHomeProxyBaseUrl();
-    const suffix = cacheToken ? `&v=${encodeURIComponent(String(cacheToken))}` : "";
+    const suffix = cacheToken
+      ? `&v=${encodeURIComponent(String(cacheToken))}`
+      : "";
     return proxyBase
       ? `${proxyBase}/api/images/download?url=${encodeURIComponent(value)}${suffix}`
       : `/api/images/download?url=${encodeURIComponent(value)}${suffix}`;
   }
 
-  return value;
+  return null;
 }
 
 function normalizeStorePlatforms(value) {
@@ -131,7 +139,8 @@ function normalizeStorePlatforms(value) {
     return value
       .map((item) => {
         if (typeof item === "string") return item;
-        if (item && typeof item === "object") return item.Record || item.Name || item.name || "";
+        if (item && typeof item === "object")
+          return item.Record || item.Name || item.name || "";
         return "";
       })
       .filter(Boolean);
@@ -140,9 +149,16 @@ function normalizeStorePlatforms(value) {
 }
 
 function extractGameImageUrl(rawGame) {
-  const rawImage = getField(rawGame, ["ImageGame", "imageGame", "Image", "image"]);
+  const rawImage = getField(rawGame, [
+    "ImageGame",
+    "imageGame",
+    "Image",
+    "image",
+  ]);
   if (Array.isArray(rawImage) && rawImage.length) {
-    return rawImage[0]?.DownloadUrl || rawImage[0]?.BlobUrl || rawImage[0] || null;
+    return (
+      rawImage[0]?.DownloadUrl || rawImage[0]?.BlobUrl || rawImage[0] || null
+    );
   }
   return rawImage;
 }
@@ -154,7 +170,11 @@ function mapGamesBySlug(games) {
 function mapPlatformsByName(platformRows, cacheToken) {
   const map = new Map();
   platformRows.forEach((row) => {
-    const platformName = getField(row, ["videogames_platform", "platform", "name"]);
+    const platformName = getField(row, [
+      "videogames_platform",
+      "platform",
+      "name",
+    ]);
     const key = normalizeName(platformName);
     if (!key) return;
     if (map.has(key)) return;
@@ -176,7 +196,9 @@ function mapStoreUrlByPlatform(storeRows) {
   storeRows.forEach((store) => {
     const url = getField(store, ["store_url", "url"]);
     if (!url) return;
-    const platforms = normalizeStorePlatforms(getField(store, ["platforms", "platform"]));
+    const platforms = normalizeStorePlatforms(
+      getField(store, ["platforms", "platform"]),
+    );
     platforms.forEach((platform) => {
       const key = normalizeName(platform);
       if (key && !map.has(key)) {
@@ -187,12 +209,19 @@ function mapStoreUrlByPlatform(storeRows) {
   return map;
 }
 
-function buildPlatformsForStory(platformNames, platformMeta, storeUrlByPlatform, storyStoreRows) {
+function buildPlatformsForStory(
+  platformNames,
+  platformMeta,
+  storeUrlByPlatform,
+  storyStoreRows,
+) {
   const storyStoreUrlByPlatform = new Map();
   storyStoreRows.forEach((store) => {
     const url = getField(store, ["store_url", "url"]);
     if (!url) return;
-    const platforms = normalizeStorePlatforms(getField(store, ["platforms", "platform"]));
+    const platforms = normalizeStorePlatforms(
+      getField(store, ["platforms", "platform"]),
+    );
     platforms.forEach((platformName) => {
       const key = normalizeName(platformName);
       if (key && !storyStoreUrlByPlatform.has(key)) {
@@ -206,7 +235,11 @@ function buildPlatformsForStory(platformNames, platformMeta, storeUrlByPlatform,
     .map((platformName, idx) => {
       const key = normalizeName(platformName);
       const meta = platformMeta.get(key);
-      const url = storyStoreUrlByPlatform.get(key) || storeUrlByPlatform.get(key) || meta?.defaultUrl || "";
+      const url =
+        storyStoreUrlByPlatform.get(key) ||
+        storeUrlByPlatform.get(key) ||
+        meta?.defaultUrl ||
+        "";
       const iconUrl = meta?.iconUrl || null;
       if (!iconUrl || !url) return null;
       return {
@@ -223,7 +256,11 @@ function buildPlatformsForStory(platformNames, platformMeta, storeUrlByPlatform,
 
 function normalizeHomeRows(homeRows, cacheToken) {
   return homeRows.map((row, idx) => ({
-    title: localizedText(row, ["Title (ES)", "title (es)"], ["Title (EN)", "title (en)"]),
+    title: localizedText(
+      row,
+      ["Title (ES)", "title (es)"],
+      ["Title (EN)", "title (en)"],
+    ),
     description: localizedText(
       row,
       ["Description (ES)", "description (es)"],
@@ -231,44 +268,106 @@ function normalizeHomeRows(homeRows, cacheToken) {
     ),
     icon: normalizeMediaSource(getField(row, ["Icon", "icon"]), cacheToken),
     videogameSlug: getField(row, ["VIDEOGAMES", "videogames"]),
-    platforms: splitList(getField(row, ["VIDEOGAMES-PLATFORMS", "VIDEOGAMES_PLATFORM"])),
-    stores: splitList(getField(row, ["VIDEOGAMES-STORES", "VIDEOGAMES_STORES"])),
+    platforms: splitList(
+      getField(row, ["VIDEOGAMES-PLATFORMS", "VIDEOGAMES_PLATFORM"]),
+    ),
+    stores: splitList(
+      getField(row, ["VIDEOGAMES-STORES", "VIDEOGAMES_STORES"]),
+    ),
     _order: idx,
   }));
 }
 
 function normalizeSectionRows(sectionRows, cacheToken) {
   return sectionRows.map((row, idx) => ({
-    title: localizedText(row, ["Title (ES)", "title (es)"], ["Title (EN)", "title (en)"]),
+    title: localizedText(
+      row,
+      ["Title (ES)", "title (es)"],
+      ["Title (EN)", "title (en)"],
+    ),
     description: localizedText(
       row,
       ["Description (ES)", "description (es)"],
       ["Description (EN)", "description (en)"],
     ),
     url: getField(row, ["URL", "Url", "url"]),
-    hero: normalizeMediaSource(getField(row, ["Hero", "hero", "Image", "image"]), cacheToken),
+    hero: normalizeMediaSource(
+      getField(row, [
+        "Hero",
+        "hero",
+        "HERO",
+        "Hero Image",
+        "hero image",
+        "Image Hero",
+        "IMAGE HERO",
+        "Image",
+        "image",
+        "IMAGE",
+        "Background",
+        "background",
+        "Banner",
+        "banner",
+      ]),
+      cacheToken,
+    ),
     _order: idx,
   }));
 }
 
-function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, gamesRows, platformRows, storeRows, cacheToken }) {
+function pickSectionByTitle(sections, candidates) {
+  return (
+    sections.find((section) =>
+      isTitleLike(section?.title?.es || section?.title?.en, candidates),
+    ) || null
+  );
+}
+
+function buildHomeContent({
+  homeRows,
+  sectionRows,
+  quickAccessRows,
+  socialRows,
+  gamesRows,
+  platformRows,
+  storeRows,
+  cacheToken,
+}) {
   const home = normalizeHomeRows(homeRows, cacheToken);
   const sections = normalizeSectionRows(sectionRows, cacheToken);
   const quickAccess = quickAccessRows.map((row) => ({
-    title: localizedText(row, ["Title (ES)", "title (es)"], ["Title (EN)", "title (en)"]),
-    url: getField(row, ["URL", "Url", "url"]),
-  }));
-  const social = socialRows.map((row, idx) => ({
-    name: getField(row, ["social_media", "Social Media", "Name", "name"]),
-    description: localizedText(
+    title: localizedText(
       row,
-      ["Description (ES)", "description (es)", "Content (ES)", "content (es)"],
-      ["Description (EN)", "description (en)", "Content (EN)", "content (en)"],
+      ["Title (ES)", "title (es)"],
+      ["Title (EN)", "title (en)"],
     ),
     url: getField(row, ["URL", "Url", "url"]),
-    iconUrl: normalizeMediaSource(getField(row, ["Icon", "icon"]), cacheToken),
-    _key: `social-${idx}`,
-  })).filter((item) => item.name || item.url);
+  }));
+  const social = socialRows
+    .map((row, idx) => ({
+      name: getField(row, ["social_media", "Social Media", "Name", "name"]),
+      description: localizedText(
+        row,
+        [
+          "Description (ES)",
+          "description (es)",
+          "Content (ES)",
+          "content (es)",
+        ],
+        [
+          "Description (EN)",
+          "description (en)",
+          "Content (EN)",
+          "content (en)",
+        ],
+      ),
+      url: getField(row, ["URL", "Url", "url"]),
+      iconUrl: normalizeMediaSource(
+        getField(row, ["Icon", "icon"]),
+        cacheToken,
+      ),
+      _key: `social-${idx}`,
+    }))
+    .filter((item) => item.name || item.url);
 
   const gamesBySlug = mapGamesBySlug(gamesRows);
   const storesByKey = new Map(
@@ -307,7 +406,12 @@ function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, 
   const aboutUsRow =
     aboutUsSection ||
     home.find((row) =>
-      isTitleLike(row.title.es || row.title.en, ["sobre nosotros", "about us", "aboutus", "nosotros"]),
+      isTitleLike(row.title.es || row.title.en, [
+        "sobre nosotros",
+        "about us",
+        "aboutus",
+        "nosotros",
+      ]),
     ) ||
     null;
   const benefitItems = home.filter((row) => row.icon && !row.videogameSlug);
@@ -322,7 +426,11 @@ function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, 
         .filter(Boolean);
       successStories.push({
         title: localizedText(game, ["Title (ES)"], ["Title (EN)"]),
-        description: localizedText(game, ["Description (ES)"], ["Description (EN)"]),
+        description: localizedText(
+          game,
+          ["Description (ES)"],
+          ["Description (EN)"],
+        ),
         imageUrl: normalizeMediaSource(extractGameImageUrl(game), cacheToken),
         link: getField(game, ["Ver más (URL)", "URL", "link"]),
         platforms: buildPlatformsForStory(
@@ -336,7 +444,9 @@ function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, 
   }
 
   if (!successStories.length) {
-    const fallbackStoryRows = home.filter((row) => row.videogameSlug).slice(0, 2);
+    const fallbackStoryRows = home
+      .filter((row) => row.videogameSlug)
+      .slice(0, 2);
     fallbackStoryRows.forEach((storyRow) => {
       const game = gamesBySlug.get(normalizeName(storyRow.videogameSlug));
       if (!game) return;
@@ -345,7 +455,11 @@ function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, 
         .filter(Boolean);
       successStories.push({
         title: localizedText(game, ["Title (ES)"], ["Title (EN)"]),
-        description: localizedText(game, ["Description (ES)"], ["Description (EN)"]),
+        description: localizedText(
+          game,
+          ["Description (ES)"],
+          ["Description (EN)"],
+        ),
         imageUrl: normalizeMediaSource(extractGameImageUrl(game), cacheToken),
         link: getField(game, ["Ver más (URL)", "URL", "link"]),
         platforms: buildPlatformsForStory(
@@ -358,9 +472,36 @@ function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, 
     });
   }
 
-  const hero = sections[0] || {};
-  const gamesCta = sections[1] || {};
-  const joinCta = sections[2] || {};
+  const heroByTitle = pickSectionByTitle(sections, [
+    "hero",
+    "header",
+    "inicio",
+    "home",
+  ]);
+  const heroByImage =
+    sections.find((section) => Boolean(section?.hero)) || null;
+  const hero = heroByTitle || heroByImage || sections[0] || {};
+  const remainingSections = sections.filter((section) => section !== hero);
+
+  const gamesCtaByTitle = pickSectionByTitle(remainingSections, [
+    "grandes juegos",
+    "great games",
+    "games",
+    "videojuegos",
+  ]);
+  const joinCtaByTitle = pickSectionByTitle(remainingSections, [
+    "unete",
+    "únete",
+    "join",
+    "guild",
+    "gremio",
+  ]);
+
+  const gamesCta = gamesCtaByTitle || remainingSections[0] || {};
+  const joinCta =
+    joinCtaByTitle ||
+    remainingSections.find((section) => section !== gamesCta) ||
+    {};
   const quickAccessHeader = quickAccess.find((row) => !row.url) || null;
 
   return {
@@ -381,7 +522,9 @@ function buildHomeContent({ homeRows, sectionRows, quickAccessRows, socialRows, 
 }
 
 export async function fetchHomeContent({ force = false } = {}) {
-  const provider = (process.env.REACT_APP_PRAXSUITE_HOME_PROVIDER || "static").toLowerCase();
+  const provider = (
+    process.env.REACT_APP_PRAXSUITE_HOME_PROVIDER || "static"
+  ).toLowerCase();
   if (provider !== "praxsuite") {
     cachedHomeContent = null;
     pendingHomeRequest = null;
@@ -400,7 +543,9 @@ export async function fetchHomeContent({ force = false } = {}) {
     try {
       const cacheToken = Date.now();
       const proxyBase = getHomeProxyBaseUrl();
-      const homeApiUrl = proxyBase ? `${proxyBase}/api/home?v=${cacheToken}` : `/api/home?v=${cacheToken}`;
+      const homeApiUrl = proxyBase
+        ? `${proxyBase}/api/home?v=${cacheToken}`
+        : `/api/home?v=${cacheToken}`;
 
       const response = await fetch(homeApiUrl, { cache: "no-store" });
       if (!response.ok) {
@@ -422,7 +567,10 @@ export async function fetchHomeContent({ force = false } = {}) {
       cachedHomeContent = content;
       return content;
     } catch (error) {
-      console.warn("Home backend fetch failed, using i18n/static fallback.", error);
+      console.warn(
+        "Home backend fetch failed, using i18n/static fallback.",
+        error,
+      );
       return cachedHomeContent;
     } finally {
       pendingHomeRequest = null;

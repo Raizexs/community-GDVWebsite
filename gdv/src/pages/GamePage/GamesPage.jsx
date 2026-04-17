@@ -11,31 +11,22 @@ export const GamePage = () => {
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [games, setGames] = useState(() => getCachedGames() || []);
-  const [syncState, setSyncState] = useState("idle");
-  const [lastSyncAt, setLastSyncAt] = useState(null);
+  const [syncState, setSyncState] = useState("syncing");
 
-  // Auto-fetch games every 3 seconds
   useEffect(() => {
     const loadGames = async () => {
       setSyncState("syncing");
       try {
-        const result = await fetchGames({ force: true });
+        const result = await fetchGames();
         setGames(result);
-        setLastSyncAt(new Date());
-        setSyncState("ok");
+        setSyncState("idle");
       } catch (error) {
         console.error("Error loading games:", error);
         setSyncState("error");
       }
     };
 
-    // Load immediately on mount
     loadGames();
-
-    // Then poll every 3 seconds
-    const interval = setInterval(loadGames, 3000);
-
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -48,7 +39,9 @@ export const GamePage = () => {
     return games.filter((game) => {
       const localizedTitle = resolveLocalizedValue(game.title, i18n.language);
       const title =
-        (game.title && typeof game.title === "object" ? game.title[i18n.language] || game.title.es : "") ||
+        (game.title && typeof game.title === "object"
+          ? game.title[i18n.language] || game.title.es
+          : "") ||
         localizedTitle ||
         (game.titleKey ? t(game.titleKey) : "");
 
@@ -91,30 +84,25 @@ export const GamePage = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center">
-            <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span
-                  className={`inline-block h-2.5 w-2.5 rounded-full ${
-                    syncState === "syncing"
-                      ? "bg-yellow-500 animate-pulse"
-                      : syncState === "ok"
-                        ? "bg-green-500"
-                        : syncState === "error"
-                          ? "bg-red-500"
-                          : "bg-gray-400"
-                  }`}
-                ></span>
-                <span className="text-gray-700">
-                  {syncState === "syncing" && "Sincronizando cambios de PraxSuite..."}
-                  {syncState === "ok" && "Cambios de PraxSuite sincronizados"}
-                  {syncState === "error" && "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
-                  {syncState === "idle" && "Esperando sincronización inicial..."}
-                </span>
+            {syncState !== "idle" ? (
+              <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`inline-block h-2.5 w-2.5 rounded-full ${
+                      syncState === "syncing"
+                        ? "bg-yellow-500 animate-pulse"
+                        : "bg-red-500"
+                    }`}
+                  ></span>
+                  <span className="text-gray-700">
+                    {syncState === "syncing" &&
+                      "Sincronizando cambios de PraxSuite..."}
+                    {syncState === "error" &&
+                      "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
+                  </span>
+                </div>
               </div>
-              <span className="text-gray-500 text-xs">
-                {lastSyncAt ? `Última sync: ${lastSyncAt.toLocaleTimeString()}` : "Sin sync aún"}
-              </span>
-            </div>
+            ) : null}
             <div className="grid md:grid-cols-4 grid-cols-1 gap-7">
               {randomGames.map((g) => (
                 <GameCard

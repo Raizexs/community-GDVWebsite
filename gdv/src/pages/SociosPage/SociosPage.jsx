@@ -8,8 +8,7 @@ import { fetchPartners } from "../../services/partners/partnersService";
 export const SociosPage = () => {
   const { t } = useTranslation();
   const [socios, setSocios] = useState([]);
-  const [syncState, setSyncState] = useState("idle");
-  const [lastSyncAt, setLastSyncAt] = useState(null);
+  const [syncState, setSyncState] = useState("syncing");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -18,11 +17,10 @@ export const SociosPage = () => {
     const loadPartners = async () => {
       setSyncState("syncing");
       try {
-        const partners = await fetchPartners({ force: true });
+        const partners = await fetchPartners();
         if (!mounted) return;
         setSocios([...partners].sort(() => Math.random() - 0.5));
-        setLastSyncAt(new Date());
-        setSyncState("ok");
+        setSyncState("idle");
       } catch (error) {
         console.error("Error loading partners:", error);
         if (!mounted) return;
@@ -31,11 +29,9 @@ export const SociosPage = () => {
     };
 
     loadPartners();
-    const interval = setInterval(loadPartners, 3000);
 
     return () => {
       mounted = false;
-      clearInterval(interval);
     };
   }, []);
 
@@ -59,30 +55,25 @@ export const SociosPage = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center">
-            <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span
-                  className={`inline-block h-2.5 w-2.5 rounded-full ${
-                    syncState === "syncing"
-                      ? "bg-yellow-500 animate-pulse"
-                      : syncState === "ok"
-                        ? "bg-green-500"
-                        : syncState === "error"
-                          ? "bg-red-500"
-                          : "bg-gray-400"
-                  }`}
-                ></span>
-                <span className="text-gray-700">
-                  {syncState === "syncing" && "Sincronizando cambios de PraxSuite..."}
-                  {syncState === "ok" && "Cambios de PraxSuite sincronizados"}
-                  {syncState === "error" && "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
-                  {syncState === "idle" && "Esperando sincronización inicial..."}
-                </span>
+            {syncState !== "idle" ? (
+              <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`inline-block h-2.5 w-2.5 rounded-full ${
+                      syncState === "syncing"
+                        ? "bg-yellow-500 animate-pulse"
+                        : "bg-red-500"
+                    }`}
+                  ></span>
+                  <span className="text-gray-700">
+                    {syncState === "syncing" &&
+                      "Sincronizando cambios de PraxSuite..."}
+                    {syncState === "error" &&
+                      "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
+                  </span>
+                </div>
               </div>
-              <span className="text-gray-500 text-xs">
-                {lastSyncAt ? `Última sync: ${lastSyncAt.toLocaleTimeString()}` : "Sin sync aún"}
-              </span>
-            </div>
+            ) : null}
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-7">
               {socios.map((s) => (
                 <a

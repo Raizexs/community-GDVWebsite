@@ -30,6 +30,12 @@ function buildStaticGamesFallback() {
   }));
 }
 
+function getGamesProvider() {
+  return (
+    process.env.REACT_APP_PRAXSUITE_GAMES_PROVIDER || "static"
+  ).toLowerCase();
+}
+
 function getGamesProxyBaseUrl() {
   return (process.env.REACT_APP_GAMES_PROXY_URL || "").replace(/\/$/, "");
 }
@@ -43,7 +49,8 @@ function normalizeName(value) {
 }
 
 function splitList(value) {
-  if (Array.isArray(value)) return value.map((item) => String(item || "").trim()).filter(Boolean);
+  if (Array.isArray(value))
+    return value.map((item) => String(item || "").trim()).filter(Boolean);
   return String(value || "")
     .split(",")
     .map((item) => item.trim())
@@ -91,7 +98,9 @@ function normalizeMediaSource(rawValue, cacheToken) {
 
   if (value.startsWith("data:")) return value;
   if (value.includes(";base64,")) {
-    return value.startsWith("image/") ? `data:${value}` : `data:image/png;${value}`;
+    return value.startsWith("image/")
+      ? `data:${value}`
+      : `data:image/png;${value}`;
   }
 
   // Bypass para Blob URLs estáticos
@@ -101,7 +110,9 @@ function normalizeMediaSource(rawValue, cacheToken) {
 
   if (/^https?:\/\//i.test(value)) {
     const proxyBase = getGamesProxyBaseUrl();
-    const suffix = cacheToken ? `&v=${encodeURIComponent(String(cacheToken))}` : "";
+    const suffix = cacheToken
+      ? `&v=${encodeURIComponent(String(cacheToken))}`
+      : "";
     return proxyBase
       ? `${proxyBase}/api/images/download?url=${encodeURIComponent(value)}${suffix}`
       : `/api/images/download?url=${encodeURIComponent(value)}${suffix}`;
@@ -121,18 +132,26 @@ function normalizeGame(raw, cacheToken) {
     : Array.isArray(raw?.imageGame)
       ? raw.imageGame
       : [];
-  const imageFromArray = imageGameArray[0]?.DownloadUrl || imageGameArray[0]?.BlobUrl;
-  const imageFromField = raw?.ImageGame || raw?.imageGame || raw?.Image || raw?.image;
+  const imageFromArray =
+    imageGameArray[0]?.DownloadUrl || imageGameArray[0]?.BlobUrl;
+  const imageFromField =
+    raw?.ImageGame || raw?.imageGame || raw?.Image || raw?.image;
   const mainImageUrlRaw = imageFromArray || imageFromField;
   const mainImageUrl = normalizeMediaSource(mainImageUrlRaw, cacheToken);
 
-  const platformImages = Array.isArray(raw?.ImagePlatform) ? raw.ImagePlatform : [];
+  const platformImages = Array.isArray(raw?.ImagePlatform)
+    ? raw.ImagePlatform
+    : [];
   const platformNames = Array.isArray(raw?.Platforms)
     ? raw.Platforms
     : typeof raw?.Platforms === "string"
-      ? raw.Platforms.split(",").map((v) => v.trim()).filter(Boolean)
+      ? raw.Platforms.split(",")
+          .map((v) => v.trim())
+          .filter(Boolean)
       : [];
-  const storesResolved = Array.isArray(raw?.StoresResolved) ? raw.StoresResolved : [];
+  const storesResolved = Array.isArray(raw?.StoresResolved)
+    ? raw.StoresResolved
+    : [];
 
   const storeUrlByPlatform = new Map();
   storesResolved.forEach((storeRow) => {
@@ -143,7 +162,8 @@ function normalizeGame(raw, cacheToken) {
       ? storeRow.platform
           .map((item) => {
             if (typeof item === "string") return item;
-            if (item && typeof item === "object") return item.Record || item.Name || item.name || "";
+            if (item && typeof item === "object")
+              return item.Record || item.Name || item.name || "";
             return "";
           })
           .filter(Boolean)
@@ -209,6 +229,13 @@ function normalizeGame(raw, cacheToken) {
 }
 
 export async function fetchGames({ force = false } = {}) {
+  if (getGamesProvider() !== "praxsuite") {
+    const fallback = buildStaticGamesFallback();
+    cachedGames = fallback;
+    pendingGamesRequest = null;
+    return fallback;
+  }
+
   if (!force && cachedGames) {
     return cachedGames;
   }
@@ -221,7 +248,9 @@ export async function fetchGames({ force = false } = {}) {
     try {
       const proxyBase = getGamesProxyBaseUrl();
       const cacheToken = Date.now();
-      const gamesApiUrl = proxyBase ? `${proxyBase}/api/games?v=${cacheToken}` : `/api/games?v=${cacheToken}`;
+      const gamesApiUrl = proxyBase
+        ? `${proxyBase}/api/games?v=${cacheToken}`
+        : `/api/games?v=${cacheToken}`;
       const response = await fetch(gamesApiUrl, {
         cache: "no-store",
       });
@@ -232,9 +261,11 @@ export async function fetchGames({ force = false } = {}) {
 
       const body = await response.json();
       const rows = extractRows(body);
-      const normalized = rows.map((raw) => normalizeGame(raw, raw.UPDATEDDATE || cacheToken));
+      const normalized = rows.map((raw) =>
+        normalizeGame(raw, raw.UPDATEDDATE || cacheToken),
+      );
       const filtered = normalized.filter(
-        (g) => g && (g.titleKey || g.title?.es || g.title?.en) && g.isActive
+        (g) => g && (g.titleKey || g.title?.es || g.title?.en) && g.isActive,
       );
 
       cachedGames = filtered;

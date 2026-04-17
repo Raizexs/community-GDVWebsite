@@ -35,11 +35,14 @@ function normalizeMediaSource(rawValue, cacheToken) {
   if (typeof rawValue !== "string") return null;
   let value = rawValue.trim();
   if (!value) return null;
+  if (value.toLowerCase() === "null") return null;
 
   value = value.replace(/\s+null$/i, "");
   if (value.startsWith("data:")) return value;
   if (value.includes(";base64,")) {
-    return value.startsWith("image/") ? `data:${value}` : `data:image/png;${value}`;
+    return value.startsWith("image/")
+      ? `data:${value}`
+      : `data:image/png;${value}`;
   }
 
   if (/^https?:\/\/.*blob\.core\.windows\.net/i.test(value)) {
@@ -48,13 +51,15 @@ function normalizeMediaSource(rawValue, cacheToken) {
 
   if (/^https?:\/\//i.test(value)) {
     const proxyBase = getAboutUsProxyBaseUrl();
-    const suffix = cacheToken ? `&v=${encodeURIComponent(String(cacheToken))}` : "";
+    const suffix = cacheToken
+      ? `&v=${encodeURIComponent(String(cacheToken))}`
+      : "";
     return proxyBase
       ? `${proxyBase}/api/images/download?url=${encodeURIComponent(value)}${suffix}`
       : `/api/images/download?url=${encodeURIComponent(value)}${suffix}`;
   }
 
-  return value;
+  return null;
 }
 
 function normalizeAboutRow(raw, cacheToken) {
@@ -68,10 +73,22 @@ function normalizeAboutRow(raw, cacheToken) {
   return {
     titleEs: getField(raw, ["Title (ES)", "title (es)", "Title ES"]),
     titleEn: getField(raw, ["Title (EN)", "title (en)", "Title EN"]),
-    contentEs: getField(raw, ["Contentss (ES)", "Contents (ES)", "Content (ES)"]),
-    contentEn: getField(raw, ["Contentss (EN)", "Contents (EN)", "Content (EN)"]),
+    contentEs: getField(raw, [
+      "Contentss (ES)",
+      "Contents (ES)",
+      "Content (ES)",
+    ]),
+    contentEn: getField(raw, [
+      "Contentss (EN)",
+      "Contents (EN)",
+      "Content (EN)",
+    ]),
     imageUrl: normalizeMediaSource(imageUrlRaw, cacheToken),
-    linkedInUrl: getField(raw, ["LinkedIn URL", "Linkedin URL", "linkedin url"]),
+    linkedInUrl: getField(raw, [
+      "LinkedIn URL",
+      "Linkedin URL",
+      "linkedin url",
+    ]),
     isActive: getField(raw, ["isActive", "IsActive", "active"]),
   };
 }
@@ -86,18 +103,36 @@ function normalizeMemberRow(raw, cacheToken) {
 
   return {
     name: getField(raw, ["Name", "name", "Title (ES)", "Title (EN)"]),
-    roleEs: getField(raw, ["Role (ES)", "Rol (ES)", "role (es)", "Contentss (ES)"]),
-    roleEn: getField(raw, ["Role (EN)", "Rol (EN)", "role (en)", "Contentss (EN)"]),
+    roleEs: getField(raw, [
+      "Role (ES)",
+      "Rol (ES)",
+      "role (es)",
+      "Contentss (ES)",
+    ]),
+    roleEn: getField(raw, [
+      "Role (EN)",
+      "Rol (EN)",
+      "role (en)",
+      "Contentss (EN)",
+    ]),
     profile: normalizeMediaSource(photoRaw, cacheToken),
-    linkedInUrl: getField(raw, ["LinkedIn URL", "Linkedin URL", "linkedin url"]),
+    linkedInUrl: getField(raw, [
+      "LinkedIn URL",
+      "Linkedin URL",
+      "linkedin url",
+    ]),
     isActive: getField(raw, ["isActive", "IsActive", "active"]),
   };
 }
 
 function getSectionByTitle(rows, titleEs, titleEn) {
   return rows.find((row) => {
-    const es = String(row.titleEs || "").trim().toLowerCase();
-    const en = String(row.titleEn || "").trim().toLowerCase();
+    const es = String(row.titleEs || "")
+      .trim()
+      .toLowerCase();
+    const en = String(row.titleEn || "")
+      .trim()
+      .toLowerCase();
     return es === titleEs.toLowerCase() || en === titleEn.toLowerCase();
   });
 }
@@ -115,14 +150,20 @@ function buildAboutUsContent(sectionRows, memberRows) {
     }));
 
   const firstTextRow = sections.find((r) => r.contentEs || r.contentEn) || {};
-  const aboutHeader = getSectionByTitle(sections, "Sobre nosotros", "About us") || firstTextRow;
-  const whoWeAre = getSectionByTitle(sections, "Quiénes somos", "Who we are") || {};
-  const ourAssociation = getSectionByTitle(sections, "Nuestra asociación", "Our association") || {};
+  const aboutHeader =
+    getSectionByTitle(sections, "Sobre nosotros", "About us") || firstTextRow;
+  const whoWeAre =
+    getSectionByTitle(sections, "Quiénes somos", "Who we are") || {};
+  const ourAssociation =
+    getSectionByTitle(sections, "Nuestra asociación", "Our association") || {};
   const values = getSectionByTitle(sections, "Valores", "Values") || {};
-  const objectives = getSectionByTitle(sections, "Objetivos", "Objectives") || {};
+  const objectives =
+    getSectionByTitle(sections, "Objetivos", "Objectives") || {};
   const vision = getSectionByTitle(sections, "Visión", "Vision") || {};
-  const heroImageRow = sections.find((r) => r.imageUrl && String(r.titleEn || "").toLowerCase() === "about us")
-    || sections.find((r) => r.imageUrl);
+  const heroImageRow =
+    sections.find(
+      (r) => r.imageUrl && String(r.titleEn || "").toLowerCase() === "about us",
+    ) || sections.find((r) => r.imageUrl);
 
   return {
     title: {
@@ -185,7 +226,9 @@ function buildAboutUsContent(sectionRows, memberRows) {
 }
 
 export async function fetchAboutUsContent({ force = false } = {}) {
-  const provider = (process.env.REACT_APP_PRAXSUITE_ABOUT_US_PROVIDER || "static").toLowerCase();
+  const provider = (
+    process.env.REACT_APP_PRAXSUITE_ABOUT_US_PROVIDER || "static"
+  ).toLowerCase();
   if (provider !== "praxsuite") {
     cachedAboutUsContent = null;
     pendingAboutUsRequest = null;
@@ -214,8 +257,12 @@ export async function fetchAboutUsContent({ force = false } = {}) {
       }
 
       const body = await response.json();
-      const sectionRows = extractRows(body?.sections || body).map((raw) => normalizeAboutRow(raw, cacheToken));
-      const memberRows = extractRows(body?.members || []).map((raw) => normalizeMemberRow(raw, cacheToken));
+      const sectionRows = extractRows(body?.sections || body).map((raw) =>
+        normalizeAboutRow(raw, cacheToken),
+      );
+      const memberRows = extractRows(body?.members || []).map((raw) =>
+        normalizeMemberRow(raw, cacheToken),
+      );
       if (!sectionRows.length) {
         return cachedAboutUsContent;
       }
@@ -224,7 +271,10 @@ export async function fetchAboutUsContent({ force = false } = {}) {
       cachedAboutUsContent = content;
       return content;
     } catch (error) {
-      console.warn("AboutUs backend fetch failed, using i18n/static fallback.", error);
+      console.warn(
+        "AboutUs backend fetch failed, using i18n/static fallback.",
+        error,
+      );
       return cachedAboutUsContent;
     } finally {
       pendingAboutUsRequest = null;

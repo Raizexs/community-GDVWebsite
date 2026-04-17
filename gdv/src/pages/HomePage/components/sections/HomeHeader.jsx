@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { resolveLocalizedValue } from "../../../../utils/localization";
+import homeHeroFallback from "../../../../img/riosdelluvia.jpg";
 
 function renderValparaisoHighlighted(text) {
   const raw = String(text || "");
@@ -27,15 +29,59 @@ function renderValparaisoHighlighted(text) {
 export const HomeHeader = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage || i18n.language || "es";
-  const dynamicTitle = resolveLocalizedValue(homeContent?.hero?.title, language);
-  const dynamicDescription = resolveLocalizedValue(homeContent?.hero?.description, language);
-  const heroUrl = homeContent?.hero?.url || "...";
+  const dynamicTitle = resolveLocalizedValue(
+    homeContent?.hero?.title,
+    language,
+  );
+  const dynamicDescription = resolveLocalizedValue(
+    homeContent?.hero?.description,
+    language,
+  );
+  const heroUrl = homeContent?.hero?.url || "/socios";
+  const dynamicHeroRaw =
+    typeof homeContent?.hero?.hero === "string"
+      ? homeContent.hero.hero.trim()
+      : "";
+  const dynamicHero =
+    dynamicHeroRaw && dynamicHeroRaw.toLowerCase() !== "null"
+      ? dynamicHeroRaw
+      : "";
   const titleText = dynamicTitle || t("home.header.title");
   const descriptionText = dynamicDescription || t("home.header.description");
+  const [heroBackground, setHeroBackground] = useState(
+    dynamicHero || homeHeroFallback,
+  );
+
+  useEffect(() => {
+    if (!dynamicHero) {
+      setHeroBackground(homeHeroFallback);
+      return;
+    }
+
+    let cancelled = false;
+    const image = new Image();
+    image.onload = () => {
+      if (!cancelled) setHeroBackground(dynamicHero);
+    };
+    image.onerror = () => {
+      if (!cancelled) setHeroBackground(homeHeroFallback);
+    };
+    image.src = dynamicHero;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dynamicHero]);
 
   return (
     <div
-      className={`flex justify-center items-center header-screen home-header-img`}
+      className="flex justify-center items-center header-screen home-header-img"
+      style={{
+        backgroundImage: `linear-gradient(#000000ab, #000000ab), url(${heroBackground})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <div
         className={`flex justify-center md:items-center md:text-center text-white flex-col px-8`}

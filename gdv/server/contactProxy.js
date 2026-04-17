@@ -9,7 +9,18 @@ const {
   isRequestOriginAllowed,
 } = require("./security");
 
+loadEnvFile();
+
 const DEFAULT_REF = "47114a1c-b38f-467b-a34c-af08b0cb7b79";
+const BOT_SIGNAL_WINDOW_MS = Number(
+  process.env.CONTACT_BOT_SIGNAL_WINDOW_MS || 10 * 60 * 1000,
+);
+const BOT_SIGNAL_LIMIT = Number(process.env.CONTACT_BOT_SIGNAL_LIMIT || 6);
+const BOT_BLOCK_MS = Number(process.env.CONTACT_BOT_BLOCK_MS || 15 * 60 * 1000);
+const CONTACT_MIN_FILL_MS = Number(process.env.CONTACT_MIN_FILL_MS || 1500);
+const TURNSTILE_EXPECTED_ACTION =
+  process.env.TURNSTILE_EXPECTED_ACTION || "contact_form";
+const ipBotSignals = new Map();
 
 // ============ SECURITY: Rate Limiting ============
 const checkRateLimit = createRateLimiter({
@@ -20,6 +31,7 @@ const checkRateLimit = createRateLimiter({
 
 // ============ SECURITY: CORS Restrictions ============
 const ALLOWED_ORIGINS = getAllowedOrigins();
+const TURNSTILE_ALLOWED_HOSTNAMES = getTurnstileAllowedHostnames();
 
 function loadEnvFile() {
   const envPath = path.resolve(__dirname, "../.env");
@@ -51,7 +63,7 @@ function sendJson(res, statusCode, payload) {
     "X-XSS-Protection": "1; mode=block",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
   };
-  
+
   res.writeHead(statusCode, headers);
   res.end(JSON.stringify(payload));
 }
@@ -75,6 +87,68 @@ function isTurnstileEnabled() {
   return Boolean(process.env.TURNSTILE_SECRET_KEY);
 }
 
+function getTurnstileAllowedHostnames() {
+  const defaults = [
+    "localhost",
+    "127.0.0.1",
+    "gdvalparaiso.com",
+    "www.gdvalparaiso.com",
+  ];
+  const fromEnv = String(process.env.TURNSTILE_ALLOWED_HOSTNAMES || "")
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean);
+
+  return [...new Set([...defaults, ...fromEnv])];
+}
+
+function getSignalState(ip) {
+  const now = Date.now();
+  const current = ipBotSignals.get(ip);
+
+  if (!current) {
+    const state = {
+      score: 0,
+      resetAt: now + BOT_SIGNAL_WINDOW_MS,
+      blockedUntil: 0,
+    };
+    ipBotSignals.set(ip, state);
+    return state;
+  }
+
+  if (now > current.resetAt) {
+    current.score = 0;
+    current.resetAt = now + BOT_SIGNAL_WINDOW_MS;
+  }
+
+  return current;
+}
+
+function getIpBlockRemainingMs(ip) {
+  if (!ip) return 0;
+  const state = getSignalState(ip);
+  const now = Date.now();
+  return state.blockedUntil > now ? state.blockedUntil - now : 0;
+}
+
+function registerBotSignal(ip, score = 1) {
+  if (!ip) return;
+  const state = getSignalState(ip);
+  const now = Date.now();
+  state.score += score;
+
+  if (state.score >= BOT_SIGNAL_LIMIT) {
+    state.blockedUntil = now + BOT_BLOCK_MS;
+    state.score = 0;
+    state.resetAt = now + BOT_SIGNAL_WINDOW_MS;
+  }
+}
+
+function clearBotSignals(ip) {
+  if (!ip) return;
+  ipBotSignals.delete(ip);
+}
+
 async function verifyTurnstileToken(token, remoteIp) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) {
@@ -93,26 +167,56 @@ async function verifyTurnstileToken(token, remoteIp) {
       body.append("remoteip", remoteIp);
     }
 
-    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+    const response = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
       },
-      body: body.toString(),
-    });
+    );
 
     const payload = await response.json().catch(() => ({}));
+    const hostname = String(payload?.hostname || "").toLowerCase();
+    const action = String(payload?.action || "");
+
+    if (!payload?.success) {
+      return {
+        ok: false,
+        reason:
+          payload?.["error-codes"] ||
+          payload?.error ||
+          "captcha-verification-failed",
+      };
+    }
+
+    if (TURNSTILE_EXPECTED_ACTION && action !== TURNSTILE_EXPECTED_ACTION) {
+      return { ok: false, reason: "captcha-action-mismatch" };
+    }
+
+    if (hostname && !TURNSTILE_ALLOWED_HOSTNAMES.includes(hostname)) {
+      return { ok: false, reason: "captcha-hostname-mismatch" };
+    }
+
     return {
-      ok: Boolean(payload?.success),
-      reason: payload?.["error-codes"] || payload?.error || "captcha-verification-failed",
+      ok: true,
+      reason: "",
     };
   } catch (error) {
-    return { ok: false, reason: error.message || "captcha-verification-request-failed" };
+    return {
+      ok: false,
+      reason: error.message || "captcha-verification-request-failed",
+    };
   }
 }
 
 function buildInsertPayload({ name, email, subject, message }) {
-  const ref = process.env.REACT_APP_PRAXSUITE_CONTACT_REF || process.env.PRAXSUITE_CONTACT_REF || DEFAULT_REF;
+  const ref =
+    process.env.REACT_APP_PRAXSUITE_CONTACT_REF ||
+    process.env.PRAXSUITE_CONTACT_REF ||
+    DEFAULT_REF;
   const table =
     process.env.REACT_APP_PRAXSUITE_CONTACT_TABLE ||
     process.env.PRAXSUITE_CONTACT_TABLE ||
@@ -134,7 +238,13 @@ function buildInsertPayload({ name, email, subject, message }) {
     row[customSubmissionField] = customSubmissionId;
   }
 
-  const returningFields = ["ID", nameField, emailField, subjectField, messageField];
+  const returningFields = [
+    "ID",
+    nameField,
+    emailField,
+    subjectField,
+    messageField,
+  ];
   if (customSubmissionField) {
     returningFields.push(customSubmissionField);
   }
@@ -268,7 +378,6 @@ function readJsonBody(req) {
   });
 }
 
-loadEnvFile();
 const port = Number(process.env.CONTACT_API_PORT || 8080);
 
 const server = http.createServer(async (req, res) => {
@@ -278,7 +387,7 @@ const server = http.createServer(async (req, res) => {
   // ============ SECURITY: CORS Pre-flight ============
   const origin = req.headers.origin || "";
   const isAllowed = isRequestOriginAllowed(origin, ALLOWED_ORIGINS);
-  
+
   if (req.method === "OPTIONS") {
     if (isAllowed) {
       sendCorsHeaders(res, origin);
@@ -288,9 +397,16 @@ const server = http.createServer(async (req, res) => {
     }
     return;
   }
-  
+
   // ============ SECURITY: Add CORS header to response ============
   res.setHeader("Access-Control-Allow-Origin", isAllowed ? origin : "");
+
+  const blockedMs = getIpBlockRemainingMs(clientIp);
+  if (blockedMs > 0) {
+    res.setHeader("Retry-After", String(Math.ceil(blockedMs / 1000)));
+    sendJson(res, 429, { error: "Too many suspicious attempts from this IP" });
+    return;
+  }
 
   if (req.method === "GET" && req.url === "/api/health") {
     sendJson(res, 200, { status: "ok" });
@@ -305,8 +421,8 @@ const server = http.createServer(async (req, res) => {
   // ============ SECURITY: Rate Limiting ============
   if (!checkRateLimit(req)) {
     res.setHeader("Retry-After", "60");
-    sendJson(res, 429, { 
-      error: "Too many requests. Maximum 5 requests per minute." 
+    sendJson(res, 429, {
+      error: "Too many requests. Maximum 5 requests per minute.",
     });
     return;
   }
@@ -325,6 +441,9 @@ const server = http.createServer(async (req, res) => {
     const subject = String(body.subject || "").trim();
     const message = String(body.message || "").trim();
     const captchaToken = String(body.captchaToken || "").trim();
+    const honeypot = String(body.website || "").trim();
+    const formStartedAt = Number(body.formStartedAt);
+    const now = Date.now();
 
     // ============ SECURITY: Input Validation ============
     if (!name || !email || !subject || !message) {
@@ -342,10 +461,32 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (honeypot) {
+      registerBotSignal(clientIp, 4);
+      sendJson(res, 403, { error: "Suspicious activity detected" });
+      return;
+    }
+
+    if (!Number.isFinite(formStartedAt)) {
+      registerBotSignal(clientIp, 2);
+      sendJson(res, 400, { error: "Invalid form metadata" });
+      return;
+    }
+
+    if (now - formStartedAt < CONTACT_MIN_FILL_MS) {
+      registerBotSignal(clientIp, 2);
+      sendJson(res, 429, { error: "Form submitted too quickly" });
+      return;
+    }
+
     if (isTurnstileEnabled()) {
-      const captchaVerification = await verifyTurnstileToken(captchaToken, clientIp);
+      const captchaVerification = await verifyTurnstileToken(
+        captchaToken,
+        clientIp,
+      );
       if (!captchaVerification.ok) {
-        sendJson(res, 400, {
+        registerBotSignal(clientIp, 3);
+        sendJson(res, 403, {
           error: "Captcha verification failed",
         });
         return;
@@ -371,6 +512,7 @@ const server = http.createServer(async (req, res) => {
       success: true,
       message: "Contact successfully submitted",
     });
+    clearBotSignals(clientIp);
   } catch (error) {
     console.error("Contact proxy unexpected error:", error);
     sendJson(res, 500, {

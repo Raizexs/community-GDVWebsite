@@ -10,7 +10,9 @@ import TaeLao from "../../img/partners/logo02-vertical-light.png";
 import TangaraStudio from "../../img/partners/logo01-horizontal-light.png";
 import TesseractLogo from "../../img/partners/Tesseract Logo Black cortado.png";
 
-const provider = (process.env.REACT_APP_PRAXSUITE_PARTNERS_PROVIDER || "static").toLowerCase();
+const provider = (
+  process.env.REACT_APP_PRAXSUITE_PARTNERS_PROVIDER || "static"
+).toLowerCase();
 let cachedPartners = null;
 let pendingPartnersRequest = null;
 
@@ -73,11 +75,15 @@ function normalizeMediaSource(rawValue, cacheToken) {
   if (typeof rawValue !== "string") return null;
   let value = rawValue.trim();
   if (!value) return null;
+  if (value.toLowerCase() === "null") return null;
 
   value = value.replace(/\s+null$/i, "");
+  if (!value || value.toLowerCase() === "null") return null;
   if (value.startsWith("data:")) return value;
   if (value.includes(";base64,")) {
-    return value.startsWith("image/") ? `data:${value}` : `data:image/png;${value}`;
+    return value.startsWith("image/")
+      ? `data:${value}`
+      : `data:image/png;${value}`;
   }
 
   if (/^https?:\/\/.*blob\.core\.windows\.net/i.test(value)) {
@@ -86,13 +92,15 @@ function normalizeMediaSource(rawValue, cacheToken) {
 
   if (/^https?:\/\//i.test(value)) {
     const proxyBase = getPartnersProxyBaseUrl();
-    const suffix = cacheToken ? `&v=${encodeURIComponent(String(cacheToken))}` : "";
+    const suffix = cacheToken
+      ? `&v=${encodeURIComponent(String(cacheToken))}`
+      : "";
     return proxyBase
       ? `${proxyBase}/api/images/download?url=${encodeURIComponent(value)}${suffix}`
       : `/api/images/download?url=${encodeURIComponent(value)}${suffix}`;
   }
 
-  return value;
+  return null;
 }
 
 function normalizePartner(raw, cacheToken) {
@@ -114,9 +122,16 @@ function normalizePartner(raw, cacheToken) {
   const normalizedImage = normalizeMediaSource(imageUrlRaw, cacheToken);
 
   return {
-    id: String(getField(raw, ["ID", "id", "Id", "PARTNER", "Partner", "name"]) ?? ""),
+    id: String(
+      getField(raw, ["ID", "id", "Id", "PARTNER", "Partner", "name"]) ?? "",
+    ),
     name: getField(raw, ["PARTNER", "Partner", "Name", "name"]),
-    website: getField(raw, ["PARTNER URL", "Partner URL", "Website", "website"]),
+    website: getField(raw, [
+      "PARTNER URL",
+      "Partner URL",
+      "Website",
+      "website",
+    ]),
     logoUrl: normalizedImage,
   };
 }
@@ -168,7 +183,10 @@ export async function fetchPartners({ force = false } = {}) {
   try {
     return await pendingPartnersRequest;
   } catch (error) {
-    console.warn("Partners backend fetch failed, using static fallback.", error);
+    console.warn(
+      "Partners backend fetch failed, using static fallback.",
+      error,
+    );
     pendingPartnersRequest = null;
     return staticPartners;
   } finally {
