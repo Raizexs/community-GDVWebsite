@@ -106,7 +106,7 @@
       "label": "— Liderazgo de la asociación —",
       "title": "Conoce nuestra junta directiva, los actuales portavoces de los desarrolladores de videojuegos de Valparaíso",
       "president": "Presidente",
-      "finances": "Finanzas",
+      "finances": "Tesorero",
       "secretary": "Secretario"
     }
   },
@@ -143,7 +143,12 @@
       "message": "Mensaje",
       "messagePlaceholder": "Mensaje...",
       "requiredFields": "Todos los campos son obligatorios...",
-      "sendButton": "Enviar"
+      "sendButton": "Enviar",
+      "sending": "Enviando...",
+      "success": "Tu mensaje fue enviado correctamente.",
+      "submitError": "No pudimos enviar tu mensaje. Intenta nuevamente.",
+      "captchaRequired": "Debes completar el captcha para enviar el formulario.",
+      "captchaLoadError": "No pudimos cargar/verificar el captcha. Recarga la página e inténtalo nuevamente."
     }
   },
   "gameCard": {

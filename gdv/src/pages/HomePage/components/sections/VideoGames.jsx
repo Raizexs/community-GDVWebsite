@@ -1,44 +1,49 @@
 import { GameCard } from "../../../../components/GameCard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getShuffledGames } from "../../../../data/gamesData";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { fetchGames } from "../../../../services/games/gamesService";
+import { resolveLocalizedValue } from "../../../../utils/localization";
 
-export const VideoGames = () => {
+export const VideoGames = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(i18n.language);
+  const [games, setGames] = useState([]);
 
   useEffect(() => {
-    const handleLanguageChange = (lng) => {
-      setCurrentLang(lng);
-    };
+    let mounted = true;
 
-    i18n.on("languageChanged", handleLanguageChange);
+    fetchGames()
+      .then((result) => {
+        if (mounted) setGames(result);
+      })
+      .catch((error) => {
+        console.error("Error loading home games:", error);
+        if (mounted) setGames([]);
+      });
 
     return () => {
-      i18n.off("languageChanged", handleLanguageChange);
+      mounted = false;
     };
-  }, [i18n]);
+  }, []);
 
-  // Use centralized shuffled games data to be fair to all games
-  const games = getShuffledGames();
-
-  const getRandomGames = (gamesList, numberOfGames) => {
-    // Games are already shuffled from getShuffledGames, just slice the number needed
-    return gamesList.slice(0, numberOfGames);
-  };
-
-  const randomGames = getRandomGames(games, 8);
+  const randomGames = useMemo(() => {
+    const shuffled = [...games].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 8);
+  }, [games]);
+  const language = i18n.resolvedLanguage || i18n.language || "es";
+  const label = resolveLocalizedValue(homeContent?.gamesSection?.title, language) || t("home.videoGames.label");
+  const title = resolveLocalizedValue(homeContent?.gamesSection?.description, language) || t("home.videoGames.title");
+  const ctaHeading = resolveLocalizedValue(homeContent?.gamesCta?.title, language) || t("home.videoGames.ctaHeading");
+  const ctaDescription = resolveLocalizedValue(homeContent?.gamesCta?.description, language) || t("home.videoGames.description");
+  const ctaUrl = homeContent?.gamesCta?.url || "/videogames";
 
   return (
     <>
       <section className="py-20 px-4 section-bg">
         <div className="mb-12 flex flex-col justify-center items-center text-center">
-          <h6 className="mb-2 vgvalpo-textcolor3 text-base">
-            {t("home.videoGames.label")}
-          </h6>
+          <h6 className="mb-2 vgvalpo-textcolor3 text-base">{label}</h6>
           <h3 className="font-bold text-black md:text-3xl md:w-4/12 text-2xl">
-            {t("home.videoGames.title")}
+            {title}
           </h3>
         </div>
 
@@ -48,8 +53,11 @@ export const VideoGames = () => {
               <GameCard
                 key={g.id}
                 bgimg={g.image}
+                imageUrl={g.imageUrl}
                 titleKey={g.titleKey}
                 descriptionKey={g.descriptionKey}
+                title={g.title}
+                description={g.description}
                 link={g.link}
                 gameplataforms={g.platforms}
               />
@@ -62,17 +70,30 @@ export const VideoGames = () => {
           className={`flex justify-center md:items-center md:text-center text-white flex-col px-8`}
         >
           <h1 className="mb-3 leading-tight text-2xl uppercase md:text-3xl md:w-9/12 font-bold">
-            {t("home.videoGames.ctaHeading")}
+            {ctaHeading}
           </h1>
-          <p className="md:w-7/12 mb-6">{t("home.videoGames.description")}</p>
-          <Link
-            to={"/videogames"}
-            className={
-              "vgvalpo-bgcolor5 rounded-md px-8 py-3 flex justify-center items-center"
-            }
-          >
-            {t("home.videoGames.seeGamesButton")}
-          </Link>
+          <p className="md:w-7/12 mb-6">{ctaDescription}</p>
+          {/^https?:\/\//i.test(ctaUrl) ? (
+            <a
+              href={ctaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={
+                "vgvalpo-bgcolor5 rounded-md px-8 py-3 flex justify-center items-center"
+              }
+            >
+              {t("home.videoGames.seeGamesButton")}
+            </a>
+          ) : (
+            <Link
+              to={ctaUrl}
+              className={
+                "vgvalpo-bgcolor5 rounded-md px-8 py-3 flex justify-center items-center"
+              }
+            >
+              {t("home.videoGames.seeGamesButton")}
+            </Link>
+          )}
         </div>
       </section>
     </>

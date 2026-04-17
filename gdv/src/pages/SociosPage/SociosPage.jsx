@@ -2,65 +2,41 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavbarComponent } from "../../components/Navbar";
 import { FooterComponent } from "../../components/Footer";
-import { Link } from "react-router-dom";
 import { SociosHeader } from "./components/sections/SociosHeader";
-
-// Partner company logos
-import AbstractDigital from "../../img/partners/Logo Abstract - color horizontal.png";
-import BabyTeam from "../../img/partners/BABYTEAM.png";
-import CangrejoIdeas from "../../img/partners/logo_cangrejo_color.png";
-import Gudhar from "../../img/partners/Gudhar_sinfondo (1).png";
-import RamCandy from "../../img/partners/Logo_color_02.png";
-import SlimeTeam from "../../img/partners/LOGO_B_NB512.png";
-import TaeLao from "../../img/partners/logo02-vertical-light.png";
-import TangaraStudio from "../../img/partners/logo01-horizontal-light.png";
-import TesseractLogo from "../../img/partners/Tesseract Logo Black cortado.png";
+import { fetchPartners } from "../../services/partners/partnersService";
 
 export const SociosPage = () => {
   const { t } = useTranslation();
   const [socios, setSocios] = useState([]);
-
-  const AddSocios = () => {
-    const sociosList = [
-      {
-        logo: AbstractDigital,
-        website: "https://www.abstractdw.com/",
-        name: "Abstract Digital",
-      },
-      { logo: BabyTeam, website: "https://babyteam.cl/", name: "Baby Team" },
-      {
-        logo: CangrejoIdeas,
-        website: "https://cangrejoideas.com/",
-        name: "Cangrejo Ideas",
-      },
-      { logo: Gudhar, website: "https://www.gudhar.com/", name: "GUDHAR" },
-      { logo: RamCandy, website: "https://ramcandy.com/", name: "Ram Candy" },
-      {
-        logo: SlimeTeam,
-        website: "https://www.slimeteam.com/",
-        name: "Slime Team",
-      },
-      { logo: TaeLao, website: "https://tae-lao.itch.io/", name: "Tae Lao" },
-      {
-        logo: TangaraStudio,
-        website: "https://tangara.studio/",
-        name: "Tangara Studio",
-      },
-      {
-        logo: TesseractLogo,
-        website: "https://tesseractsoftwares.com/",
-        name: "Tesseract",
-      },
-    ];
-
-    // Randomize the order to be fair to all partners
-    const shuffledSocios = [...sociosList].sort(() => Math.random() - 0.5);
-    setSocios(shuffledSocios);
-  };
+  const [syncState, setSyncState] = useState("idle");
+  const [lastSyncAt, setLastSyncAt] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    AddSocios();
+
+    let mounted = true;
+    const loadPartners = async () => {
+      setSyncState("syncing");
+      try {
+        const partners = await fetchPartners({ force: true });
+        if (!mounted) return;
+        setSocios([...partners].sort(() => Math.random() - 0.5));
+        setLastSyncAt(new Date());
+        setSyncState("ok");
+      } catch (error) {
+        console.error("Error loading partners:", error);
+        if (!mounted) return;
+        setSyncState("error");
+      }
+    };
+
+    loadPartners();
+    const interval = setInterval(loadPartners, 3000);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -83,9 +59,34 @@ export const SociosPage = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center">
+            <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`inline-block h-2.5 w-2.5 rounded-full ${
+                    syncState === "syncing"
+                      ? "bg-yellow-500 animate-pulse"
+                      : syncState === "ok"
+                        ? "bg-green-500"
+                        : syncState === "error"
+                          ? "bg-red-500"
+                          : "bg-gray-400"
+                  }`}
+                ></span>
+                <span className="text-gray-700">
+                  {syncState === "syncing" && "Sincronizando cambios de PraxSuite..."}
+                  {syncState === "ok" && "Cambios de PraxSuite sincronizados"}
+                  {syncState === "error" && "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
+                  {syncState === "idle" && "Esperando sincronización inicial..."}
+                </span>
+              </div>
+              <span className="text-gray-500 text-xs">
+                {lastSyncAt ? `Última sync: ${lastSyncAt.toLocaleTimeString()}` : "Sin sync aún"}
+              </span>
+            </div>
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-7">
               {socios.map((s) => (
                 <a
+                  key={s.name}
                   href={s.website}
                   target="_blank"
                   rel="noopener noreferrer"

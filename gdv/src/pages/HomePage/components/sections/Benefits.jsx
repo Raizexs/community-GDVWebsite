@@ -1,45 +1,45 @@
+import { useTranslation } from "react-i18next";
+import { resolveLocalizedValue } from "../../../../utils/localization";
 import icon1 from "../../../../img/icons/News.png";
 import icon2 from "../../../..//img/icons/People Working Together.png";
 import icon3 from "../../../../img/icons/Commercial.png";
 import icon4 from "../../../../img/icons/Education.png";
 import icon5 from "../../../../img/icons/Business.png";
 import icon6 from "../../../../img/icons/Tear-Off Calendar.png";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
-export const Benefits = () => {
+export const Benefits = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(i18n.language);
-
-  useEffect(() => {
-    const handleLanguageChange = (lng) => {
-      setCurrentLang(lng);
-    };
-
-    i18n.on("languageChanged", handleLanguageChange);
-
-    return () => {
-      i18n.off("languageChanged", handleLanguageChange);
-    };
-  }, [i18n]);
-
-  const benefits = [
+  const language = i18n.resolvedLanguage || i18n.language || "es";
+  const dynamicBenefits = (homeContent?.benefitItems || []).map((item, index) => ({
+    key: `dynamic-${index}`,
+    icon: item.icon,
+    title: resolveLocalizedValue(item.title, language),
+    description: resolveLocalizedValue(item.description, language),
+  }));
+  const staticBenefits = [
     { key: "press", icon: icon1 },
     { key: "networking", icon: icon2 },
     { key: "diffusion", icon: icon3 },
     { key: "education", icon: icon4 },
     { key: "consultancy", icon: icon5 },
     { key: "events", icon: icon6 },
-  ];
+  ].map((item) => ({
+    ...item,
+    title: t(`home.benefits.${item.key}.title`),
+    description: t(`home.benefits.${item.key}.description`),
+  }));
+  const benefits = dynamicBenefits.length ? dynamicBenefits : staticBenefits;
+  const sectionLabel =
+    resolveLocalizedValue(homeContent?.benefitsSection?.title, language) || t("home.benefits.label");
+  const sectionTitle =
+    resolveLocalizedValue(homeContent?.benefitsSection?.description, language) || t("home.benefits.title");
 
   return (
-    <section className="py-20 px-4 section-bg">
+    <section className="py-20 px-4 section-bg mt-12">
       <div className="mb-16 flex flex-col justify-center items-center text-center">
-        <h6 className="mb-2 vgvalpo-textcolor3 text-base">
-          {t("home.benefits.label")}
-        </h6>
+        <h6 className="mb-2 vgvalpo-textcolor3 text-base">{sectionLabel}</h6>
         <h3 className="font-bold text-black md:text-3xl md:w-4/12 text-2xl">
-          {t("home.benefits.title")}
+          {sectionTitle}
         </h3>
       </div>
 
@@ -56,10 +56,10 @@ export const Benefits = () => {
                 className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4"
               />
               <h5 className="vgvalpo-textcolor5 font-bold mb-2 text-xl">
-                {t(`home.benefits.${benefit.key}.title`)}
+                {benefit.title}
               </h5>
               <p className="text-sm vgvalpo-textcolor6">
-                {t(`home.benefits.${benefit.key}.description`)}
+                {benefit.description}
               </p>
             </div>
           ))}
