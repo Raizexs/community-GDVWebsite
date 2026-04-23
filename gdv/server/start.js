@@ -1,19 +1,26 @@
 const { spawn } = require("child_process");
 
-const apiProcess = spawn("node", ["server/contactProxy.js"], { stdio: "inherit" });
-const gamesProcess = spawn("node", ["server/gamesProxy.js"], { stdio: "inherit" });
-const partnersProcess = spawn("node", ["server/partnersProxy.js"], { stdio: "inherit" });
-const aboutUsProcess = spawn("node", ["server/aboutUsProxy.js"], { stdio: "inherit" });
-const homeProcess = spawn("node", ["server/homeProxy.js"], { stdio: "inherit" });
+const apiProcess = spawn("node", ["server/contactProxy.js"], {
+  stdio: "inherit",
+});
+const gamesProcess = spawn("node", ["server/gamesProxy.js"], {
+  stdio: "inherit",
+});
 
-const reactProcess = spawn("npm", ["run", "react-start"], { stdio: "inherit", shell: true });
+const reactProcess = spawn("npm", ["run", "react-start"], {
+  stdio: "inherit",
+  shell: true,
+  env: {
+    ...process.env,
+    NODE_OPTIONS: [process.env.NODE_OPTIONS, "--no-deprecation"]
+      .filter(Boolean)
+      .join(" "),
+  },
+});
 
 const killAll = () => {
   apiProcess.kill();
   gamesProcess.kill();
-  partnersProcess.kill();
-  aboutUsProcess.kill();
-  homeProcess.kill();
   reactProcess.kill();
   process.exit();
 };

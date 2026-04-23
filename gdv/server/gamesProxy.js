@@ -22,12 +22,12 @@ const ALLOWED_ORIGINS = getAllowedOrigins();
 const IMAGE_ALLOWED_HOSTS = getAllowedImageHosts();
 const checkGamesApiRateLimit = createRateLimiter({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 60000),
-  max: Number(process.env.RATE_LIMIT_GAMES_API || 120),
+  max: Number(process.env.RATE_LIMIT_GAMES_API || 12),
   keyPrefix: "games-api",
 });
 const checkImageProxyRateLimit = createRateLimiter({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 60000),
-  max: Number(process.env.RATE_LIMIT_IMAGE_PROXY || 180),
+  max: Number(process.env.RATE_LIMIT_IMAGE_PROXY || 15),
   keyPrefix: "games-image",
 });
 
@@ -578,7 +578,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`✅ Games proxy running on http://localhost:${port}`);
-  console.log(`   Endpoint: GET http://localhost:${port}/api/games`);
-  console.log(`   CORS allowed: ${ALLOWED_ORIGINS.join(", ")}`);
+  // Silent startup
 });

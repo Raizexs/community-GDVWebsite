@@ -2,7 +2,7 @@ import { GameCard } from "../../../../components/GameCard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
-import { fetchGames } from "../../../../services/games/gamesService";
+import { fetchGames, getStaticGamesFallback } from "../../../../services/games/gamesService";
 import { resolveLocalizedValue } from "../../../../utils/localization";
 
 export const VideoGames = ({ homeContent }) => {
@@ -14,11 +14,11 @@ export const VideoGames = ({ homeContent }) => {
 
     fetchGames()
       .then((result) => {
-        if (mounted) setGames(result);
+        if (mounted) setGames(Array.isArray(result) && result.length ? result : getStaticGamesFallback());
       })
       .catch((error) => {
         console.error("Error loading home games:", error);
-        if (mounted) setGames([]);
+        if (mounted) setGames(getStaticGamesFallback());
       });
 
     return () => {
@@ -31,10 +31,18 @@ export const VideoGames = ({ homeContent }) => {
     return shuffled.slice(0, 8);
   }, [games]);
   const language = i18n.resolvedLanguage || i18n.language || "es";
-  const label = resolveLocalizedValue(homeContent?.gamesSection?.title, language) || t("home.videoGames.label");
-  const title = resolveLocalizedValue(homeContent?.gamesSection?.description, language) || t("home.videoGames.title");
-  const ctaHeading = resolveLocalizedValue(homeContent?.gamesCta?.title, language) || t("home.videoGames.ctaHeading");
-  const ctaDescription = resolveLocalizedValue(homeContent?.gamesCta?.description, language) || t("home.videoGames.description");
+  const label =
+    resolveLocalizedValue(homeContent?.gamesSection?.title, language) ||
+    t("home.videoGames.label");
+  const title =
+    resolveLocalizedValue(homeContent?.gamesSection?.description, language) ||
+    t("home.videoGames.title");
+  const ctaHeading =
+    resolveLocalizedValue(homeContent?.gamesCta?.title, language) ||
+    t("home.videoGames.ctaHeading");
+  const ctaDescription =
+    resolveLocalizedValue(homeContent?.gamesCta?.description, language) ||
+    t("home.videoGames.description");
   const ctaUrl = homeContent?.gamesCta?.url || "/videogames";
 
   return (

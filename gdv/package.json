@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "baseline-browser-mapping": "^2.10.19",
+    "caniuse-lite": "^1.0.30001788",
     "cra-template": "1.2.0",
     "flowbite": "^2.5.2",
     "flowbite-react": "^0.10.2",
@@ -45,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17"

@@ -1,85 +1,78 @@
 import { SuccessStories } from "../../../../components/SuccessStories";
-import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { resolveLocalizedValue } from "../../../../utils/localization";
-import { fetchGames } from "../../../../services/games/gamesService";
 import Gameimg1 from "../../../../img/TormentedSouls_header.jpg";
 import Gameimg2 from "../../../../img/Colorbound_header.jpg";
 
+import iconSteam from "../../../../img/plataforms/steam.png";
+import iconPlaystation from "../../../../img/plataforms/playstation.png";
+import iconXbox from "../../../../img/plataforms/xbox.png";
+import iconEpic from "../../../../img/plataforms/epic.png";
+import iconNintendo from "../../../../img/plataforms/nintendo.png";
+import iconGOG from "../../../../img/plataforms/GOG.png";
+
 export const SuccessStoriesSection = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
-  const [gamesFallback, setGamesFallback] = useState([]);
 
-  useEffect(() => {
-    let mounted = true;
-    fetchGames()
-      .then((result) => {
-        if (!mounted) return;
-        setGamesFallback(result);
-      })
-      .catch(() => {
-        if (!mounted) return;
-        setGamesFallback([]);
-      });
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const dynamicStories = useMemo(() => {
-    const lang = i18n.resolvedLanguage || i18n.language || "es";
-    return (homeContent?.successStories || [])
-      .map((story) => ({
-        title: resolveLocalizedValue(story.title, lang),
-        description: resolveLocalizedValue(story.description, lang),
-        image: story.imageUrl,
-        info: story.link,
-        plataforms: story.platforms || [],
-      }))
-      .filter((story) => story.title && story.image);
-  }, [homeContent, i18n.language, i18n.resolvedLanguage]);
-
-  const fallbackStories = useMemo(() => {
-    const bySlug = new Map(gamesFallback.map((g) => [String(g.slug || "").toLowerCase(), g]));
-    const tormented = bySlug.get("tormentedsouls");
-    const colorbound = bySlug.get("colorbound");
-    return [
-      {
-        title: tormented?.title || {
-          es: t("home.successStories.tormentedSouls.title"),
-          en: t("home.successStories.tormentedSouls.title"),
-        },
-        description: tormented?.description || {
-          es: t("home.successStories.tormentedSouls.description"),
-          en: t("home.successStories.tormentedSouls.description"),
-        },
-        image: tormented?.imageUrl || Gameimg1,
-        info: tormented?.link || "https://pqube.co.uk/games/tormented-souls/",
-        plataforms: tormented?.platforms || [],
+  const successStories = [
+    {
+      title: {
+        es: t("home.successStories.tormentedSouls.title"),
+        en: t("home.successStories.tormentedSouls.title"),
       },
-      {
-        title: colorbound?.title || {
-          es: t("home.successStories.colorbound.title"),
-          en: t("home.successStories.colorbound.title"),
-        },
-        description: colorbound?.description || {
-          es: t("home.successStories.colorbound.description"),
-          en: t("home.successStories.colorbound.description"),
-        },
-        image: colorbound?.imageUrl || Gameimg2,
-        info: colorbound?.link || "https://store.steampowered.com/app/3778610/Colorbound/",
-        plataforms: colorbound?.platforms || [],
+      description: {
+        es: t("home.successStories.tormentedSouls.description"),
+        en: t("home.successStories.tormentedSouls.description"),
       },
-    ].map((story) => ({
-      ...story,
-      title: resolveLocalizedValue(story.title, i18n.resolvedLanguage || i18n.language || "es"),
-      description: resolveLocalizedValue(story.description, i18n.resolvedLanguage || i18n.language || "es"),
-    }));
-  }, [gamesFallback, i18n.language, i18n.resolvedLanguage, t]);
+      image: Gameimg1,
+      info: "https://pqube.co.uk/games/tormented-souls/",
+      plataforms: [
+        { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/1367590/Tormented_Souls/", platform: "Steam" },
+        { name: "Nintendo", iconUrl: iconNintendo, url: "https://www.nintendo.com/store/products/tormented-souls-switch/", platform: "Nintendo" },
+        { name: "PlayStation", iconUrl: iconPlaystation, url: "https://store.playstation.com/en-us/product/UP4293-PPSA02525_00-TORMENTEDSIEAPS5/", platform: "PlayStation" },
+        { name: "Xbox", iconUrl: iconXbox, url: "https://www.xbox.com/en-us/games/store/tormented-souls/9mwz8jv5tsqg", platform: "Xbox" },
+        { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/tormented-souls", platform: "Epic" },
+        { name: "GOG", iconUrl: iconGOG, url: "https://www.gog.com/en/game/tormented_souls", platform: "GOG" },
+      ],
+    },
+    {
+      title: {
+        es: t("home.successStories.colorbound.title"),
+        en: t("home.successStories.colorbound.title"),
+      },
+      description: {
+        es: t("home.successStories.colorbound.description"),
+        en: t("home.successStories.colorbound.description"),
+      },
+      image: Gameimg2,
+      info: "https://whitethorngames.com/colorbound",
+      plataforms: [
+        { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/3778610/Colorbound/", platform: "Steam" },
+        { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/colorbound-1c5e30", platform: "Epic" },
+      ],
+    },
+  ].map((story) => ({
+    ...story,
+    title: resolveLocalizedValue(
+      story.title,
+      i18n.resolvedLanguage || i18n.language || "es",
+    ),
+    description: resolveLocalizedValue(
+      story.description,
+      i18n.resolvedLanguage || i18n.language || "es",
+    ),
+  }));
 
-  const successStories = dynamicStories.length ? dynamicStories : fallbackStories;
-  const label = resolveLocalizedValue(homeContent?.successSection?.title, i18n.resolvedLanguage || i18n.language) || t("home.successStories.label");
-  const title = resolveLocalizedValue(homeContent?.successSection?.description, i18n.resolvedLanguage || i18n.language) || t("home.successStories.title");
+  const label =
+    resolveLocalizedValue(
+      homeContent?.successSection?.title,
+      i18n.resolvedLanguage || i18n.language,
+    ) || t("home.successStories.label");
+  const title =
+    resolveLocalizedValue(
+      homeContent?.successSection?.description,
+      i18n.resolvedLanguage || i18n.language,
+    ) || t("home.successStories.title");
 
   return (
     <section className="py-20 px-4 games-bg">

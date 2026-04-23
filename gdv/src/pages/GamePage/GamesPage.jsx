@@ -4,25 +4,29 @@ import ChileIcon from "../../img/icons/Chile.png";
 import { FooterComponent } from "../../components/Footer";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchGames, getCachedGames } from "../../services/games/gamesService";
+import {
+  fetchGames,
+  getCachedGames,
+  getStaticGamesFallback,
+} from "../../services/games/gamesService";
 import { resolveLocalizedValue } from "../../utils/localization";
 
 export const GamePage = () => {
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [games, setGames] = useState(() => getCachedGames() || []);
-  const [syncState, setSyncState] = useState("syncing");
 
   useEffect(() => {
     const loadGames = async () => {
-      setSyncState("syncing");
       try {
         const result = await fetchGames();
-        setGames(result);
-        setSyncState("idle");
+        const data = Array.isArray(result) && result.length
+          ? result
+          : getStaticGamesFallback();
+        setGames([...data].sort(() => Math.random() - 0.5));
       } catch (error) {
         console.error("Error loading games:", error);
-        setSyncState("error");
+        setGames([...getStaticGamesFallback()].sort(() => Math.random() - 0.5));
       }
     };
 
@@ -48,12 +52,6 @@ export const GamePage = () => {
       return title.toLowerCase().includes(query);
     });
   }, [games, i18n.language, searchQuery, t]);
-
-  const getRandomGames = (gamesList) => {
-    return gamesList;
-  };
-
-  const randomGames = getRandomGames(filteredGames);
 
   return (
     <div className="">
@@ -84,27 +82,8 @@ export const GamePage = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center">
-            {syncState !== "idle" ? (
-              <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`inline-block h-2.5 w-2.5 rounded-full ${
-                      syncState === "syncing"
-                        ? "bg-yellow-500 animate-pulse"
-                        : "bg-red-500"
-                    }`}
-                  ></span>
-                  <span className="text-gray-700">
-                    {syncState === "syncing" &&
-                      "Sincronizando cambios de PraxSuite..."}
-                    {syncState === "error" &&
-                      "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
-                  </span>
-                </div>
-              </div>
-            ) : null}
             <div className="grid md:grid-cols-4 grid-cols-1 gap-7">
-              {randomGames.map((g) => (
+              {filteredGames.map((g) => (
                 <GameCard
                   key={g.id}
                   bgimg={g.image}

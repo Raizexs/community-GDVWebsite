@@ -25,7 +25,7 @@ const ipBotSignals = new Map();
 // ============ SECURITY: Rate Limiting ============
 const checkRateLimit = createRateLimiter({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 60000),
-  max: Number(process.env.RATE_LIMIT_CONTACT_API || 5),
+  max: Number(process.env.RATE_LIMIT_CONTACT_API || 2),
   keyPrefix: "contact-api",
 });
 
@@ -522,5 +522,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Contact proxy running on http://localhost:${port}`);
+  // Silent startup
 });

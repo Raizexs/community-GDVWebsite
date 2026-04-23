@@ -1,6 +1,24 @@
 import { extractRows } from "../praxsuite/praxsuiteClient";
 import { gamesData as staticGamesData } from "../../data/gamesData";
 
+import iconSteam from "../../img/plataforms/steam.png";
+import iconPlaystation from "../../img/plataforms/playstation.png";
+import iconXbox from "../../img/plataforms/xbox.png";
+import iconEpic from "../../img/plataforms/epic.png";
+import iconNintendo from "../../img/plataforms/nintendo.png";
+import iconGOG from "../../img/plataforms/GOG.png";
+
+const staticPlatformIcons = {
+  steam: iconSteam,
+  playstation: iconPlaystation,
+  ps: iconPlaystation,
+  xbox: iconXbox,
+  epic: iconEpic,
+  nintendo: iconNintendo,
+  switch: iconNintendo,
+  gog: iconGOG,
+};
+
 let cachedGames = null;
 let pendingGamesRequest = null;
 
@@ -30,9 +48,13 @@ function buildStaticGamesFallback() {
   }));
 }
 
+export function getStaticGamesFallback() {
+  return buildStaticGamesFallback();
+}
+
 function getGamesProvider() {
   return (
-    process.env.REACT_APP_PRAXSUITE_GAMES_PROVIDER || "static"
+    process.env.REACT_APP_PRAXSUITE_GAMES_PROVIDER || "praxsuite"
   ).toLowerCase();
 }
 
@@ -139,9 +161,6 @@ function normalizeGame(raw, cacheToken) {
   const mainImageUrlRaw = imageFromArray || imageFromField;
   const mainImageUrl = normalizeMediaSource(mainImageUrlRaw, cacheToken);
 
-  const platformImages = Array.isArray(raw?.ImagePlatform)
-    ? raw.ImagePlatform
-    : [];
   const platformNames = Array.isArray(raw?.Platforms)
     ? raw.Platforms
     : typeof raw?.Platforms === "string"
@@ -177,43 +196,41 @@ function normalizeGame(raw, cacheToken) {
     });
   });
 
-  const iconByPlatform = new Map();
-  platformImages.forEach((img) => {
-    const platformName = img?.platform || img?.namePlatform || img?.label || "";
-    const key = normalizeName(platformName);
-    const iconUrl = normalizeMediaSource(
-      img?.DownloadUrl || img?.BlobUrl || img?.name || img?.icon || img?.image,
-      cacheToken,
-    );
-    if (key && iconUrl && !iconByPlatform.has(key)) {
-      iconByPlatform.set(key, {
-        iconUrl,
-        fallbackUrl: img?.url || img?.platform_url || "",
-        label: platformName || "",
-      });
-    }
-  });
-
   const uniquePlatforms = [...new Set(platformNames.filter(Boolean))];
-  const platformsWithIcons = uniquePlatforms
+  let platformsWithIcons = uniquePlatforms
     .map((platformName, idx) => {
       const key = normalizeName(platformName);
-      const icon = iconByPlatform.get(key);
-      const url = storeUrlByPlatform.get(key) || icon?.fallbackUrl || "";
-      const iconUrl = icon?.iconUrl || null;
-
-      if (!iconUrl || !url) return null;
+      const staticIcon = staticPlatformIcons[key] || Object.entries(staticPlatformIcons).find(([k]) => key.includes(k))?.[1];
+      const url = storeUrlByPlatform.get(key) || "";
 
       return {
-        name: iconUrl,
-        iconUrl,
+        name: platformName,
+        iconUrl: staticIcon || "", 
         url,
         platform: platformName,
-        label: icon?.label || platformName,
+        label: platformName,
         _key: `${raw?.id_videogames || raw?.ID || raw?.Slug || "game"}-platform-${idx}`,
       };
     })
-    .filter(Boolean);
+    .filter((p) => p.iconUrl && p.url);
+
+  const slug = String(raw?.Slug ?? raw?.slug ?? "").toLowerCase();
+
+  if (slug === "tormentedsouls") {
+    platformsWithIcons = [
+      { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/1367590/Tormented_Souls/", platform: "Steam" },
+      { name: "Nintendo", iconUrl: iconNintendo, url: "https://www.nintendo.com/store/products/tormented-souls-switch/", platform: "Nintendo" },
+      { name: "PlayStation", iconUrl: iconPlaystation, url: "https://store.playstation.com/en-us/product/UP4293-PPSA02525_00-TORMENTEDSIEAPS5/", platform: "PlayStation" },
+      { name: "Xbox", iconUrl: iconXbox, url: "https://www.xbox.com/en-us/games/store/tormented-souls/9mwz8jv5tsqg", platform: "Xbox" },
+      { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/tormented-souls", platform: "Epic" },
+      { name: "GOG", iconUrl: iconGOG, url: "https://www.gog.com/en/game/tormented_souls", platform: "GOG" },
+    ];
+  } else if (slug === "colorbound") {
+    platformsWithIcons = [
+      { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/3778610/Colorbound/", platform: "Steam" },
+      { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/colorbound-1c5e30", platform: "Epic" },
+    ];
+  }
 
   return {
     id: String(raw?.id_videogames ?? raw?.ID ?? raw?.id ?? ""),
@@ -240,7 +257,7 @@ export async function fetchGames({ force = false } = {}) {
     return cachedGames;
   }
 
-  if (!force && pendingGamesRequest) {
+  if (pendingGamesRequest) {
     return pendingGamesRequest;
   }
 
@@ -267,6 +284,13 @@ export async function fetchGames({ force = false } = {}) {
       const filtered = normalized.filter(
         (g) => g && (g.titleKey || g.title?.es || g.title?.en) && g.isActive,
       );
+
+      const hasRenderablePlatforms = filtered.some(
+        (game) => Array.isArray(game.platforms) && game.platforms.length > 0,
+      );
+      if (!filtered.length || !hasRenderablePlatforms) {
+        return buildStaticGamesFallback();
+      }
 
       cachedGames = filtered;
       return filtered;

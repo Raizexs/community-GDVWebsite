@@ -8,7 +8,10 @@ import { Benefits } from "./components/sections/Benefits";
 import { Jointheguild } from "../../components/Jointheguild";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import { useEffect, useState } from "react";
-import { fetchHomeContent, getCachedHomeContent } from "../../services/home/homeService";
+import {
+  fetchHomeContent,
+  getCachedHomeContent,
+} from "../../services/home/homeService";
 
 export const HomePage = () => {
   useScrollRestoration();

@@ -3,36 +3,19 @@ import { useTranslation } from "react-i18next";
 import { NavbarComponent } from "../../components/Navbar";
 import { FooterComponent } from "../../components/Footer";
 import { SociosHeader } from "./components/sections/SociosHeader";
-import { fetchPartners } from "../../services/partners/partnersService";
+import {
+  getStaticPartnersFallback,
+} from "../../services/partners/partnersService";
 
 export const SociosPage = () => {
   const { t } = useTranslation();
   const [socios, setSocios] = useState([]);
-  const [syncState, setSyncState] = useState("syncing");
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    let mounted = true;
-    const loadPartners = async () => {
-      setSyncState("syncing");
-      try {
-        const partners = await fetchPartners();
-        if (!mounted) return;
-        setSocios([...partners].sort(() => Math.random() - 0.5));
-        setSyncState("idle");
-      } catch (error) {
-        console.error("Error loading partners:", error);
-        if (!mounted) return;
-        setSyncState("error");
-      }
-    };
-
-    loadPartners();
-
-    return () => {
-      mounted = false;
-    };
+    const source = getStaticPartnersFallback();
+    setSocios([...source].sort(() => Math.random() - 0.5));
   }, []);
 
   return (
@@ -55,25 +38,6 @@ export const SociosPage = () => {
           </div>
 
           <div className="flex flex-col justify-center items-center">
-            {syncState !== "idle" ? (
-              <div className="mb-4 w-full max-w-3xl rounded-md border px-4 py-2 text-sm bg-white">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`inline-block h-2.5 w-2.5 rounded-full ${
-                      syncState === "syncing"
-                        ? "bg-yellow-500 animate-pulse"
-                        : "bg-red-500"
-                    }`}
-                  ></span>
-                  <span className="text-gray-700">
-                    {syncState === "syncing" &&
-                      "Sincronizando cambios de PraxSuite..."}
-                    {syncState === "error" &&
-                      "Sin conexión con PraxSuite, mostrando contenido de respaldo"}
-                  </span>
-                </div>
-              </div>
-            ) : null}
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-7">
               {socios.map((s) => (
                 <a
