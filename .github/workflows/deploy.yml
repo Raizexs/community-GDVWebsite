@@ -36,5 +36,10 @@ jobs:
       - name: Build & Push (master tag only)
         run: |
           IMAGE=$LOGIN_SERVER/$IMAGE_NAME:master
-          docker build -t $IMAGE -f gdv/Dockerfile gdv
+          docker build \
+            --build-arg REACT_APP_PRAXSUITE_GAMES_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_GAMES_PUBLIC_KEY }} \
+            --build-arg REACT_APP_PRAXSUITE_GAMES_STORES_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_GAMES_STORES_PUBLIC_KEY }} \
+            --build-arg REACT_APP_PRAXSUITE_GAMES_PLATFORM_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_GAMES_PLATFORM_PUBLIC_KEY }} \
+            --build-arg REACT_APP_PRAXSUITE_CONTACT_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_CONTACT_PUBLIC_KEY }} \
+            -t $IMAGE -f gdv/Dockerfile gdv
           docker push $IMAGE
