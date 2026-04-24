@@ -41,5 +41,7 @@ jobs:
             --build-arg REACT_APP_PRAXSUITE_GAMES_STORES_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_GAMES_STORES_PUBLIC_KEY }} \
             --build-arg REACT_APP_PRAXSUITE_GAMES_PLATFORM_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_GAMES_PLATFORM_PUBLIC_KEY }} \
             --build-arg REACT_APP_PRAXSUITE_CONTACT_PUBLIC_KEY=${{ secrets.REACT_APP_PRAXSUITE_CONTACT_PUBLIC_KEY }} \
+            --build-arg REACT_APP_TURNSTILE_SITE_KEY=${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }} \
+            --build-arg TURNSTILE_SECRET_KEY=${{ secrets.TURNSTILE_SECRET_KEY }} \
             -t $IMAGE -f gdv/Dockerfile gdv
           docker push $IMAGE
