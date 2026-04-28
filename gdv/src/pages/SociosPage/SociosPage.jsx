@@ -37,20 +37,64 @@ export const SociosPage = () => {
             </h3>
           </div>
 
-          <div className="flex flex-col justify-center items-center">
-            <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-7">
-              {socios.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
-                >
-                  <img src={s.logo} alt={s.name} className="w-full" />
-                </a>
-              ))}
-            </div>
+          <div className="flex flex-col justify-center items-center w-full max-w-6xl mx-auto gap-7">
+            {socios.length === 10 ? (
+              <>
+                <div className="flex flex-wrap justify-center gap-7 w-full">
+                  {socios.slice(0, 4).map((s) => (
+                    <a
+                      key={s.name}
+                      href={s.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
+                    >
+                      <img src={s.logo} alt={s.name} className="w-full" />
+                    </a>
+                  ))}
+                </div>
+                <div className="flex flex-wrap justify-center gap-7 w-full">
+                  {socios.slice(4, 6).map((s) => (
+                    <a
+                      key={s.name}
+                      href={s.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
+                    >
+                      <img src={s.logo} alt={s.name} className="w-full" />
+                    </a>
+                  ))}
+                </div>
+                <div className="flex flex-wrap justify-center gap-7 w-full">
+                  {socios.slice(6, 10).map((s) => (
+                    <a
+                      key={s.name}
+                      href={s.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
+                    >
+                      <img src={s.logo} alt={s.name} className="w-full" />
+                    </a>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-wrap justify-center gap-7 w-full">
+                {socios.map((s) => (
+                  <a
+                    key={s.name}
+                    href={s.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
+                  >
+                    <img src={s.logo} alt={s.name} className="w-full" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

@@ -203,9 +203,24 @@ function normalizeGame(raw, cacheToken) {
       const staticIcon = staticPlatformIcons[key] || Object.entries(staticPlatformIcons).find(([k]) => key.includes(k))?.[1];
       const url = storeUrlByPlatform.get(key) || "";
 
+      const tablePlatform = (raw?.ImagePlatform || []).find(p => normalizeName(p.platform) === key);
+      let tableIconUrl = tablePlatform ? tablePlatform.name : "";
+      
+      if (Array.isArray(tableIconUrl)) {
+        tableIconUrl = tableIconUrl[0]?.DownloadUrl || tableIconUrl[0]?.BlobUrl || tableIconUrl[0]?.url || "";
+      } else if (typeof tableIconUrl === "object" && tableIconUrl !== null) {
+        tableIconUrl = tableIconUrl.DownloadUrl || tableIconUrl.BlobUrl || tableIconUrl.url || "";
+      }
+
+      let finalIconUrl = (typeof tableIconUrl === 'string' && tableIconUrl.trim() !== '') ? tableIconUrl : staticIcon;
+
+      if (finalIconUrl && finalIconUrl.startsWith('http') && finalIconUrl !== staticIcon) {
+        finalIconUrl = normalizeMediaSource(finalIconUrl, null) || finalIconUrl;
+      }
+
       return {
         name: platformName,
-        iconUrl: staticIcon || "", 
+        iconUrl: finalIconUrl || "", 
         url,
         platform: platformName,
         label: platformName,
