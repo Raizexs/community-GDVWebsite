@@ -16,6 +16,7 @@ env:
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   WEBAPP_NAME: Community-GDVWebsite
   RESOURCE_GROUP: Core-Production
+  ENV_TAG: prod
 
 jobs:
   build-and-push:
@@ -38,6 +39,24 @@ jobs:
           ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
           az acr login --name "$ACR_NAME_LC"
 
+      - name: Read version.txt
+        run: |
+          VERSION=$(cat version.txt | tr -d ' \n\r')
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "version.txt must be semver like 1.2.3, got: $VERSION"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Compute immutable tag
+        run: |
+          TS=$(date -u +"%Y%m%d.%H%M%S")
+          RUN=${{ github.run_number }}
+          IMMUTABLE_TAG="${ENV_TAG}-${VERSION}-${TS}-r${RUN}"
+          echo "TS=$TS" >> $GITHUB_ENV
+          echo "RUN=$RUN" >> $GITHUB_ENV
+          echo "IMMUTABLE_TAG=$IMMUTABLE_TAG" >> $GITHUB_ENV
+
       - name: Build & Push
         env:
           REACT_APP_TURNSTILE_SITE_KEY: ${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }}
@@ -47,17 +66,31 @@ jobs:
           set +x
           ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
           LOGIN_SERVER_LC="$ACR_NAME_LC.azurecr.io"
-          IMAGE="$LOGIN_SERVER_LC/$IMAGE_NAME:master"
+          IMAGE_BASE="$LOGIN_SERVER_LC/$IMAGE_NAME"
+
           docker build \
             --build-arg REACT_APP_TURNSTILE_SITE_KEY \
             --build-arg REACT_APP_GAMES_PROXY_URL \
             --build-arg REACT_APP_CONTACT_API_URL \
-            -t $IMAGE \
+            -t $IMAGE_BASE:$IMMUTABLE_TAG \
+            -t $IMAGE_BASE:$ENV_TAG-$VERSION \
+            -t $IMAGE_BASE:$VERSION \
+            -t $IMAGE_BASE:$ENV_TAG \
             -f gdv/Dockerfile gdv
-          docker push $IMAGE
 
-      - name: Restart App Service to pull latest image
+          docker push $IMAGE_BASE:$IMMUTABLE_TAG
+          docker push $IMAGE_BASE:$ENV_TAG-$VERSION
+          docker push $IMAGE_BASE:$VERSION
+          docker push $IMAGE_BASE:$ENV_TAG
+
+      - name: Deploy to App Service
         run: |
+          ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
+          LOGIN_SERVER_LC="$ACR_NAME_LC.azurecr.io"
+          az webapp config container set \
+            --name $WEBAPP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --container-image-name "$LOGIN_SERVER_LC/$IMAGE_NAME:$ENV_TAG"
           az webapp restart \
             --name $WEBAPP_NAME \
             --resource-group $RESOURCE_GROUP
