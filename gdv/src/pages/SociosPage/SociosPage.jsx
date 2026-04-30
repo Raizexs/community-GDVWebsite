@@ -4,7 +4,7 @@ import { NavbarComponent } from "../../components/Navbar";
 import { FooterComponent } from "../../components/Footer";
 import { SociosHeader } from "./components/sections/SociosHeader";
 import {
-  getStaticPartnersFallback,
+  fetchPartners,
 } from "../../services/partners/partnersService";
 
 export const SociosPage = () => {
@@ -14,8 +14,12 @@ export const SociosPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const source = getStaticPartnersFallback();
-    setSocios([...source].sort(() => Math.random() - 0.5));
+    const loadPartners = async () => {
+      const data = await fetchPartners();
+      setSocios([...data].sort(() => Math.random() - 0.5));
+    };
+
+    loadPartners();
   }, []);
 
   return (
