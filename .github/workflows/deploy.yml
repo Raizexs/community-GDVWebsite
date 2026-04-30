@@ -83,14 +83,8 @@ jobs:
           docker push $IMAGE_BASE:$VERSION
           docker push $IMAGE_BASE:$ENV_TAG
 
-      - name: Deploy to App Service
+      - name: Restart App Service to pull latest image
         run: |
-          ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
-          LOGIN_SERVER_LC="$ACR_NAME_LC.azurecr.io"
-          az webapp config container set \
-            --name $WEBAPP_NAME \
-            --resource-group $RESOURCE_GROUP \
-            --container-image-name "$LOGIN_SERVER_LC/$IMAGE_NAME:$ENV_TAG"
           az webapp restart \
             --name $WEBAPP_NAME \
             --resource-group $RESOURCE_GROUP
