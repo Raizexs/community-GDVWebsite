@@ -18,7 +18,7 @@ export const ContactPage = () => {
 
   const contactApiUrl =
     process.env.REACT_APP_CONTACT_API_URL ||
-    "http://localhost:8080/api/contact";
+    "/api/contact";
   const turnstileSiteKey = process.env.REACT_APP_TURNSTILE_SITE_KEY || "";
   const turnstileTheme = (
     process.env.REACT_APP_TURNSTILE_THEME || "light"
