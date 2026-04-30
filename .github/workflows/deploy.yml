@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to Azure Container Registry
+name: GDV Website - Deploy to Production
 
 on:
   push:
@@ -14,6 +14,10 @@ env:
   ACR_NAME: ${{ secrets.ACR_NAME }}
   LOGIN_SERVER: ${{ secrets.ACR_NAME }}.azurecr.io
   AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  WEBAPP_NAME: Community-GDVWebsite
+  RESOURCE_GROUP: Core-Production
+  ENV_TAG: prod
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -31,16 +35,58 @@ jobs:
         run: az account set --subscription $AZURE_SUBSCRIPTION_ID
 
       - name: ACR login (AAD)
-        run: az acr login --name $ACR_NAME
-
-      - name: Build & Push (master tag only)
         run: |
-          IMAGE=$LOGIN_SERVER/$IMAGE_NAME:master
+          ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
+          az acr login --name "$ACR_NAME_LC"
+
+      - name: Read version.txt
+        run: |
+          VERSION=$(cat version.txt | tr -d ' \n\r')
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "version.txt must be semver like 1.2.3, got: $VERSION"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Compute immutable tag
+        run: |
+          TS=$(date -u +"%Y%m%d.%H%M%S")
+          RUN=${{ github.run_number }}
+          IMMUTABLE_TAG="${ENV_TAG}-${VERSION}-${TS}-r${RUN}"
+          echo "TS=$TS" >> $GITHUB_ENV
+          echo "RUN=$RUN" >> $GITHUB_ENV
+          echo "IMMUTABLE_TAG=$IMMUTABLE_TAG" >> $GITHUB_ENV
+
+      - name: Build & Push
+        env:
+          REACT_APP_TURNSTILE_SITE_KEY: ${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }}
+          REACT_APP_GAMES_PROXY_URL: ${{ secrets.REACT_APP_GAMES_PROXY_URL }}
+          REACT_APP_CONTACT_API_URL: ${{ secrets.REACT_APP_CONTACT_API_URL }}
+          REACT_APP_PARTNERS_PROXY_URL: ${{ secrets.REACT_APP_PARTNERS_PROXY_URL }}
+        run: |
+          set +x
+          ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
+          LOGIN_SERVER_LC="$ACR_NAME_LC.azurecr.io"
+          IMAGE_BASE="$LOGIN_SERVER_LC/$IMAGE_NAME"
+
           docker build \
-            --build-arg REACT_APP_TURNSTILE_SITE_KEY=${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }} \
-            --build-arg REACT_APP_GAMES_PROXY_URL=${{ secrets.REACT_APP_GAMES_PROXY_URL }} \
-            --build-arg REACT_APP_CONTACT_API_URL=${{ secrets.REACT_APP_CONTACT_API_URL }} \
-            --build-arg REACT_APP_PARTNERS_PROXY_URL=${{ secrets.REACT_APP_PARTNERS_PROXY_URL }} \
-            -t $IMAGE \
+            --build-arg REACT_APP_TURNSTILE_SITE_KEY \
+            --build-arg REACT_APP_GAMES_PROXY_URL \
+            --build-arg REACT_APP_CONTACT_API_URL \
+            --build-arg REACT_APP_PARTNERS_PROXY_URL \
+            -t $IMAGE_BASE:$IMMUTABLE_TAG \
+            -t $IMAGE_BASE:$ENV_TAG-$VERSION \
+            -t $IMAGE_BASE:$VERSION \
+            -t $IMAGE_BASE:$ENV_TAG \
             -f gdv/Dockerfile gdv
-          docker push $IMAGE
+
+          docker push $IMAGE_BASE:$IMMUTABLE_TAG
+          docker push $IMAGE_BASE:$ENV_TAG-$VERSION
+          docker push $IMAGE_BASE:$VERSION
+          docker push $IMAGE_BASE:$ENV_TAG
+
+      - name: Restart App Service to pull latest image
+        run: |
+          az webapp restart \
+            --name $WEBAPP_NAME \
+            --resource-group $RESOURCE_GROUP
