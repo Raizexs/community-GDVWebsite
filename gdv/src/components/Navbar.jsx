@@ -19,7 +19,7 @@ export const NavbarComponent = () => {
   };
 
   return (
-    <div className="NavbarComponent sticky top-0 z-10 w-full">
+    <div className="NavbarComponent sticky top-0 z-50 w-full">
       <nav className="vgvalpo-bgcolor1 px-6 py-5 my-border-bottom">
         <div className="px-8 mx-auto flex justify-between items-center">
           <img src={Logo} alt="" className="w-16" />
@@ -69,6 +69,7 @@ export const NavbarComponent = () => {
               className={
                 "vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center text-white"
               }
+              aria-label="Ir a membresia"
             >
               {t("navbar.membership")}
             </Link>
@@ -95,14 +96,22 @@ export const NavbarComponent = () => {
             className="text-white py-4 block w-full text-left flex items-center hover:bg-white/10 px-3 rounded-lg transition-colors"
           >
             {t("navbar.association")}{" "}
-            <i className={`bi bi-chevron-down text-xs ml-1 transition-transform ${isOpenOption ? "rotate-180" : ""}`}></i>
+            <i
+              className={`bi bi-chevron-down text-xs ml-1 transition-transform ${isOpenOption ? "rotate-180" : ""}`}
+            ></i>
           </button>
           {isOpenOption && (
             <div className="md:hidden z-20 w-full vgvalpo-bgcolor1 px-4 py-2 my-border rounded-md">
-              <Link to={"/aboutus"} className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg">
+              <Link
+                to={"/aboutus"}
+                className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg"
+              >
                 {t("navbar.aboutUs")}
               </Link>
-              <Link to={"/socios"} className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg">
+              <Link
+                to={"/socios"}
+                className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg"
+              >
                 {t("navbar.ourPartners")}
               </Link>
             </div>

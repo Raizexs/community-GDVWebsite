@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import profile1 from "../../../../img/AboutUSImages/Alejandro.jpg";
 import profile2 from "../../../../img/AboutUSImages/Jacob.jpg";
 import profile3 from "../../../../img/AboutUSImages/Directorio_Sven (1).png";
 
-export const Members = () => {
-  const { t } = useTranslation();
-  const members = [
+export const Members = ({ membersData }) => {
+  const { t, i18n } = useTranslation();
+  const staticMembers = [
     {
       profile: profile1,
       name: "Alejandro Aranguiz",
@@ -29,6 +28,17 @@ export const Members = () => {
       instagramlink: "https://www.linkedin.com/in/svbrand/",
     },
   ];
+  const i18nLanguage = (i18n?.resolvedLanguage || i18n?.language || "").toLowerCase();
+  const lang = i18nLanguage.startsWith("en") ? "en" : "es";
+
+  const members = Array.isArray(membersData) && membersData.length
+    ? membersData.map((member) => ({
+      profile: member.profile || profile1,
+      name: member.name,
+      rol: lang === "en" ? member.roleEn : member.roleEs,
+      instagramlink: member.linkedInUrl,
+    }))
+    : staticMembers;
 
   return (
     <section className="py-20 px-4 games-bg">
@@ -42,7 +52,7 @@ export const Members = () => {
       </div>
 
       <div className="flex justify-center items-center">
-        <div className="grid md:grid-cols-4 grid-cols-1 gap-16">
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-16">
           {members.map((m) => (
             <div className="w-60 flex items-center text-center flex-col">
               <div className="vgvalpo-gradient p-1 rounded-full mb-4">

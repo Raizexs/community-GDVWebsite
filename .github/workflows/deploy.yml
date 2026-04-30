@@ -36,5 +36,10 @@ jobs:
       - name: Build & Push (master tag only)
         run: |
           IMAGE=$LOGIN_SERVER/$IMAGE_NAME:master
-          docker build -t $IMAGE -f gdv/Dockerfile gdv
+          docker build \
+            --build-arg REACT_APP_TURNSTILE_SITE_KEY=${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }} \
+            --build-arg REACT_APP_GAMES_PROXY_URL=${{ secrets.REACT_APP_GAMES_PROXY_URL }} \
+            --build-arg REACT_APP_CONTACT_API_URL=${{ secrets.REACT_APP_CONTACT_API_URL }} \
+            -t $IMAGE \
+            -f gdv/Dockerfile gdv
           docker push $IMAGE
