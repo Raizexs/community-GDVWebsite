@@ -5,7 +5,36 @@ import { FooterComponent } from "../../components/Footer";
 import { SociosHeader } from "./components/sections/SociosHeader";
 import {
   fetchPartners,
+  getStaticPartnersFallback,
 } from "../../services/partners/partnersService";
+
+const cardClassName =
+  "w-60 h-32 p-4 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card";
+
+function PartnerCard({ partner }) {
+  const content = (
+    <img
+      src={partner.logo}
+      alt={partner.name}
+      className="max-w-full max-h-full object-contain"
+    />
+  );
+
+  if (!partner.website) {
+    return <div className={cardClassName}>{content}</div>;
+  }
+
+  return (
+    <a
+      href={partner.website}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cardClassName}
+    >
+      {content}
+    </a>
+  );
+}
 
 export const SociosPage = () => {
   const { t } = useTranslation();
@@ -15,8 +44,29 @@ export const SociosPage = () => {
     window.scrollTo(0, 0);
 
     const loadPartners = async () => {
-      const data = await fetchPartners();
-      setSocios([...data].sort(() => Math.random() - 0.5));
+      try {
+        let data = await fetchPartners();
+        if (!data || !Array.isArray(data) || data.length === 0) {
+          data = getStaticPartnersFallback();
+        }
+        
+        const shuffled = [...data];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        
+        setSocios(shuffled);
+      } catch (error) {
+        console.error("Error cargando socios, usando fallback:", error);
+        const fallbackData = getStaticPartnersFallback();
+        const shuffled = [...fallbackData];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        setSocios(shuffled);
+      }
     };
 
     loadPartners();
@@ -45,57 +95,25 @@ export const SociosPage = () => {
             {socios.length === 10 ? (
               <>
                 <div className="flex flex-wrap justify-center gap-7 w-full">
-                  {socios.slice(0, 4).map((s) => (
-                    <a
-                      key={s.name}
-                      href={s.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
-                    >
-                      <img src={s.logo} alt={s.name} className="w-full" />
-                    </a>
+                  {socios.slice(0, 4).map((s, idx) => (
+                    <PartnerCard key={s.name || idx} partner={s} />
                   ))}
                 </div>
                 <div className="flex flex-wrap justify-center gap-7 w-full">
-                  {socios.slice(4, 6).map((s) => (
-                    <a
-                      key={s.name}
-                      href={s.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
-                    >
-                      <img src={s.logo} alt={s.name} className="w-full" />
-                    </a>
+                  {socios.slice(4, 6).map((s, idx) => (
+                    <PartnerCard key={s.name || idx + 4} partner={s} />
                   ))}
                 </div>
                 <div className="flex flex-wrap justify-center gap-7 w-full">
-                  {socios.slice(6, 10).map((s) => (
-                    <a
-                      key={s.name}
-                      href={s.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
-                    >
-                      <img src={s.logo} alt={s.name} className="w-full" />
-                    </a>
+                  {socios.slice(6, 10).map((s, idx) => (
+                    <PartnerCard key={s.name || idx + 6} partner={s} />
                   ))}
                 </div>
               </>
             ) : (
               <div className="flex flex-wrap justify-center gap-7 w-full">
-                {socios.map((s) => (
-                  <a
-                    key={s.name}
-                    href={s.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-60 h-32 p-6 flex justify-center items-center bg-white hover:shadow-xl rounded-lg socios-card"
-                  >
-                    <img src={s.logo} alt={s.name} className="w-full" />
-                  </a>
+                {socios.map((s, idx) => (
+                  <PartnerCard key={s.name || idx} partner={s} />
                 ))}
               </div>
             )}

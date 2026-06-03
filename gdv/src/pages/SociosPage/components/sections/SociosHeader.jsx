@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { MEMBERSHIP_WIP_ROUTE } from "../../../../utils/membershipRoute";
 
 export const SociosHeader = () => {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ export const SociosHeader = () => {
         </h1>
         <p className="md:w-8/12 mb-8">{t("partners.header.description")}</p>
         <Link
-          to={"..."}
+          to={MEMBERSHIP_WIP_ROUTE}
           className={
             "vgvalpo-gradient-btn rounded-md px-8 py-3 flex justify-center items-center"
           }
