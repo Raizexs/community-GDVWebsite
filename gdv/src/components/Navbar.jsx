@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { MEMBERSHIP_WIP_ROUTE } from "../utils/membershipRoute";
 
 export const NavbarComponent = () => {
   const { t } = useTranslation();
@@ -65,7 +66,7 @@ export const NavbarComponent = () => {
             </Link>
             <LanguageSwitcher />
             <Link
-              to={""}
+              to={MEMBERSHIP_WIP_ROUTE}
               className={
                 "vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center text-white"
               }
@@ -126,7 +127,7 @@ export const NavbarComponent = () => {
             <LanguageSwitcher />
           </div>
           <Link
-            to={""}
+            to={MEMBERSHIP_WIP_ROUTE}
             className={
               "vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center w-40 mb-4 text-white"
             }

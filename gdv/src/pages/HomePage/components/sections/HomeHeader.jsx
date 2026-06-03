@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { resolveLocalizedValue } from "../../../../utils/localization";
+import { resolveMembershipJoinUrl } from "../../../../utils/membershipRoute";
 import homeHeroFallback from "../../../../img/riosdelluvia.jpg";
 
 function renderValparaisoHighlighted(text) {
@@ -37,7 +38,7 @@ export const HomeHeader = ({ homeContent }) => {
     homeContent?.hero?.description,
     language,
   );
-  const heroUrl = homeContent?.hero?.url || "/socios";
+  const heroUrl = resolveMembershipJoinUrl(homeContent?.hero?.url || "...");
   const dynamicHeroRaw =
     typeof homeContent?.hero?.hero === "string"
       ? homeContent.hero.hero.trim()

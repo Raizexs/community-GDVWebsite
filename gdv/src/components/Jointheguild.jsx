@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { resolveLocalizedValue } from "../utils/localization";
+import { resolveMembershipJoinUrl } from "../utils/membershipRoute";
 
 export const Jointheguild = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
@@ -8,7 +9,7 @@ export const Jointheguild = ({ homeContent }) => {
   const title = resolveLocalizedValue(homeContent?.joinCta?.title, language) || t("joinGuild.title");
   const description =
     resolveLocalizedValue(homeContent?.joinCta?.description, language) || t("joinGuild.description");
-  const joinUrl = homeContent?.joinCta?.url || "...";
+  const joinUrl = resolveMembershipJoinUrl(homeContent?.joinCta?.url || "...");
 
   return (
     <section className={`flex justify-center items-center cta-gremio-bg`}>
