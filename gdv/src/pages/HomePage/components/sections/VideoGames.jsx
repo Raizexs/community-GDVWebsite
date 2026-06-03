@@ -2,7 +2,11 @@ import { GameCard } from "../../../../components/GameCard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
-import { fetchGames, getStaticGamesFallback } from "../../../../services/games/gamesService";
+import {
+  fetchGames,
+  getCachedGames,
+  getStaticGamesFallback,
+} from "../../../../services/games/gamesService";
 import { resolveLocalizedValue } from "../../../../utils/localization";
 
 export const VideoGames = ({ homeContent }) => {
@@ -11,6 +15,14 @@ export const VideoGames = ({ homeContent }) => {
 
   useEffect(() => {
     let mounted = true;
+
+    const cached = getCachedGames();
+    if (cached?.length) {
+      setGames(cached);
+      return () => {
+        mounted = false;
+      };
+    }
 
     fetchGames()
       .then((result) => {

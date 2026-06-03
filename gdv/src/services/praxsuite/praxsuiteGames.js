@@ -1,5 +1,6 @@
 import { getPraxsuiteGamesConfig } from "../../config/appConfig";
 import { fetchPraxsuiteTable } from "./praxsuiteApi";
+import { assertClientRateLimit } from "./praxsuiteSecurity";
 
 function normalizeName(value) {
   return String(value || "")
@@ -49,25 +50,30 @@ export function getGamesApiKeys() {
 
 export async function fetchMergedGamesFromPraxsuite() {
   const cfg = getPraxsuiteGamesConfig();
+  assertClientRateLimit("query");
 
+  const tableOpts = { skipRateLimit: true };
   const [gamesRows, platformRows, storeRows] = await Promise.all([
     fetchPraxsuiteTable(
       cfg.gamesQueryUrl,
       "VIDEOGAMES",
       cfg.gamesRef,
       cfg.gamesKey,
+      tableOpts,
     ),
     fetchPraxsuiteTable(
       cfg.platformQueryUrl,
       "VIDEOGAMES-PLATFORM",
       cfg.platformRef,
       cfg.platformKey,
+      tableOpts,
     ),
     fetchPraxsuiteTable(
       cfg.storesQueryUrl,
       "VIDEOGAMES-STORES",
       cfg.storesRef,
       cfg.storesKey,
+      tableOpts,
     ),
   ]);
 
@@ -96,7 +102,9 @@ export async function fetchMergedGamesFromPraxsuite() {
 
     const storeUrlByPlatform = new Map();
     gameStoreRows.forEach((storeRow) => {
-      const storeUrl = String(storeRow?.store_url || storeRow?.url || "").trim();
+      const storeUrl = String(
+        storeRow?.store_url || storeRow?.url || "",
+      ).trim();
       if (!storeUrl) return;
       const storePlatforms = extractPlatformNames(
         storeRow?.platforms || storeRow?.platform,
@@ -110,8 +118,7 @@ export async function fetchMergedGamesFromPraxsuite() {
     });
 
     const mergedPlatforms = platformNames.map((platformName) => {
-      const platformRow =
-        platformByName.get(normalizeName(platformName)) || {};
+      const platformRow = platformByName.get(normalizeName(platformName)) || {};
       const platformKey = normalizeName(platformName);
       return {
         platform: platformName,
@@ -155,11 +162,7 @@ export async function fetchMergedGamesFromPraxsuite() {
         mergedStores[0]?.url ||
         "",
       ImageGame:
-        game?.ImageGame ||
-        game?.imageGame ||
-        game?.Image ||
-        game?.image ||
-        [],
+        game?.ImageGame || game?.imageGame || game?.Image || game?.image || [],
     };
   });
 }

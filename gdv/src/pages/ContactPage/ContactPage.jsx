@@ -10,6 +10,10 @@ import {
   isPraxsuiteContactReady,
 } from "../../config/appConfig";
 import { insertPraxsuiteContact } from "../../services/praxsuite/praxsuiteApi";
+import {
+  logPraxsuiteError,
+  PraxsuiteErrorCode,
+} from "../../services/praxsuite/praxsuiteSecurity";
 
 export const ContactPage = () => {
   const { t } = useTranslation();
@@ -73,14 +77,26 @@ export const ContactPage = () => {
 
     if (formData.website && formData.website.trim() !== "") {
       setAlert({ type: "success", message: t("contact.form.success") });
-      setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: "",
+      });
       return;
     }
 
     const timeToFill = Date.now() - formStartedAtRef.current;
     if (timeToFill < 3000) {
       setAlert({ type: "success", message: t("contact.form.success") });
-      setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: "",
+      });
       return;
     }
 
@@ -122,10 +138,12 @@ export const ContactPage = () => {
         resetCaptcha();
       }
     } catch (error) {
-      setAlert({
-        type: "error",
-        message: error.message || t("contact.form.submitError"),
-      });
+      logPraxsuiteError("contactForm", error);
+      const message =
+        error?.code === PraxsuiteErrorCode.RATE_LIMIT
+          ? t("contact.form.rateLimit")
+          : t("contact.form.submitError");
+      setAlert({ type: "error", message });
     } finally {
       setIsSubmitting(false);
     }

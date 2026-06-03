@@ -199,7 +199,9 @@
       "sending": "Enviando...",
       "success": "Tu mensaje fue enviado correctamente.",
       "submitError": "No pudimos enviar tu mensaje. Intenta nuevamente.",
+      "rateLimit": "Has enviado varios mensajes seguidos. Espera un minuto e inténtalo de nuevo.",
       "captchaRequired": "Debes completar el captcha para enviar el formulario.",
+      "captchaFailed": "No pudimos validar el captcha. Completa el desafío e inténtalo de nuevo.",
       "captchaLoadError": "No pudimos cargar/verificar el captcha. Recarga la página e inténtalo nuevamente.",
       "notConfigured": "El formulario no está configurado en este entorno. Copia gdv/.env.example a gdv/.env y completa las variables de PraxSuite."
     }

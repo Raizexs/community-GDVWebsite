@@ -1,8 +1,25 @@
 import { extractRows } from "./praxsuiteClient";
 import { resolvePraxsuiteGatewayUrl } from "./praxsuiteGateway";
+import {
+  assertAllowedGatewayUrl,
+  assertClientRateLimit,
+  throwPraxsuiteApiError,
+} from "./praxsuiteSecurity";
 
-export async function fetchPraxsuiteTable(queryUrl, tableName, ref, apiKey) {
+export async function fetchPraxsuiteTable(
+  queryUrl,
+  tableName,
+  ref,
+  apiKey,
+  { skipRateLimit = false } = {},
+) {
+  if (!skipRateLimit) {
+    assertClientRateLimit("query");
+  }
+
   const gatewayUrl = resolvePraxsuiteGatewayUrl(queryUrl);
+  assertAllowedGatewayUrl(gatewayUrl);
+
   const payload = {
     refs: { [tableName]: ref },
     query: { from: tableName, select: [] },
@@ -19,7 +36,7 @@ export async function fetchPraxsuiteTable(queryUrl, tableName, ref, apiKey) {
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`PraxSuite error: ${response.status} - ${errorText}`);
+    throwPraxsuiteApiError("fetchPraxsuiteTable", response.status, errorText);
   }
 
   const text = await response.text();
@@ -42,8 +59,11 @@ export async function insertPraxsuiteContact({
   subject,
   message,
 }) {
+  assertClientRateLimit("contact");
+
   const table = "CONTACT";
   const gatewayUrl = resolvePraxsuiteGatewayUrl(queryUrl);
+  assertAllowedGatewayUrl(gatewayUrl);
   const payload = {
     refs: { [table]: ref },
     mutation: {
@@ -72,7 +92,11 @@ export async function insertPraxsuiteContact({
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(errorText || `PraxSuite contact error: ${response.status}`);
+    throwPraxsuiteApiError(
+      "insertPraxsuiteContact",
+      response.status,
+      errorText,
+    );
   }
 
   return response.json().catch(() => ({}));

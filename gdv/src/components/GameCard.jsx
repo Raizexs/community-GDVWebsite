@@ -15,13 +15,20 @@ export const GameCard = ({
 
   const localizedTitle = resolveLocalizedValue(title, i18n.language);
   const titleText =
-    (title && typeof title === "object" ? title[i18n.language] || title.es : "") ||
+    (title && typeof title === "object"
+      ? title[i18n.language] || title.es
+      : "") ||
     localizedTitle ||
     (titleKey ? t(titleKey) : "");
 
-  const localizedDescription = resolveLocalizedValue(description, i18n.language);
+  const localizedDescription = resolveLocalizedValue(
+    description,
+    i18n.language,
+  );
   const descriptionText =
-    (description && typeof description === "object" ? description[i18n.language] || description.es : "") ||
+    (description && typeof description === "object"
+      ? description[i18n.language] || description.es
+      : "") ||
     localizedDescription ||
     (descriptionKey ? t(descriptionKey) : "");
 
@@ -72,7 +79,25 @@ export const GameCard = ({
                 const url = p?.url;
                 const key = p?._key || `${idx}`;
 
-                if (!url || !icon) return null;
+                if (!icon) return null;
+
+                const img = (
+                  <img
+                    src={icon}
+                    alt={p?.label || p?.platform || "Platform"}
+                    style={{
+                      width: "22px",
+                      height: "22px",
+                      borderRadius: "9999px",
+                      objectFit: "cover",
+                    }}
+                    loading="lazy"
+                  />
+                );
+
+                if (!url || url === "#") {
+                  return <span key={key}>{img}</span>;
+                }
 
                 return (
                   <a
@@ -81,12 +106,7 @@ export const GameCard = ({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img
-                      src={icon}
-                      alt={p?.label || p?.platform || "Platform"}
-                      style={{ width: "22px", height: "22px", borderRadius: "9999px", objectFit: "cover" }}
-                      loading="lazy"
-                    />
+                    {img}
                   </a>
                 );
               })}

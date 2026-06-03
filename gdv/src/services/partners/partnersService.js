@@ -8,12 +8,18 @@ import TaeLao from "../../img/partners/TAE-LAO.png";
 import ChileGamesDatabase from "../../img/partners/CHILEGAMESDATABASE.png";
 import TangaraStudio from "../../img/partners/TANGARASTUDIO.png";
 import TesseractLogo from "../../img/partners/TESSERACT.png";
+import { shouldLoadPartnersFromPraxsuite } from "../../config/appConfig";
 import {
-  getPraxsuitePartnersConfig,
-  shouldLoadPartnersFromPraxsuite,
-} from "../../config/appConfig";
-import { fetchPraxsuiteTable } from "../praxsuite/praxsuiteApi";
+  fetchPartnersRows,
+  getPartnersApiKeys,
+} from "../praxsuite/praxsuitePartners";
 import { resolveDisplayableMediaUrl } from "../praxsuite/praxsuiteMedia";
+import {
+  canLoadFromPraxsuite,
+  logPraxsuiteError,
+} from "../praxsuite/praxsuiteSecurity";
+
+const PARTNERS_UI_CACHE_TTL_MS = 4000;
 
 const staticPartners = [
   {
@@ -52,7 +58,10 @@ const staticPartners = [
   },
 ];
 
-let cachedPartners = null;
+let partnersUiCache = {
+  data: null,
+  timestamp: 0,
+};
 let pendingPartnersRequest = null;
 
 export function getStaticPartnersFallback() {
@@ -95,14 +104,9 @@ function resolvePartnerWebsite(name, rawUrl) {
   return KNOWN_PARTNER_URLS[normalizePartnerName(name)] || "";
 }
 
-async function normalizePartner(raw) {
+async function normalizePartner(raw, apiKeys) {
   const name =
-    raw?.Partner ||
-    raw?.name ||
-    raw?.Name ||
-    raw?.Title ||
-    raw?.title ||
-    "";
+    raw?.Partner || raw?.name || raw?.Name || raw?.Title || raw?.title || "";
   const rawWebsite =
     raw?.["Partner URL"] ||
     raw?.website ||
@@ -122,22 +126,48 @@ async function normalizePartner(raw) {
     raw?.Image ||
     raw?.icon ||
     raw?.Icon;
-  const cfg = getPraxsuitePartnersConfig();
-  const logo = await resolveDisplayableMediaUrl(imageField, [cfg.apiKey]);
+
+  const logo = await resolveDisplayableMediaUrl(imageField, apiKeys, {
+    rateLimitBucket: "partnersMedia",
+  });
 
   return { name, website, logo };
+}
+
+async function loadPartnersFromPraxsuite({ force = false } = {}) {
+  const apiKeys = getPartnersApiKeys();
+  const rows = await fetchPartnersRows({ force });
+  const normalized = await Promise.all(
+    rows.map((raw) => normalizePartner(raw, apiKeys)),
+  );
+  const filtered = normalized.filter((p) => p && p.name && p.logo);
+
+  if (!filtered.length) {
+    return getStaticPartnersFallback();
+  }
+
+  return filtered;
 }
 
 export async function fetchPartners({ force = false } = {}) {
   if (!shouldLoadPartnersFromPraxsuite()) {
     const fallback = getStaticPartnersFallback();
-    cachedPartners = fallback;
+    partnersUiCache = { data: fallback, timestamp: Date.now() };
     pendingPartnersRequest = null;
     return fallback;
   }
 
-  if (!force && cachedPartners) {
-    return cachedPartners;
+  const now = Date.now();
+  if (
+    !force &&
+    partnersUiCache.data &&
+    now - partnersUiCache.timestamp < PARTNERS_UI_CACHE_TTL_MS
+  ) {
+    return partnersUiCache.data;
+  }
+
+  if (!canLoadFromPraxsuite("partners")) {
+    return getStaticPartnersFallback();
   }
 
   if (pendingPartnersRequest) {
@@ -146,22 +176,9 @@ export async function fetchPartners({ force = false } = {}) {
 
   pendingPartnersRequest = (async () => {
     try {
-      const cfg = getPraxsuitePartnersConfig();
-      const rows = await fetchPraxsuiteTable(
-        cfg.queryUrl,
-        cfg.table,
-        cfg.ref,
-        cfg.apiKey,
-      );
-      const normalized = await Promise.all(rows.map((raw) => normalizePartner(raw)));
-      const filtered = normalized.filter((p) => p && p.name && p.logo);
-
-      if (!filtered.length) {
-        return getStaticPartnersFallback();
-      }
-
-      cachedPartners = filtered;
-      return filtered;
+      const data = await loadPartnersFromPraxsuite({ force });
+      partnersUiCache = { data, timestamp: Date.now() };
+      return data;
     } finally {
       pendingPartnersRequest = null;
     }
@@ -170,7 +187,12 @@ export async function fetchPartners({ force = false } = {}) {
   try {
     return await pendingPartnersRequest;
   } catch (error) {
-    console.warn("Partners PraxSuite fetch failed:", error?.message || error);
+    logPraxsuiteError("fetchPartners", error);
+
+    if (partnersUiCache.data?.length) {
+      return partnersUiCache.data;
+    }
+
     return getStaticPartnersFallback();
   }
 }

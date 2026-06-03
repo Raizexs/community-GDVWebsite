@@ -199,7 +199,9 @@
       "sending": "Sending...",
       "success": "Your message was sent successfully.",
       "submitError": "We could not send your message. Please try again.",
+      "rateLimit": "You have sent several messages in a row. Please wait a minute and try again.",
       "captchaRequired": "You must complete the captcha before submitting the form.",
+      "captchaFailed": "We could not validate the captcha. Complete the challenge and try again.",
       "captchaLoadError": "We could not load/verify the captcha. Reload the page and try again.",
       "notConfigured": "The form is not configured in this environment. Copy gdv/.env.example to gdv/.env and fill in the PraxSuite variables."
     }

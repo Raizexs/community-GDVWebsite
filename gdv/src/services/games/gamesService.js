@@ -1,10 +1,15 @@
 import { gamesData as staticGamesData } from "../../data/gamesData";
 import { shouldLoadGamesFromPraxsuite } from "../../config/appConfig";
 import {
+  canLoadFromPraxsuite,
+  PraxsuiteErrorCode,
+} from "../praxsuite/praxsuiteSecurity";
+import {
   fetchMergedGamesFromPraxsuite,
   getGamesApiKeys,
 } from "../praxsuite/praxsuiteGames";
 import {
+  canUseDirectMediaUrl,
   normalizeMediaSourceSync,
   resolveDisplayableMediaUrl,
 } from "../praxsuite/praxsuiteMedia";
@@ -71,7 +76,16 @@ function normalizeName(value) {
 async function normalizeMediaSource(rawValue, apiKeys) {
   const syncUrl = normalizeMediaSourceSync(rawValue);
   if (!syncUrl || !syncUrl.startsWith("http")) return syncUrl;
-  return resolveDisplayableMediaUrl(rawValue, apiKeys);
+  if (canUseDirectMediaUrl(syncUrl)) return syncUrl;
+
+  try {
+    return await resolveDisplayableMediaUrl(rawValue, apiKeys);
+  } catch (error) {
+    if (error?.code === PraxsuiteErrorCode.RATE_LIMIT) {
+      return canUseDirectMediaUrl(syncUrl) ? syncUrl : null;
+    }
+    throw error;
+  }
 }
 
 async function normalizeGame(raw, apiKeys) {
@@ -137,11 +151,14 @@ async function normalizeGame(raw, apiKeys) {
       const staticIcon =
         staticPlatformIcons[key] ||
         Object.entries(staticPlatformIcons).find(([k]) => key.includes(k))?.[1];
-      const url = storeUrlByPlatform.get(key) || "";
-
       const tablePlatform = (raw?.ImagePlatform || []).find(
         (p) => normalizeName(p.platform) === key,
       );
+      const url =
+        storeUrlByPlatform.get(key) ||
+        tablePlatform?.url ||
+        "";
+
       let tableIconUrl = tablePlatform ? tablePlatform.name : "";
 
       if (Array.isArray(tableIconUrl)) {
@@ -158,24 +175,28 @@ async function normalizeGame(raw, apiKeys) {
           "";
       }
 
-      let finalIconUrl =
-        typeof tableIconUrl === "string" && tableIconUrl.trim() !== ""
-          ? tableIconUrl
-          : staticIcon;
+      let finalIconUrl = staticIcon;
 
       if (
-        finalIconUrl &&
-        finalIconUrl.startsWith("http") &&
-        finalIconUrl !== staticIcon
+        !finalIconUrl &&
+        typeof tableIconUrl === "string" &&
+        tableIconUrl.trim() !== ""
       ) {
-        finalIconUrl =
-          (await normalizeMediaSource(finalIconUrl, apiKeys)) || finalIconUrl;
+        finalIconUrl = tableIconUrl;
+        if (finalIconUrl.startsWith("http")) {
+          const resolved = await normalizeMediaSource(finalIconUrl, apiKeys);
+          finalIconUrl = resolved || staticIcon || finalIconUrl;
+        }
+      }
+
+      if (!finalIconUrl) {
+        finalIconUrl = staticIcon || "";
       }
 
       return {
         name: platformName,
-        iconUrl: finalIconUrl || "",
-        url,
+        iconUrl: finalIconUrl,
+        url: url || "#",
         platform: platformName,
         label: platformName,
         _key: `${raw?.id_videogames || raw?.ID || raw?.Slug || "game"}-platform-${idx}`,
@@ -183,7 +204,7 @@ async function normalizeGame(raw, apiKeys) {
     }),
   );
 
-  platformsWithIcons = platformsWithIcons.filter((p) => p.iconUrl && p.url);
+  platformsWithIcons = platformsWithIcons.filter((p) => p.iconUrl);
 
   const slug = String(raw?.Slug ?? raw?.slug ?? "").toLowerCase();
 
@@ -268,6 +289,10 @@ export async function fetchGames({ force = false } = {}) {
     return cachedGames;
   }
 
+  if (!canLoadFromPraxsuite("games")) {
+    return buildStaticGamesFallback();
+  }
+
   if (pendingGamesRequest) {
     return pendingGamesRequest;
   }
@@ -283,10 +308,7 @@ export async function fetchGames({ force = false } = {}) {
         (g) => g && (g.titleKey || g.title?.es || g.title?.en) && g.isActive,
       );
 
-      const hasRenderablePlatforms = filtered.some(
-        (game) => Array.isArray(game.platforms) && game.platforms.length > 0,
-      );
-      if (!filtered.length || !hasRenderablePlatforms) {
+      if (!filtered.length) {
         return buildStaticGamesFallback();
       }
 
@@ -301,6 +323,7 @@ export async function fetchGames({ force = false } = {}) {
     return await pendingGamesRequest;
   } catch (error) {
     console.warn("Games PraxSuite fetch failed:", error?.message || error);
+    if (cachedGames?.length) return cachedGames;
     return buildStaticGamesFallback();
   }
 }

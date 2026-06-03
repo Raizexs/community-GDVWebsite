@@ -4,6 +4,11 @@
  *   REACT_APP_PRAXSUITE_TABLES   JSON: ref + key por módulo (no commitear)
  *   REACT_APP_TURNSTILE_SITE_KEY
  *
+ * Opcionales (hardening cliente):
+ *   REACT_APP_PRAXSUITE_GATEWAY_HOST_ALLOWLIST
+ *   REACT_APP_PRAXSUITE_MEDIA_HOST_ALLOWLIST
+ *   REACT_APP_PRAXSUITE_PUBLIC_KEY (opcional, imágenes de socios)
+ *
  * Compatibilidad: REACT_APP_PRAXSUITE_API_KEYS + REACT_APP_PRAXSUITE_REFS (JSON separados)
  */
 
@@ -71,13 +76,7 @@ function parseModulesFromEnv() {
   const fromRefs = parseJsonEnv("REACT_APP_PRAXSUITE_REFS");
   const sharedKey = env("REACT_APP_PRAXSUITE_PUBLIC_KEY");
 
-  const moduleNames = [
-    "games",
-    "platform",
-    "stores",
-    "partners",
-    "contact",
-  ];
+  const moduleNames = ["games", "platform", "stores", "partners", "contact"];
 
   cachedModules = {};
   for (const name of moduleNames) {
@@ -124,7 +123,9 @@ function parseModulesFromEnv() {
 
 function getModule(name) {
   const modules = parseModulesFromEnv();
-  return modules?.[name] || { table: DEFAULT_TABLE_NAMES[name], ref: "", key: "" };
+  return (
+    modules?.[name] || { table: DEFAULT_TABLE_NAMES[name], ref: "", key: "" }
+  );
 }
 
 export function getPraxsuiteQueryUrl() {
@@ -177,12 +178,12 @@ export function isPraxsuiteGamesReady() {
   const c = getPraxsuiteGamesConfig();
   return Boolean(
     c.gamesQueryUrl &&
-      c.gamesRef &&
-      c.gamesKey &&
-      c.platformRef &&
-      c.platformKey &&
-      c.storesRef &&
-      c.storesKey,
+    c.gamesRef &&
+    c.gamesKey &&
+    c.platformRef &&
+    c.platformKey &&
+    c.storesRef &&
+    c.storesKey,
   );
 }
 
@@ -193,7 +194,7 @@ export function isPraxsuitePartnersReady() {
 
 export function isPraxsuiteContactReady() {
   const c = getPraxsuiteContactConfig();
-  return Boolean(c.queryUrl && c.ref && c.apiKey);
+  return Boolean(c.queryUrl && c.ref && c.apiKey && getTurnstileSiteKey());
 }
 
 function getDataSource() {
