@@ -204,6 +204,11 @@
       "notConfigured": "The form is not configured in this environment. Copy gdv/.env.example to gdv/.env and fill in the PraxSuite variables."
     }
   },
+  "errorPage": {
+    "title": "Something epic is in development...",
+    "description": "Our designers are working at full speed to offer you a unique experience. We are about to reveal something that will leave a mark. Just a few more days!",
+    "backHome": "Back to Home"
+  },
   "gameCard": {
     "seeMore": "See more"
   },

@@ -204,6 +204,11 @@
       "notConfigured": "El formulario no está configurado en este entorno. Copia gdv/.env.example a gdv/.env y completa las variables de PraxSuite."
     }
   },
+  "errorPage": {
+    "title": "Algo épico está en desarrollo...",
+    "description": "Nuestros diseñadores están trabajando a toda máquina para ofrecerte una experiencia única. Estamos a punto de revelar algo que dejará huella. ¡Solo unos días más!",
+    "backHome": "Volver al Inicio"
+  },
   "gameCard": {
     "seeMore": "Ver más"
   },
