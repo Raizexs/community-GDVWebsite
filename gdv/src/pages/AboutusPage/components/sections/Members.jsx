@@ -7,25 +7,28 @@ export const Members = ({ membersData }) => {
   const { t, i18n } = useTranslation();
   const staticMembers = [
     {
+      id: "alejandro-aranguiz",
       profile: profile1,
-      name: "Alejandro Aranguiz",
+      name: "Alejandro Aránguiz C.",
       rol: t("aboutUs.members.president"),
-      facebooklink: "...",
-      instagramlink: "https://www.linkedin.com/in/alejandroaranguizc",
+      linkedinlink: "https://www.linkedin.com/in/alejandroaranguizc",
+      emaillink: "presidencia@gdvalparaiso.com",
     },
     {
+      id: "jacob-wischrey",
       profile: profile2,
-      name: "Jacob Wischrey",
+      name: "Jacob Wischrey M.",
       rol: t("aboutUs.members.finances"),
-      facebooklink: "...",
-      instagramlink: "https://www.linkedin.com/in/jwilschrey/",
+      linkedinlink: "https://www.linkedin.com/in/jwilschrey/",
+      emaillink: "tesoreria@gdvalparaiso.com",
     },
     {
+      id: "sven-von-brand",
       profile: profile3,
       name: "Sven von Brand L.",
       rol: t("aboutUs.members.secretary"),
-      facebooklink: "...",
-      instagramlink: "https://www.linkedin.com/in/svbrand/",
+      linkedinlink: "https://www.linkedin.com/in/svbrand/",
+      emaillink: "secretaria@gdvalparaiso.com",
     },
   ];
   const i18nLanguage = (i18n?.resolvedLanguage || i18n?.language || "").toLowerCase();
@@ -33,10 +36,12 @@ export const Members = ({ membersData }) => {
 
   const members = Array.isArray(membersData) && membersData.length
     ? membersData.map((member) => ({
+      id: member.id ?? member.email ?? member.name,
       profile: member.profile || profile1,
       name: member.name,
       rol: lang === "en" ? member.roleEn : member.roleEs,
-      instagramlink: member.linkedInUrl,
+      linkedinlink: member.linkedInUrl,
+      emaillink: member.email ? `mailto:${member.email}` : "mailto:contacto@gdvalparaiso.com",
     }))
     : staticMembers;
 
@@ -54,7 +59,10 @@ export const Members = ({ membersData }) => {
       <div className="flex justify-center items-center">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-16">
           {members.map((m) => (
-            <div className="w-60 flex items-center text-center flex-col">
+            <div
+              key={m.id ?? m.name}
+              className="w-60 flex items-center text-center flex-col"
+            >
               <div className="vgvalpo-gradient p-1 rounded-full mb-4">
                 <img
                   src={m.profile}
@@ -66,7 +74,7 @@ export const Members = ({ membersData }) => {
               <p className="text-lg vgvalpo-textcolor5 mb-3">{m.rol}</p>
               <div className="flex justify-center items-center gap-2">
                 <a
-                  href={m.instagramlink}
+                  href={m.linkedinlink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-linkedin flex items-center justify-center w-9 h-9 rounded-lg transition duration-500 hover:-translate-y-1"
@@ -79,6 +87,20 @@ export const Members = ({ membersData }) => {
                     fill="white"
                   >
                     <path d="M27 0H5C2.2 0 0 2.2 0 5v22c0 2.8 2.2 5 5 5h22c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5zM9.4 27H5.7V12.1h3.7V27zm-1.9-17.1c-1.2 0-2.1-.9-2.1-2.1s.9-2.1 2.1-2.1c1.2 0 2.1.9 2.1 2.1s-.9 2.1-2.1 2.1zm19.5 17.1h-3.7v-7.2c0-1.7-.6-2.8-2.1-2.8-1.1 0-1.7.7-2 1.4-.1.3-.1.7-.1 1.1V27h-3.7s.1-12.3 0-13.9h3.7v2c.5-.8 1.4-2 3.5-2 2.6 0 4.5 1.7 4.5 5.4V27z" />
+                  </svg>
+                </a>
+                <a
+                  href={m.emaillink?.startsWith('mailto:') ? m.emaillink : `mailto:${m.emaillink}`}
+                  className="bg-gray-800 flex items-center justify-center w-9 h-9 rounded-lg transition duration-500 hover:-translate-y-1"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                  >
+                    <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" />
                   </svg>
                 </a>
               </div>

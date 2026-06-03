@@ -128,6 +128,58 @@
       "joinButton": "¡Únete al Gremio!"
     }
   },
+  "membresia": {
+    "hero": {
+      "title": "Cuotas Sociales GDV",
+      "subtitle": "Sé parte del gremio que impulsa la industria de videojuegos en Valparaíso.",
+      "wipBadge": "Información en revisión",
+      "cta": "Contáctanos"
+    },
+    "pricing": {
+      "label": "— Estructura aprobada —",
+      "title": "Modalidades de cuota social",
+      "paymentSystem": "Sistema de pago mensual, con alternativa de pago anual propuesta.",
+      "foundersNote": "Socios fundadores: los costos de fundación se devuelven mediante las cuotas sociales, según lo acordado por el gremio.",
+      "monthly": {
+        "title": "Cuota mensual",
+        "price": "1",
+        "priceUnit": "UF / mes",
+        "description": "Tier único de socios. Cuota social estándar del gremio."
+      },
+      "discount": {
+        "title": "Descuento temporal",
+        "price": "0,5",
+        "priceUnit": "UF / mes",
+        "description": "Por 6 meses, previa solicitud y evaluación por la directiva."
+      },
+      "annual": {
+        "title": "Pago anual",
+        "price": "9,6",
+        "priceUnit": "UF / año",
+        "description": "Equivalente a un 20% de descuento respecto al pago mensual.",
+        "badge": "20% de descuento"
+      }
+    },
+    "benefits": {
+      "label": "— Beneficios para socios —",
+      "title": "Lo que obtienes al ser parte del gremio",
+      "items": {
+        "community": "Participación en una comunidad profesional de desarrolladores, estudios, artistas, diseñadores y actores de la industria.",
+        "activities": "Acceso a actividades, reuniones, networking y espacios colaborativos del gremio.",
+        "visibility": "Visibilidad dentro del ecosistema regional de videojuegos.",
+        "initiatives": "Participación en iniciativas, alianzas y proyectos impulsados por GDV.",
+        "support": "Apoyo colectivo para fortalecer la industria local.",
+        "opportunities": "Posibilidad de vinculación con instituciones, eventos y oportunidades del sector."
+      }
+    },
+    "contact": {
+      "title": "¿Quieres ser parte de GDV Valparaíso?",
+      "button": "Contáctanos",
+      "supportText": "Escríbenos para recibir más información sobre el proceso de incorporación.",
+      "email": "directiva@gdvalparaiso.com",
+      "mailtoSubject": "Consulta incorporación GDV"
+    }
+  },
   "contact": {
     "header": {
       "title": "Contáctanos",
@@ -148,7 +200,8 @@
       "success": "Tu mensaje fue enviado correctamente.",
       "submitError": "No pudimos enviar tu mensaje. Intenta nuevamente.",
       "captchaRequired": "Debes completar el captcha para enviar el formulario.",
-      "captchaLoadError": "No pudimos cargar/verificar el captcha. Recarga la página e inténtalo nuevamente."
+      "captchaLoadError": "No pudimos cargar/verificar el captcha. Recarga la página e inténtalo nuevamente.",
+      "notConfigured": "El formulario no está configurado en este entorno. Copia gdv/.env.example a gdv/.env y completa las variables de PraxSuite."
     }
   },
   "gameCard": {

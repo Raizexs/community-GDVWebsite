@@ -106,6 +106,15 @@
   background-repeat: no-repeat;
 }
 
+.membresia-header-img {
+  background:
+    linear-gradient(#000000ab, #000000ab),
+    url(../img/futuristic-technology-concept-gradient-background/3069841.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .contact-header-img {
   background:
     linear-gradient(#000000ab, #000000ab),

@@ -128,6 +128,58 @@
       "joinButton": "Join the Guild!"
     }
   },
+  "membresia": {
+    "hero": {
+      "title": "GDV Membership Fees",
+      "subtitle": "Be part of the guild driving the video game industry in Valparaíso.",
+      "wipBadge": "Information under review",
+      "cta": "Contact us"
+    },
+    "pricing": {
+      "label": "— Approved structure —",
+      "title": "Membership fee options",
+      "paymentSystem": "Monthly payment system, with a proposed annual payment alternative.",
+      "foundersNote": "Founding members: founding costs are reimbursed through membership fees, as agreed by the guild.",
+      "monthly": {
+        "title": "Monthly fee",
+        "price": "1",
+        "priceUnit": "UF / month",
+        "description": "Single member tier. Standard guild membership fee."
+      },
+      "discount": {
+        "title": "Temporary discount",
+        "price": "0.5",
+        "priceUnit": "UF / month",
+        "description": "For 6 months, upon request and board evaluation."
+      },
+      "annual": {
+        "title": "Annual payment",
+        "price": "9.6",
+        "priceUnit": "UF / year",
+        "description": "Equivalent to a 20% discount compared to monthly payment.",
+        "badge": "20% discount"
+      }
+    },
+    "benefits": {
+      "label": "— Member benefits —",
+      "title": "What you get as part of the guild",
+      "items": {
+        "community": "Participation in a professional community of developers, studios, artists, designers and industry actors.",
+        "activities": "Access to guild activities, meetings, networking and collaborative spaces.",
+        "visibility": "Visibility within the regional video game ecosystem.",
+        "initiatives": "Participation in initiatives, partnerships and projects driven by GDV.",
+        "support": "Collective support to strengthen the local industry.",
+        "opportunities": "Opportunities to connect with institutions, events and sector opportunities."
+      }
+    },
+    "contact": {
+      "title": "Want to be part of GDV Valparaíso?",
+      "button": "Contact us",
+      "supportText": "Write to us for more information about the joining process.",
+      "email": "directiva@gdvalparaiso.com",
+      "mailtoSubject": "GDV membership inquiry"
+    }
+  },
   "contact": {
     "header": {
       "title": "Contact Us",
@@ -148,7 +200,8 @@
       "success": "Your message was sent successfully.",
       "submitError": "We could not send your message. Please try again.",
       "captchaRequired": "You must complete the captcha before submitting the form.",
-      "captchaLoadError": "We could not load/verify the captcha. Reload the page and try again."
+      "captchaLoadError": "We could not load/verify the captcha. Reload the page and try again.",
+      "notConfigured": "The form is not configured in this environment. Copy gdv/.env.example to gdv/.env and fill in the PraxSuite variables."
     }
   },
   "gameCard": {
