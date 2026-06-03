@@ -2,6 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavbarComponent } from "../../components/Navbar";
 import { FooterComponent } from "../../components/Footer";
+import {
+  getPraxsuiteContactConfig,
+  getTurnstileAction,
+  getTurnstileSiteKey,
+  getTurnstileTheme,
+  isPraxsuiteContactReady,
+} from "../../config/appConfig";
+import { insertPraxsuiteContact } from "../../services/praxsuite/praxsuiteApi";
 
 export const ContactPage = () => {
   const { t } = useTranslation();
@@ -16,19 +24,12 @@ export const ContactPage = () => {
     website: "",
   });
 
-  const contactApiUrl =
-    process.env.REACT_APP_CONTACT_API_URL ||
-    "/api/contact";
-  const turnstileSiteKey = process.env.REACT_APP_TURNSTILE_SITE_KEY || "";
-  const turnstileTheme = (
-    process.env.REACT_APP_TURNSTILE_THEME || "light"
-  ).toLowerCase();
-  const turnstileAction =
-    process.env.REACT_APP_TURNSTILE_ACTION || "contact_form";
-  const captchaTheme = ["light", "dark", "auto"].includes(turnstileTheme)
-    ? turnstileTheme
-    : "light";
-  const captchaEnabled = Boolean(turnstileSiteKey);
+  const contactConfig = getPraxsuiteContactConfig();
+  const contactReady = isPraxsuiteContactReady();
+  const turnstileSiteKey = getTurnstileSiteKey();
+  const captchaTheme = getTurnstileTheme();
+  const turnstileAction = getTurnstileAction();
+  const captchaEnabled = true;
   const widgetIdRef = useRef(null);
   const formStartedAtRef = useRef(Date.now());
   const captchaScriptId = "cf-turnstile-script";
@@ -70,35 +71,40 @@ export const ContactPage = () => {
       return;
     }
 
+    if (formData.website && formData.website.trim() !== "") {
+      setAlert({ type: "success", message: t("contact.form.success") });
+      setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+      return;
+    }
+
+    const timeToFill = Date.now() - formStartedAtRef.current;
+    if (timeToFill < 3000) {
+      setAlert({ type: "success", message: t("contact.form.success") });
+      setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+      return;
+    }
+
+    if (!contactReady) {
+      setAlert({
+        type: "error",
+        message: t("contact.form.notConfigured"),
+      });
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       setAlert({ type: "", message: "" });
 
-      const response = await fetch(contactApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          subject,
-          message,
-          captchaToken,
-          website: formData.website,
-          formStartedAt: formStartedAtRef.current,
-        }),
+      await insertPraxsuiteContact({
+        queryUrl: contactConfig.queryUrl,
+        ref: contactConfig.ref,
+        apiKey: contactConfig.apiKey,
+        name,
+        email,
+        subject,
+        message,
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        const errorMessage =
-          result?.error ||
-          result?.details?.error ||
-          t("contact.form.submitError");
-        throw new Error(errorMessage);
-      }
 
       setAlert({
         type: "success",
@@ -262,7 +268,7 @@ export const ContactPage = () => {
                   value={formData.message}
                   onChange={handleChange}
                   rows="4"
-                  className="block p-2.5 w-full text-base text-gray-900 rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                  className="block p-2.5 w-full text-base text-gray-900 rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-y max-h-64 min-h-[120px]"
                   placeholder={t("contact.form.messagePlaceholder")}
                   required
                 ></textarea>
@@ -279,6 +285,12 @@ export const ContactPage = () => {
                   autoComplete="off"
                 />
               </div>
+
+              {!contactReady ? (
+                <p className="mb-5 text-amber-700 text-sm">
+                  {t("contact.form.notConfigured")}
+                </p>
+              ) : null}
 
               {alert.message ? (
                 <p
@@ -298,8 +310,8 @@ export const ContactPage = () => {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="text-white vgvalpo-bgcolor5 rounded-md px-10 text-base py-2 flex justify-center items-center"
+                disabled={isSubmitting || !captchaToken || !contactReady}
+                className="text-white vgvalpo-bgcolor5 rounded-md px-10 text-base py-2 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting
                   ? t("contact.form.sending")

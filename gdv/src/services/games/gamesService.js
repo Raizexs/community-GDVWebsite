@@ -1,5 +1,13 @@
-import { extractRows } from "../praxsuite/praxsuiteClient";
 import { gamesData as staticGamesData } from "../../data/gamesData";
+import { shouldLoadGamesFromPraxsuite } from "../../config/appConfig";
+import {
+  fetchMergedGamesFromPraxsuite,
+  getGamesApiKeys,
+} from "../praxsuite/praxsuiteGames";
+import {
+  normalizeMediaSourceSync,
+  resolveDisplayableMediaUrl,
+} from "../praxsuite/praxsuiteMedia";
 
 import iconSteam from "../../img/plataforms/steam.png";
 import iconPlaystation from "../../img/plataforms/playstation.png";
@@ -52,16 +60,6 @@ export function getStaticGamesFallback() {
   return buildStaticGamesFallback();
 }
 
-function getGamesProvider() {
-  return (
-    process.env.REACT_APP_PRAXSUITE_GAMES_PROVIDER || "praxsuite"
-  ).toLowerCase();
-}
-
-function getGamesProxyBaseUrl() {
-  return (process.env.REACT_APP_GAMES_PROXY_URL || "").replace(/\/$/, "");
-}
-
 function normalizeName(value) {
   return String(value || "")
     .trim()
@@ -70,80 +68,13 @@ function normalizeName(value) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-function splitList(value) {
-  if (Array.isArray(value))
-    return value.map((item) => String(item || "").trim()).filter(Boolean);
-  return String(value || "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
+async function normalizeMediaSource(rawValue, apiKeys) {
+  const syncUrl = normalizeMediaSourceSync(rawValue);
+  if (!syncUrl || !syncUrl.startsWith("http")) return syncUrl;
+  return resolveDisplayableMediaUrl(rawValue, apiKeys);
 }
 
-function extractMediaRaw(value) {
-  if (!value) return null;
-  if (typeof value === "string") return value;
-  if (Array.isArray(value)) {
-    for (const entry of value) {
-      const found = extractMediaRaw(entry);
-      if (found) return found;
-    }
-    return null;
-  }
-
-  if (typeof value === "object") {
-    return (
-      value.DownloadUrl ||
-      value.BlobUrl ||
-      value.url ||
-      value.URL ||
-      value.ImageUrl ||
-      value.imageUrl ||
-      value.image ||
-      value.icon ||
-      value.name ||
-      null
-    );
-  }
-
-  return null;
-}
-
-function normalizeMediaSource(rawValue, cacheToken) {
-  const mediaRaw = extractMediaRaw(rawValue);
-  if (typeof mediaRaw !== "string") return null;
-
-  let value = mediaRaw.trim();
-  if (!value) return null;
-
-  // Some rows come as "image/png;base64,... null"
-  value = value.replace(/\s+null$/i, "");
-
-  if (value.startsWith("data:")) return value;
-  if (value.includes(";base64,")) {
-    return value.startsWith("image/")
-      ? `data:${value}`
-      : `data:image/png;${value}`;
-  }
-
-  // Bypass para Blob URLs estáticos
-  if (/^https?:\/\/.*blob\.core\.windows\.net/i.test(value)) {
-    return value;
-  }
-
-  if (/^https?:\/\//i.test(value)) {
-    const proxyBase = getGamesProxyBaseUrl();
-    const suffix = cacheToken
-      ? `&v=${encodeURIComponent(String(cacheToken))}`
-      : "";
-    return proxyBase
-      ? `${proxyBase}/api/images/download?url=${encodeURIComponent(value)}${suffix}`
-      : `/api/images/download?url=${encodeURIComponent(value)}${suffix}`;
-  }
-
-  return null;
-}
-
-function normalizeGame(raw, cacheToken) {
+async function normalizeGame(raw, apiKeys) {
   const titleEs = raw?.["Title (ES)"];
   const titleEn = raw?.["Title (EN)"];
   const descEs = raw?.["Description (ES)"];
@@ -159,7 +90,7 @@ function normalizeGame(raw, cacheToken) {
   const imageFromField =
     raw?.ImageGame || raw?.imageGame || raw?.Image || raw?.image;
   const mainImageUrlRaw = imageFromArray || imageFromField;
-  const mainImageUrl = normalizeMediaSource(mainImageUrlRaw, cacheToken);
+  const mainImageUrl = await normalizeMediaSource(mainImageUrlRaw, apiKeys);
 
   const platformNames = Array.isArray(raw?.Platforms)
     ? raw.Platforms
@@ -186,7 +117,10 @@ function normalizeGame(raw, cacheToken) {
             return "";
           })
           .filter(Boolean)
-      : splitList(storeRow?.platform || storeRow?.platforms);
+      : String(storeRow?.platform || storeRow?.platforms || "")
+          .split(",")
+          .map((v) => v.trim())
+          .filter(Boolean);
 
     platformsFromStore.forEach((platformName) => {
       const key = normalizeName(platformName);
@@ -197,53 +131,115 @@ function normalizeGame(raw, cacheToken) {
   });
 
   const uniquePlatforms = [...new Set(platformNames.filter(Boolean))];
-  let platformsWithIcons = uniquePlatforms
-    .map((platformName, idx) => {
+  let platformsWithIcons = await Promise.all(
+    uniquePlatforms.map(async (platformName, idx) => {
       const key = normalizeName(platformName);
-      const staticIcon = staticPlatformIcons[key] || Object.entries(staticPlatformIcons).find(([k]) => key.includes(k))?.[1];
+      const staticIcon =
+        staticPlatformIcons[key] ||
+        Object.entries(staticPlatformIcons).find(([k]) => key.includes(k))?.[1];
       const url = storeUrlByPlatform.get(key) || "";
 
-      const tablePlatform = (raw?.ImagePlatform || []).find(p => normalizeName(p.platform) === key);
+      const tablePlatform = (raw?.ImagePlatform || []).find(
+        (p) => normalizeName(p.platform) === key,
+      );
       let tableIconUrl = tablePlatform ? tablePlatform.name : "";
-      
+
       if (Array.isArray(tableIconUrl)) {
-        tableIconUrl = tableIconUrl[0]?.DownloadUrl || tableIconUrl[0]?.BlobUrl || tableIconUrl[0]?.url || "";
+        tableIconUrl =
+          tableIconUrl[0]?.DownloadUrl ||
+          tableIconUrl[0]?.BlobUrl ||
+          tableIconUrl[0]?.url ||
+          "";
       } else if (typeof tableIconUrl === "object" && tableIconUrl !== null) {
-        tableIconUrl = tableIconUrl.DownloadUrl || tableIconUrl.BlobUrl || tableIconUrl.url || "";
+        tableIconUrl =
+          tableIconUrl.DownloadUrl ||
+          tableIconUrl.BlobUrl ||
+          tableIconUrl.url ||
+          "";
       }
 
-      let finalIconUrl = (typeof tableIconUrl === 'string' && tableIconUrl.trim() !== '') ? tableIconUrl : staticIcon;
+      let finalIconUrl =
+        typeof tableIconUrl === "string" && tableIconUrl.trim() !== ""
+          ? tableIconUrl
+          : staticIcon;
 
-      if (finalIconUrl && finalIconUrl.startsWith('http') && finalIconUrl !== staticIcon) {
-        finalIconUrl = normalizeMediaSource(finalIconUrl, null) || finalIconUrl;
+      if (
+        finalIconUrl &&
+        finalIconUrl.startsWith("http") &&
+        finalIconUrl !== staticIcon
+      ) {
+        finalIconUrl =
+          (await normalizeMediaSource(finalIconUrl, apiKeys)) || finalIconUrl;
       }
 
       return {
         name: platformName,
-        iconUrl: finalIconUrl || "", 
+        iconUrl: finalIconUrl || "",
         url,
         platform: platformName,
         label: platformName,
         _key: `${raw?.id_videogames || raw?.ID || raw?.Slug || "game"}-platform-${idx}`,
       };
-    })
-    .filter((p) => p.iconUrl && p.url);
+    }),
+  );
+
+  platformsWithIcons = platformsWithIcons.filter((p) => p.iconUrl && p.url);
 
   const slug = String(raw?.Slug ?? raw?.slug ?? "").toLowerCase();
 
   if (slug === "tormentedsouls") {
     platformsWithIcons = [
-      { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/1367590/Tormented_Souls/", platform: "Steam" },
-      { name: "Nintendo", iconUrl: iconNintendo, url: "https://www.nintendo.com/store/products/tormented-souls-switch/", platform: "Nintendo" },
-      { name: "PlayStation", iconUrl: iconPlaystation, url: "https://store.playstation.com/en-us/product/UP4293-PPSA02525_00-TORMENTEDSIEAPS5/", platform: "PlayStation" },
-      { name: "Xbox", iconUrl: iconXbox, url: "https://www.xbox.com/en-us/games/store/tormented-souls/9mwz8jv5tsqg", platform: "Xbox" },
-      { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/tormented-souls", platform: "Epic" },
-      { name: "GOG", iconUrl: iconGOG, url: "https://www.gog.com/en/game/tormented_souls", platform: "GOG" },
+      {
+        name: "Steam",
+        iconUrl: iconSteam,
+        url: "https://store.steampowered.com/app/1367590/Tormented_Souls/",
+        platform: "Steam",
+      },
+      {
+        name: "Nintendo",
+        iconUrl: iconNintendo,
+        url: "https://www.nintendo.com/store/products/tormented-souls-switch/",
+        platform: "Nintendo",
+      },
+      {
+        name: "PlayStation",
+        iconUrl: iconPlaystation,
+        url: "https://store.playstation.com/en-us/product/UP4293-PPSA02525_00-TORMENTEDSIEAPS5/",
+        platform: "PlayStation",
+      },
+      {
+        name: "Xbox",
+        iconUrl: iconXbox,
+        url: "https://www.xbox.com/en-us/games/store/tormented-souls/9mwz8jv5tsqg",
+        platform: "Xbox",
+      },
+      {
+        name: "Epic",
+        iconUrl: iconEpic,
+        url: "https://store.epicgames.com/en-US/p/tormented-souls",
+        platform: "Epic",
+      },
+      {
+        name: "GOG",
+        iconUrl: iconGOG,
+        url: "https://www.gog.com/en/game/tormented_souls",
+        platform: "GOG",
+      },
     ];
   } else if (slug === "colorbound") {
     platformsWithIcons = [
-      { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/3778610/Colorbound/", platform: "Steam" },
-      { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/colorbound-1c5e30", platform: "Epic" },
+      {
+        name: "Steam",
+        iconUrl: iconSteam,
+        url: "https://store.steampowered.com/app/3778610/Colorbound/",
+        platform: "Steam",
+      },
+      {
+        name: "Epic",
+        iconUrl: iconEpic,
+        url: "https://store.epicgames.com/en-US/p/colorbound-1c5e30",
+        platform: "Epic",
+      },
     ];
   }
 
@@ -261,7 +257,7 @@ function normalizeGame(raw, cacheToken) {
 }
 
 export async function fetchGames({ force = false } = {}) {
-  if (getGamesProvider() !== "praxsuite") {
+  if (!shouldLoadGamesFromPraxsuite()) {
     const fallback = buildStaticGamesFallback();
     cachedGames = fallback;
     pendingGamesRequest = null;
@@ -278,23 +274,10 @@ export async function fetchGames({ force = false } = {}) {
 
   pendingGamesRequest = (async () => {
     try {
-      const proxyBase = getGamesProxyBaseUrl();
-      const cacheToken = Date.now();
-      const gamesApiUrl = proxyBase
-        ? `${proxyBase}/api/games?v=${cacheToken}`
-        : `/api/games?v=${cacheToken}`;
-      const response = await fetch(gamesApiUrl, {
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Games backend returned status ${response.status}`);
-      }
-
-      const body = await response.json();
-      const rows = extractRows(body);
-      const normalized = rows.map((raw) =>
-        normalizeGame(raw, raw.UPDATEDDATE || cacheToken),
+      const apiKeys = getGamesApiKeys();
+      const rows = await fetchMergedGamesFromPraxsuite();
+      const normalized = await Promise.all(
+        rows.map((raw) => normalizeGame(raw, apiKeys)),
       );
       const filtered = normalized.filter(
         (g) => g && (g.titleKey || g.title?.es || g.title?.en) && g.isActive,
@@ -317,7 +300,7 @@ export async function fetchGames({ force = false } = {}) {
   try {
     return await pendingGamesRequest;
   } catch (error) {
-    console.warn("Games backend fetch failed.", error);
+    console.warn("Games PraxSuite fetch failed:", error?.message || error);
     return buildStaticGamesFallback();
   }
 }
