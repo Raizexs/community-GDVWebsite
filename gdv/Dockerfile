@@ -12,32 +12,30 @@ RUN npm install --legacy-peer-deps
 # Copia el resto de los archivos
 COPY . .
 
-# 1. Recibir los argumentos desde GitHub Actions
+# Variables de entorno para la construcción
+ARG REACT_APP_PRAXSUITE_QUERY_URL
+ARG REACT_APP_PRAXSUITE_TABLES
 ARG REACT_APP_TURNSTILE_SITE_KEY
-ARG REACT_APP_GAMES_PROXY_URL
-ARG REACT_APP_CONTACT_API_URL
-ARG REACT_APP_PARTNERS_PROXY_URL
 
-# 2. Transformarlos en variables de entorno para la compilación de React
+# Define las variables de entorno
+ENV REACT_APP_PRAXSUITE_QUERY_URL=$REACT_APP_PRAXSUITE_QUERY_URL
+ENV REACT_APP_PRAXSUITE_TABLES=$REACT_APP_PRAXSUITE_TABLES
 ENV REACT_APP_TURNSTILE_SITE_KEY=$REACT_APP_TURNSTILE_SITE_KEY
-ENV REACT_APP_GAMES_PROXY_URL=$REACT_APP_GAMES_PROXY_URL
-ENV REACT_APP_CONTACT_API_URL=$REACT_APP_CONTACT_API_URL
-ENV REACT_APP_PARTNERS_PROXY_URL=$REACT_APP_PARTNERS_PROXY_URL
 
-# Construye la aplicación para producción
+# Construye la aplicación
 RUN npm run build
 
-# Usa una imagen ligera oficial de Nginx
+# Usa una imagen base de Nginx para servir la aplicación
 FROM nginx:alpine
 
 # Copia la configuración de Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copia los archivos construidos de React al directorio de Nginx
+# Copia la aplicación construida
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Exponer el puerto 80
+# Expone el puerto 80
 EXPOSE 80
 
-# Iniciar Nginx
+# Inicia Nginx
 CMD ["nginx", "-g", "daemon off;"]

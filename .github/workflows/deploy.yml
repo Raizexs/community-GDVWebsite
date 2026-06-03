@@ -60,9 +60,8 @@ jobs:
       - name: Build & Push
         env:
           REACT_APP_TURNSTILE_SITE_KEY: ${{ secrets.REACT_APP_TURNSTILE_SITE_KEY }}
-          REACT_APP_GAMES_PROXY_URL: ${{ secrets.REACT_APP_GAMES_PROXY_URL }}
-          REACT_APP_CONTACT_API_URL: ${{ secrets.REACT_APP_CONTACT_API_URL }}
-          REACT_APP_PARTNERS_PROXY_URL: ${{ secrets.REACT_APP_PARTNERS_PROXY_URL }}
+          REACT_APP_PRAXSUITE_QUERY_URL: ${{ secrets.REACT_APP_PRAXSUITE_QUERY_URL }}
+          REACT_APP_PRAXSUITE_TABLES: ${{ secrets.REACT_APP_PRAXSUITE_TABLES }}
         run: |
           set +x
           ACR_NAME_LC=$(echo "$ACR_NAME" | tr '[:upper:]' '[:lower:]')
@@ -71,9 +70,8 @@ jobs:
 
           docker build \
             --build-arg REACT_APP_TURNSTILE_SITE_KEY \
-            --build-arg REACT_APP_GAMES_PROXY_URL \
-            --build-arg REACT_APP_CONTACT_API_URL \
-            --build-arg REACT_APP_PARTNERS_PROXY_URL \
+            --build-arg REACT_APP_PRAXSUITE_QUERY_URL \
+            --build-arg REACT_APP_PRAXSUITE_TABLES \
             -t $IMAGE_BASE:$IMMUTABLE_TAG \
             -t $IMAGE_BASE:$ENV_TAG-$VERSION \
             -t $IMAGE_BASE:$VERSION \
