@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Reveal } from "../../../../components/Reveal";
 import aboutus from "../../../../img/AboutUSImages/GDV.jpg";
 import icon1 from "../../../../img/icons/Prize.png";
 import icon2 from "../../../../img/icons/Goal.png";
@@ -51,24 +52,26 @@ export const AboutusSection = ({ content }) => {
 
   return (
     <section className="py-20 px-4 section-bg">
-      <div className="mb-12 flex flex-col justify-center items-center text-center">
+      <Reveal className="mb-12 flex flex-col justify-center items-center text-center motion-section-header">
         <h6 className="mb-2 vgvalpo-textcolor3 text-base">
           — {t("aboutUs.label")} —
         </h6>
         <h3 className="font-bold text-black md:text-3xl md:w-5/12 text-2xl">
           {title}
         </h3>
-      </div>
+      </Reveal>
 
       <div className="flex justify-center items-center flex-col gap-16 mb-24">
-        <div className="flex justify-center items-center flex-col md:flex-row gap-8">
-          <img
-            src={heroImageSrc}
-            alt="about-us"
-            className="rounded-lg md:w-1/3"
-            onError={() => setHeroImageSrc(aboutus)}
-          />
-          <div className="flex flex-col md:w-4/12 select-text">
+        <Reveal className="flex justify-center items-center flex-col md:flex-row gap-8">
+          <div className="md:w-1/3 motion-card-media-zoom">
+            <img
+              src={heroImageSrc}
+              alt="about-us"
+              className="rounded-lg w-full"
+              onError={() => setHeroImageSrc(aboutus)}
+            />
+          </div>
+          <Reveal className="flex flex-col md:w-4/12 select-text motion-section-header">
             <div className="p-4">
               <h5 className="text-black font-bold text-3xl mb-2 vgvalpo-textcolor3">
                 {whoWeAreTitle}
@@ -85,12 +88,12 @@ export const AboutusSection = ({ content }) => {
                 {ourAssociationDescription}
               </p>
             </div>
-          </div>
-        </div>
+          </Reveal>
+        </Reveal>
       </div>
 
       <div className="flex justify-center items-center mb-8">
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-20">
+        <Reveal className="grid md:grid-cols-3 grid-cols-1 gap-20" stagger>
           <div className="w-60 flex items-center text-center flex-col select-text">
             <img
               src={icon1}
@@ -129,7 +132,7 @@ export const AboutusSection = ({ content }) => {
             </h5>
             <p className="text-sm vgvalpo-textcolor6">{visionDescription}</p>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

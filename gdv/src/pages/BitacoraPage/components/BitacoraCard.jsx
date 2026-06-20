@@ -33,7 +33,7 @@ export function BitacoraCard({
       }`}
     >
       <div
-        className={`bitacora-entry-card-media bitacora-entry-card-media--${mediaOrientation}`}
+        className={`bitacora-entry-card-media motion-card-media-zoom bitacora-entry-card-media--${mediaOrientation}`}
       >
         {post.coverImage ? (
           <img

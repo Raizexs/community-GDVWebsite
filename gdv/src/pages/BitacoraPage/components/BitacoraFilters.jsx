@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Reveal } from "../../../components/Reveal";
 import {
   BITACORA_FILTER_OPTIONS,
   getCategoryStyle,
@@ -8,7 +9,7 @@ export function BitacoraFilters({ activeCategory, onChange }) {
   const { t } = useTranslation();
 
   return (
-    <div className="bitacora-filters">
+    <Reveal className="bitacora-filters">
       <span className="bitacora-filters-label">{t("bitacora.filterBy")}</span>
       <div className="bitacora-filters-list">
         {BITACORA_FILTER_OPTIONS.map((category) => {
@@ -31,6 +32,6 @@ export function BitacoraFilters({ activeCategory, onChange }) {
           );
         })}
       </div>
-    </div>
+    </Reveal>
   );
 }

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Reveal } from "../../../../components/Reveal";
 import profile1 from "../../../../img/AboutUSImages/Alejandro.jpg";
 import profile2 from "../../../../img/AboutUSImages/Jacob.jpg";
 import profile3 from "../../../../img/AboutUSImages/Directorio_Sven (1).png";
@@ -54,17 +55,17 @@ export const Members = ({ membersData }) => {
 
   return (
     <section className="py-20 px-4 games-bg">
-      <div className="mb-16 flex flex-col justify-center items-center text-center">
+      <Reveal className="mb-16 flex flex-col justify-center items-center text-center motion-section-header" emphasis>
         <h6 className="mb-2 vgvalpo-textcolor3 text-base">
           — {t("aboutUs.members.label")} —
         </h6>
         <h3 className="font-bold text-black md:text-3xl md:w-4/12 text-2xl">
           {t("aboutUs.members.title")}
         </h3>
-      </div>
+      </Reveal>
 
       <div className="flex justify-center items-center">
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-16">
+        <Reveal className="grid md:grid-cols-3 grid-cols-1 gap-16" stagger emphasis>
           {members.map((m) => (
             <div
               key={m.id ?? m.name}
@@ -125,7 +126,7 @@ export const Members = ({ membersData }) => {
               </div>
             </div>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

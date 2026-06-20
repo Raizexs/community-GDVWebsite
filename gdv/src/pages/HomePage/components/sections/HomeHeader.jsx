@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Reveal } from "../../../../components/Reveal";
 import { resolveLocalizedValue } from "../../../../utils/localization";
 import { resolveMembershipJoinUrl } from "../../../../utils/membershipRoute";
 import homeHeroFallback from "../../../../img/riosdelluvia.jpg";
@@ -84,8 +85,8 @@ export const HomeHeader = ({ homeContent }) => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div
-        className={`flex justify-center md:items-center md:text-center text-white flex-col px-8`}
+      <Reveal
+        className="flex justify-center md:items-center md:text-center text-white flex-col px-8 motion-section-header"
       >
         <h1 className="mb-5 leading-tight uppercase text-4xl md:text-6xl md:w-9/12 font-bold">
           {renderValparaisoHighlighted(titleText)}
@@ -112,7 +113,7 @@ export const HomeHeader = ({ homeContent }) => {
             {t("home.header.joinButton")}
           </Link>
         )}
-      </div>
+      </Reveal>
     </div>
   );
 };

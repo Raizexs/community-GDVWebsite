@@ -1,4 +1,5 @@
 import { GameCard } from "../../../../components/GameCard";
+import { Reveal } from "../../../../components/Reveal";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
@@ -65,15 +66,15 @@ export const VideoGames = ({ homeContent }) => {
   return (
     <>
       <section className="py-20 px-4 section-bg">
-        <div className="mb-12 flex flex-col justify-center items-center text-center">
+        <Reveal className="mb-12 flex flex-col justify-center items-center text-center motion-section-header" emphasis>
           <h6 className="mb-2 vgvalpo-textcolor3 text-base">{label}</h6>
           <h3 className="font-bold text-black md:text-3xl md:w-4/12 text-2xl">
             {title}
           </h3>
-        </div>
+        </Reveal>
 
         <div className="flex flex-col justify-center items-center">
-          <div className="grid md:grid-cols-4 grid-cols-1 gap-7">
+          <Reveal className="grid md:grid-cols-4 grid-cols-1 gap-7" stagger emphasis>
             {randomGames.map((g) => (
               <GameCard
                 key={g.id}
@@ -87,13 +88,11 @@ export const VideoGames = ({ homeContent }) => {
                 gameplataforms={g.platforms}
               />
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
       <section className={`flex justify-center items-center cta-games-bg`}>
-        <div
-          className={`flex justify-center md:items-center md:text-center text-white flex-col px-8`}
-        >
+        <Reveal className="flex justify-center md:items-center md:text-center text-white flex-col px-8 motion-section-header">
           <h1 className="mb-3 leading-tight text-2xl uppercase md:text-3xl md:w-9/12 font-bold">
             {ctaHeading}
           </h1>
@@ -119,7 +118,7 @@ export const VideoGames = ({ homeContent }) => {
               {t("home.videoGames.seeGamesButton")}
             </Link>
           )}
-        </div>
+        </Reveal>
       </section>
     </>
   );

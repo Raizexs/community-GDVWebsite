@@ -36,17 +36,19 @@ export const GameCard = ({
     <div className="game-card w-72 max-w-full bg-white card-shadow rounded-lg overflow-hidden">
       {imageUrl ? (
         <>
-          <img
-            src={imageUrl}
-            alt={titleText}
-            className="rounded-t-lg h-36 w-full object-cover bg-black"
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-              const fallback = e.currentTarget.nextElementSibling;
-              if (fallback) fallback.style.display = "block";
-            }}
-          />
+          <div className="motion-card-media-zoom">
+            <img
+              src={imageUrl}
+              alt={titleText}
+              className="rounded-t-lg h-36 w-full object-cover bg-black"
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                const fallback = e.currentTarget.nextElementSibling;
+                if (fallback) fallback.style.display = "block";
+              }}
+            />
+          </div>
           <div
             className={`cardimg bg-black rounded-t-lg h-36 ${bgimg}`}
             style={{ display: "none" }}

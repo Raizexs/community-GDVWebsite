@@ -8,6 +8,7 @@ import { SuccessStoriesSection } from "./components/sections/SuccessStoriesSecti
 import { Benefits } from "./components/sections/Benefits";
 import { BitacoraPreviewSection } from "./components/sections/BitacoraPreviewSection";
 import { Jointheguild } from "../../components/Jointheguild";
+import { Reveal } from "../../components/Reveal";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
 import {
   fetchHomeContent,
@@ -41,11 +42,21 @@ export const HomePage = () => {
           <HomeHeader homeContent={homeContent} />
         </header>
         <main>
-          <VideoGames homeContent={homeContent} />
-          <SuccessStoriesSection homeContent={homeContent} />
-          <BitacoraPreviewSection />
-          <Benefits homeContent={homeContent} />
-          <Jointheguild homeContent={homeContent} />
+          <Reveal emphasis className="block">
+            <VideoGames homeContent={homeContent} />
+          </Reveal>
+          <Reveal emphasis className="block">
+            <SuccessStoriesSection homeContent={homeContent} />
+          </Reveal>
+          <Reveal emphasis className="block">
+            <BitacoraPreviewSection />
+          </Reveal>
+          <Reveal emphasis className="block">
+            <Benefits homeContent={homeContent} />
+          </Reveal>
+          <Reveal emphasis className="block">
+            <Jointheguild homeContent={homeContent} />
+          </Reveal>
         </main>
         <FooterComponent homeContent={homeContent} />
       </PageEnter>

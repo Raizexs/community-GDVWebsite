@@ -1,5 +1,6 @@
 import { NavbarComponent } from "../../components/Navbar";
 import { PageEnter } from "../../components/PageEnter";
+import { Reveal } from "../../components/Reveal";
 import { GameCard } from "../../components/GameCard";
 import ChileIcon from "../../img/icons/Chile.png";
 import { FooterComponent } from "../../components/Footer";
@@ -61,7 +62,12 @@ export const GamePage = () => {
       <PageEnter>
         <main>
           <section className="py-20 px-4 section-bg">
-            <div className="mb-12 flex justify-center items-center flex-col md:flex-row gap-4">
+            <Reveal
+              onMount
+              emphasis
+              delay={90}
+              className="mb-12 flex justify-center items-center flex-col md:flex-row gap-4 motion-section-header"
+            >
               <div className="flex items-center gap-2 max-w-md mx-auto ">
                 <img src={ChileIcon} alt="" className="w-10" />
                 <h3 className="text-xl font-bold vgvalpo-textcolor3">
@@ -82,24 +88,32 @@ export const GamePage = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             <div className="flex flex-col justify-center items-center">
-              <div className="grid md:grid-cols-4 grid-cols-1 gap-7">
-                {filteredGames.map((g) => (
-                  <GameCard
-                    key={g.id}
-                    bgimg={g.image}
-                    imageUrl={g.imageUrl}
-                    titleKey={g.titleKey}
-                    descriptionKey={g.descriptionKey}
-                    title={g.title}
-                    description={g.description}
-                    link={g.link}
-                    gameplataforms={g.platforms}
-                  />
-                ))}
-              </div>
+              {filteredGames.length > 0 ? (
+                <Reveal
+                  onMount
+                  emphasis
+                  stagger
+                  delay={260}
+                  className="grid md:grid-cols-4 grid-cols-1 gap-7"
+                >
+                  {filteredGames.map((g) => (
+                    <GameCard
+                      key={g.id}
+                      bgimg={g.image}
+                      imageUrl={g.imageUrl}
+                      titleKey={g.titleKey}
+                      descriptionKey={g.descriptionKey}
+                      title={g.title}
+                      description={g.description}
+                      link={g.link}
+                      gameplataforms={g.platforms}
+                    />
+                  ))}
+                </Reveal>
+              ) : null}
             </div>
           </section>
         </main>

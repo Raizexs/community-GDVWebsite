@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { formatEventDateTime } from "../../../../utils/bitacoraFormat";
 import { fetchUpcomingEvents } from "../../../../services/events/eventsService";
+import { Reveal } from "../../../../components/Reveal";
 import { EventAgendaActions } from "../EventAgendaActions";
 import { EventAgendaCard } from "../EventAgendaCard";
 
@@ -50,11 +51,11 @@ export function EventAgendaSection() {
   return (
     <section className="bitacora-agenda-section">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="bitacora-agenda-header">
+        <Reveal className="bitacora-agenda-header motion-section-header">
           <h6>— {t("bitacora.agenda.label")} —</h6>
           <h2>{t("bitacora.agenda.title")}</h2>
           <p>{t("bitacora.agenda.subtitle")}</p>
-        </div>
+        </Reveal>
 
         {loading ? (
           <p className="bitacora-state-message">
@@ -63,7 +64,7 @@ export function EventAgendaSection() {
         ) : (
           <>
             {nextEvent ? (
-              <div className="bitacora-next-event">
+              <Reveal className="bitacora-next-event">
                 <div className="bitacora-next-event-copy">
                   <span className="bitacora-next-event-badge">
                     {t("bitacora.agenda.nextEvent")}
@@ -85,7 +86,7 @@ export function EventAgendaSection() {
                   showSocialCta={nextEvent.id === furthestEventId}
                   className="bitacora-next-event-actions"
                 />
-              </div>
+              </Reveal>
             ) : null}
 
             <div className="bitacora-agenda-footer">
@@ -117,7 +118,7 @@ export function EventAgendaSection() {
                   {t("bitacora.agenda.allUpcoming")}
                 </p>
                 {calendarEvents.length ? (
-                  <div className="bitacora-agenda-grid bitacora-grid-animated">
+                  <Reveal className="bitacora-agenda-grid" stagger>
                     {calendarEvents.map((event) => (
                       <EventAgendaCard
                         key={event.id}
@@ -126,7 +127,7 @@ export function EventAgendaSection() {
                         showSocialCta={event.id === furthestEventId}
                       />
                     ))}
-                  </div>
+                  </Reveal>
                 ) : (
                   <p className="bitacora-calendar-empty-message">
                     {t("bitacora.agenda.noMoreEvents")}

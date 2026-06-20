@@ -5,6 +5,7 @@ import {
   getStaticProvidersFallback,
 } from "../../../../services/providers/providersService";
 import { ServiceProviderCard } from "../ServiceProviderCard";
+import { Reveal } from "../../../../components/Reveal";
 
 export function ProvidersSection() {
   const { t } = useTranslation();
@@ -29,7 +30,12 @@ export function ProvidersSection() {
   return (
     <section className="px-4 providers-section">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-8 flex flex-col justify-center items-center text-center">
+        <Reveal
+          onMount
+          emphasis
+          delay={620}
+          className="mb-8 flex flex-col justify-center items-center text-center motion-section-header"
+        >
           <h6 className="mb-2 vgvalpo-textcolor3 text-base">
             {t("partners.providers.label")}
           </h6>
@@ -39,18 +45,25 @@ export function ProvidersSection() {
           <p className="text-gray-600 max-w-2xl">
             {t("partners.providers.subtitle")}
           </p>
-        </div>
+        </Reveal>
 
         {loading ? (
           <p className="text-center text-gray-600">
             {t("partners.providers.loading")}
           </p>
         ) : providers.length ? (
-          <div className="providers-grid">
+          <Reveal
+            key="providers-loaded"
+            onMount
+            emphasis
+            stagger
+            delay={760}
+            className="providers-grid"
+          >
             {providers.map((provider) => (
               <ServiceProviderCard key={provider.id} provider={provider} />
             ))}
-          </div>
+          </Reveal>
         ) : (
           <p className="text-center text-gray-600">
             {t("partners.providers.empty")}

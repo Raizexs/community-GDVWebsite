@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavbarComponent } from "../../components/Navbar";
 import { PageEnter } from "../../components/PageEnter";
+import { Reveal } from "../../components/Reveal";
 import { FooterComponent } from "../../components/Footer";
 import { BitacoraPageIntro } from "./components/sections/BitacoraPageIntro";
 import { BitacoraCard } from "./components/BitacoraCard";
@@ -58,14 +59,16 @@ export const BitacoraPage = () => {
                   {t("bitacora.loading")}
                 </p>
               ) : filteredPosts.length ? (
-                <div
+                <Reveal
                   key={activeCategory}
-                  className="bitacora-grid bitacora-grid-animated"
+                  className="bitacora-grid"
+                  stagger
+                  emphasis
                 >
                   {filteredPosts.map((post) => (
                     <BitacoraCard key={post.id || post.slug} post={post} />
                   ))}
-                </div>
+                </Reveal>
               ) : (
                 <p className="bitacora-state-message">{t("bitacora.empty")}</p>
               )}

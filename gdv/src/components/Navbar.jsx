@@ -1,15 +1,47 @@
 import Logo from "../img/gdv-icon2.PNG";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MEMBERSHIP_WIP_ROUTE } from "../utils/membershipRoute";
 
+function isNavActive(pathname, path) {
+  if (path === "/") return pathname === "/";
+  return pathname === path || pathname.startsWith(`${path}/`);
+}
+
+function isAssociationActive(pathname) {
+  return isNavActive(pathname, "/aboutus") || isNavActive(pathname, "/socios");
+}
+
+function navLinkClass(pathname, path, mobile = false) {
+  const base = mobile ? "navbar-mobile-link" : "navbar-link";
+  return `${base}${isNavActive(pathname, path) ? " is-active" : ""}`;
+}
+
 export const NavbarComponent = () => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenOption, setIsOpenOption] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 8);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+    setIsOpenOption(false);
+  }, [pathname]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,20 +51,36 @@ export const NavbarComponent = () => {
     setIsOpenOption(!isOpenOption);
   };
 
+  const associationActive = isAssociationActive(pathname);
+
   return (
-    <div className="NavbarComponent sticky top-0 z-50 w-full">
-      <nav className="vgvalpo-bgcolor1 px-6 py-5 my-border-bottom">
+    <div
+      className={`NavbarComponent sticky top-0 z-50 w-full ${
+        isScrolled ? "navbar-scrolled" : ""
+      }`}
+    >
+      <nav className="navbar-inner vgvalpo-bgcolor1 px-6 py-5 my-border-bottom">
         <div className="px-8 mx-auto flex justify-between items-center">
-          <img src={Logo} alt="" className="w-16" />
+          <Link
+            to="/"
+            className="navbar-logo-link inline-flex shrink-0"
+            aria-label={t("navbar.home")}
+          >
+            <img src={Logo} alt="" className="w-16" />
+          </Link>
 
           <div className="hidden md:flex md:justify-center md:items-center space-x-10">
-            <Link to={"/"} className="text-white vg-link">
+            <Link to="/" className={navLinkClass(pathname, "/")}>
               {t("navbar.home")}
             </Link>
             <div className="relative">
               <button
+                type="button"
                 onClick={toggleOption}
-                className="text-white flex items-center hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
+                className={`navbar-dropdown-btn ${
+                  associationActive ? "is-active" : ""
+                } ${isOpenOption ? "is-open" : ""}`}
+                aria-expanded={isOpenOption}
               >
                 {t("navbar.association")}{" "}
                 <i
@@ -43,14 +91,18 @@ export const NavbarComponent = () => {
                 <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg vgvalpo-bgcolor1 my-border z-50">
                   <div className="py-1">
                     <Link
-                      to={"/aboutus"}
-                      className="block text-white px-4 py-2 vg-link hover:bg-white/10 transition-colors"
+                      to="/aboutus"
+                      className={`navbar-dropdown-link ${
+                        isNavActive(pathname, "/aboutus") ? "is-active" : ""
+                      }`}
                     >
                       {t("navbar.aboutUs")}
                     </Link>
                     <Link
-                      to={"/socios"}
-                      className="block text-white px-4 py-2 vg-link hover:bg-white/10 transition-colors"
+                      to="/socios"
+                      className={`navbar-dropdown-link ${
+                        isNavActive(pathname, "/socios") ? "is-active" : ""
+                      }`}
                     >
                       {t("navbar.ourPartners")}
                     </Link>
@@ -58,21 +110,19 @@ export const NavbarComponent = () => {
                 </div>
               )}
             </div>
-            <Link to={"/videogames"} className="text-white vg-link">
+            <Link to="/videogames" className={navLinkClass(pathname, "/videogames")}>
               {t("navbar.videoGames")}
             </Link>
-            <Link to={"/noticias"} className="text-white vg-link">
+            <Link to="/noticias" className={navLinkClass(pathname, "/noticias")}>
               {t("navbar.bitacora")}
             </Link>
-            <Link to={"/contact"} className="text-white vg-link">
+            <Link to="/contact" className={navLinkClass(pathname, "/contact")}>
               {t("navbar.contact")}
             </Link>
             <LanguageSwitcher />
             <Link
               to={MEMBERSHIP_WIP_ROUTE}
-              className={
-                "vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center text-white"
-              }
+              className="navbar-membership-btn vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center text-white"
               aria-label="Ir a membresia"
             >
               {t("navbar.membership")}
@@ -81,8 +131,11 @@ export const NavbarComponent = () => {
 
           <div className="md:hidden flex justify-center items-center">
             <button
+              type="button"
               onClick={toggleMenu}
               className="flex justify-center items-center"
+              aria-expanded={isOpen}
+              aria-label={isOpen ? "Cerrar menu" : "Abrir menu"}
             >
               <i className="bi bi-list text-white text-4xl"></i>
             </button>
@@ -92,12 +145,16 @@ export const NavbarComponent = () => {
 
       {isOpen && (
         <div className="md:hidden absolute z-20 w-full vgvalpo-bgcolor1 p-4 px-6 my-border-top my-border-bottom">
-          <Link to={"/"} className="text-white py-4 block vg-link">
+          <Link to="/" className={navLinkClass(pathname, "/", true)}>
             {t("navbar.home")}
           </Link>
           <button
+            type="button"
             onClick={toggleOption}
-            className="text-white py-4 block w-full text-left flex items-center hover:bg-white/10 px-3 rounded-lg transition-colors"
+            className={`navbar-dropdown-btn w-full text-left py-4 ${
+              associationActive ? "is-active" : ""
+            } ${isOpenOption ? "is-open" : ""}`}
+            aria-expanded={isOpenOption}
           >
             {t("navbar.association")}{" "}
             <i
@@ -107,36 +164,41 @@ export const NavbarComponent = () => {
           {isOpenOption && (
             <div className="md:hidden z-20 w-full vgvalpo-bgcolor1 px-4 py-2 my-border rounded-md">
               <Link
-                to={"/aboutus"}
-                className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg"
+                to="/aboutus"
+                className={`navbar-mobile-link ${
+                  isNavActive(pathname, "/aboutus") ? "is-active" : ""
+                }`}
               >
                 {t("navbar.aboutUs")}
               </Link>
               <Link
-                to={"/socios"}
-                className="text-white py-4 block vg-link hover:bg-white/10 transition-colors px-2 rounded-lg"
+                to="/socios"
+                className={`navbar-mobile-link ${
+                  isNavActive(pathname, "/socios") ? "is-active" : ""
+                }`}
               >
                 {t("navbar.ourPartners")}
               </Link>
             </div>
           )}
-          <Link to={"/videogames"} className="text-white py-4 block vg-link">
+          <Link
+            to="/videogames"
+            className={navLinkClass(pathname, "/videogames", true)}
+          >
             {t("navbar.videoGames")}
           </Link>
-          <Link to={"/noticias"} className="text-white py-4 block vg-link">
+          <Link to="/noticias" className={navLinkClass(pathname, "/noticias", true)}>
             {t("navbar.bitacora")}
           </Link>
-          <Link to={"/contact"} className="text-white py-4 mb-4 block vg-link">
+          <Link to="/contact" className={navLinkClass(pathname, "/contact", true)}>
             {t("navbar.contact")}
           </Link>
-          <div className="mb-4">
+          <div className="mb-4 mt-2">
             <LanguageSwitcher />
           </div>
           <Link
             to={MEMBERSHIP_WIP_ROUTE}
-            className={
-              "vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center w-40 mb-4 text-white"
-            }
+            className="navbar-membership-btn vgvalpo-gradient-btn rounded-md px-6 py-3 flex justify-center items-center w-40 mb-4 text-white"
           >
             {t("navbar.membership")}
           </Link>

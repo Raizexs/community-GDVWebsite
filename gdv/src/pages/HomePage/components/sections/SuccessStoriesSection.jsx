@@ -1,4 +1,5 @@
 import { SuccessStories } from "../../../../components/SuccessStories";
+import { Reveal } from "../../../../components/Reveal";
 import { useTranslation } from "react-i18next";
 import { resolveLocalizedValue } from "../../../../utils/localization";
 import Gameimg1 from "../../../../img/TormentedSouls_header.jpg";
@@ -116,23 +117,30 @@ export const SuccessStoriesSection = ({ homeContent }) => {
 
   return (
     <section className="py-20 px-4 games-bg">
-      <div className="mb-12 flex flex-col justify-center items-center text-center">
+      <Reveal className="mb-12 flex flex-col justify-center items-center text-center motion-section-header" emphasis>
         <h6 className="mb-2 vgvalpo-textcolor3 text-base">{label}</h6>
         <h3 className="font-bold text-black md:text-3xl md:w-4/12 text-2xl">
           {title}
         </h3>
-      </div>
+      </Reveal>
 
       <div className="flex justify-center items-center flex-col gap-16">
         {successStories.map((s, index) => (
-          <SuccessStories
+          <Reveal
             key={index}
-            title={s.title}
-            description={s.description}
-            image={s.image}
-            gameplataforms={s.plataforms}
-            info={s.info}
-          />
+            emphasis
+            className={`motion-reveal-alt ${
+              index % 2 === 0 ? "motion-reveal-alt-left" : "motion-reveal-alt-right"
+            }`}
+          >
+            <SuccessStories
+              title={s.title}
+              description={s.description}
+              image={s.image}
+              gameplataforms={s.plataforms}
+              info={s.info}
+            />
+          </Reveal>
         ))}
       </div>
     </section>

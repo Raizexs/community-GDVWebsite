@@ -1,5 +1,5 @@
 export function PageEnter({ children, className = "" }) {
-  const classes = ["page-enter", "animate-fadeIn", className]
+  const classes = ["page-enter", "motion-page-enter", className]
     .filter(Boolean)
     .join(" ");
 

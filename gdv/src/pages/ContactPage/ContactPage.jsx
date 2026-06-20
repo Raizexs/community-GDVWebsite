@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavbarComponent } from "../../components/Navbar";
 import { PageEnter } from "../../components/PageEnter";
+import { Reveal } from "../../components/Reveal";
 import { FooterComponent } from "../../components/Footer";
 import {
   getPraxsuiteContactConfig,
@@ -215,9 +216,10 @@ export const ContactPage = () => {
         <main>
           <section className="games-bg">
             <div className="flex md:flex-row flex-col justify-center items-center">
-              <div className="w-full py-20 md:h-myh h-44 bg-contact"></div>
+              <Reveal className="w-full py-20 md:h-myh h-44 bg-contact" emphasis />
+              <Reveal className="w-full header-screen bg-white p-9" emphasis>
               <form
-                className="w-full header-screen bg-white p-9"
+                className="w-full"
                 onSubmit={handleSubmit}
               >
                 <p className="text-3xl font-bold mb-8 vgvalpo-textcolor3">
@@ -340,6 +342,7 @@ export const ContactPage = () => {
                     : t("contact.form.sendButton")}
                 </button>
               </form>
+              </Reveal>
             </div>
           </section>
         </main>

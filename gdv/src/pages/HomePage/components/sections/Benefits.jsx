@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Reveal } from "../../../../components/Reveal";
 import { resolveLocalizedValue } from "../../../../utils/localization";
 import icon1 from "../../../../img/icons/News.png";
 import icon2 from "../../../..//img/icons/People Working Together.png";
@@ -42,15 +43,15 @@ export const Benefits = ({ homeContent }) => {
 
   return (
     <section className="py-20 px-4 section-bg mt-12">
-      <div className="mb-16 flex flex-col justify-center items-center text-center">
+      <Reveal className="mb-16 flex flex-col justify-center items-center text-center motion-section-header" emphasis>
         <h6 className="mb-2 vgvalpo-textcolor3 text-base">{sectionLabel}</h6>
         <h3 className="font-bold text-black md:text-3xl md:w-4/12 text-2xl">
           {sectionTitle}
         </h3>
-      </div>
+      </Reveal>
 
       <div className="flex justify-center items-center mb-8">
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-20">
+        <Reveal className="grid md:grid-cols-3 grid-cols-1 gap-20" stagger emphasis>
           {benefits.map((benefit) => (
             <div
               key={benefit.key}
@@ -69,7 +70,7 @@ export const Benefits = ({ homeContent }) => {
               </p>
             </div>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

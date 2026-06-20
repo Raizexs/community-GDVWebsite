@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { AboutusSection } from "./components/sections/AboutusSection";
 import { Members } from "./components/sections/Members";
 import { Jointheguild } from "../../components/Jointheguild";
+import { Reveal } from "../../components/Reveal";
 import {
   fetchAboutUsContent,
   getCachedAboutUsContent,
@@ -41,8 +42,12 @@ export const AboutusPage = () => {
       <PageEnter>
         <main>
           <AboutusSection content={aboutUsContent} />
-          <Members membersData={aboutUsContent?.members} />
-          <Jointheguild />
+          <Reveal emphasis className="block">
+            <Members membersData={aboutUsContent?.members} />
+          </Reveal>
+          <Reveal emphasis className="block">
+            <Jointheguild />
+          </Reveal>
         </main>
         <FooterComponent />
       </PageEnter>

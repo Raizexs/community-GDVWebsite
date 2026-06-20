@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PartnerCard } from "../PartnerCard";
+import { Reveal } from "../../../../components/Reveal";
 import {
   fetchPartners,
   getStaticPartnersFallback,
@@ -38,42 +39,34 @@ export function SociosStudiosSection() {
 
   return (
     <section className="pt-20 pb-10 px-4">
-      <div className="mb-12 flex flex-col justify-center items-center text-center">
+      <Reveal
+        onMount
+        emphasis
+        delay={320}
+        className="mb-12 flex flex-col justify-center items-center text-center motion-section-header"
+      >
         <h6 className="mb-2 vgvalpo-textcolor3 text-base">
           {t("partners.studios.label")}
         </h6>
         <h3 className="font-bold text-black md:text-3xl md:w-5/12 text-2xl">
           {t("partners.studios.title")}
         </h3>
-      </div>
+      </Reveal>
 
-      <div className="flex flex-col justify-center items-center w-full max-w-6xl mx-auto gap-7">
-        {socios.length === 10 ? (
-          <>
-            <div className="flex flex-wrap justify-center gap-7 w-full">
-              {socios.slice(0, 4).map((partner, idx) => (
-                <PartnerCard key={partner.name || idx} partner={partner} />
-              ))}
-            </div>
-            <div className="flex flex-wrap justify-center gap-7 w-full">
-              {socios.slice(4, 6).map((partner, idx) => (
-                <PartnerCard key={partner.name || idx + 4} partner={partner} />
-              ))}
-            </div>
-            <div className="flex flex-wrap justify-center gap-7 w-full">
-              {socios.slice(6, 10).map((partner, idx) => (
-                <PartnerCard key={partner.name || idx + 6} partner={partner} />
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="flex flex-wrap justify-center gap-7 w-full">
-            {socios.map((partner, idx) => (
-              <PartnerCard key={partner.name || idx} partner={partner} />
-            ))}
-          </div>
-        )}
-      </div>
+      {socios.length > 0 ? (
+        <Reveal
+          key="partners-loaded"
+          onMount
+          emphasis
+          stagger
+          delay={480}
+          className="flex flex-wrap justify-center gap-7 w-full max-w-6xl mx-auto"
+        >
+          {socios.map((partner, idx) => (
+            <PartnerCard key={partner.name || idx} partner={partner} />
+          ))}
+        </Reveal>
+      ) : null}
     </section>
   );
 }

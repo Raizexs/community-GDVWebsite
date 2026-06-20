@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet-async";
 import { NavbarComponent } from "../../components/Navbar";
+import { PageEnter } from "../../components/PageEnter";
+import { Reveal } from "../../components/Reveal";
 import { FooterComponent } from "../../components/Footer";
 import { useImageOrientation } from "../../hooks/useImageOrientation";
 import { resolveLocalizedValue } from "../../utils/localization";
@@ -88,153 +90,175 @@ export const BitacoraDetailPage = () => {
         </title>
       </Helmet>
       <NavbarComponent />
-      <main className="bitacora-page-main">
-        <section className="bitacora-detail-section">
-          <div className="bitacora-detail-container">
-            <Link to="/noticias" className="bitacora-detail-back">
-              <i className="bi bi-arrow-left" />
-              {t("bitacora.backToList")}
-            </Link>
-
-            {loading ? (
-              <p className="bitacora-state-message">{t("bitacora.loading")}</p>
-            ) : post ? (
-              <article key={slug} className="bitacora-detail-article animate-fadeIn">
-                <div className="bitacora-detail-header">
-                  <span className={`bitacora-entry-category ${categoryClass}`}>
-                    {categoryLabel}
-                  </span>
-                  <h1>{title}</h1>
-                  {subtitle ? <p className="bitacora-detail-subtitle">{subtitle}</p> : null}
-                  {formattedDate || author ? (
-                    <p className="bitacora-detail-meta">
-                      {formattedDate
-                        ? t("bitacora.publishedOn", { date: formattedDate })
-                        : null}
-                      {formattedDate && author ? " • " : null}
-                      {author ? t("bitacora.byAuthor", { author }) : null}
-                    </p>
-                  ) : null}
-                </div>
-
-                {post.coverImage ? (
-                  <figure
-                    className={`bitacora-detail-hero bitacora-detail-hero--${coverOrientation || "auto"}`}
-                  >
-                    <img
-                      src={post.coverImage}
-                      alt={title}
-                      onLoad={onCoverImageLoad}
-                    />
-                    {coverCaption ? (
-                      <figcaption>{coverCaption}</figcaption>
-                    ) : null}
-                  </figure>
-                ) : null}
-
-                <LocalizedHtml
-                  value={body}
-                  className="bitacora-detail-body bitacora-body"
-                />
-
-                {aboutEvent ? (
-                  <section className="bitacora-detail-block">
-                    <h2 className="bitacora-detail-section-title">
-                      {t("bitacora.aboutEvent")}
-                    </h2>
-                    <LocalizedHtml
-                      value={aboutEvent}
-                      className="bitacora-detail-body bitacora-body"
-                    />
-                    {highlightFact ? (
-                      <p className="bitacora-detail-highlight">
-                        <strong>{t("bitacora.highlightFact")}</strong> {highlightFact}
-                      </p>
-                    ) : null}
-                  </section>
-                ) : null}
-
-                {eventDates || eventLocation || eventEntry ? (
-                  <section className="bitacora-detail-block">
-                    <h2 className="bitacora-detail-section-title">
-                      {t("bitacora.eventDetails")}
-                    </h2>
-                    <dl className="bitacora-detail-dl">
-                      {eventDates ? (
-                        <>
-                          <dt>{t("bitacora.dates")}</dt>
-                          <dd>{eventDates}</dd>
-                        </>
-                      ) : null}
-                      {eventLocation ? (
-                        <>
-                          <dt>{t("bitacora.location")}</dt>
-                          <dd>{eventLocation}</dd>
-                        </>
-                      ) : null}
-                      {eventEntry ? (
-                        <>
-                          <dt>{t("bitacora.entry")}</dt>
-                          <dd>{eventEntry}</dd>
-                        </>
-                      ) : null}
-                    </dl>
-                  </section>
-                ) : null}
-
-                {organization || post.collaborators?.length ? (
-                  <section className="bitacora-detail-block">
-                    <h2 className="bitacora-detail-section-title">
-                      {t("bitacora.organization")}
-                    </h2>
-                    <LocalizedHtml
-                      value={organization}
-                      className="bitacora-detail-body bitacora-body"
-                    />
-                    {post.collaborators?.length ? (
-                      <div className="bitacora-detail-collaborators">
-                        <h3>{t("bitacora.collaborators")}</h3>
-                        <ul>
-                          {post.collaborators.map((name) => (
-                            <li key={name}>{name}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
-                  </section>
-                ) : null}
-
-                {regionalImpact ? (
-                  <section className="bitacora-detail-block">
-                    <h2 className="bitacora-detail-section-title">
-                      {t("bitacora.regionalImpact")}
-                    </h2>
-                    <p className="bitacora-detail-impact">{regionalImpact}</p>
-                  </section>
-                ) : null}
-
-                {post.tags?.length ? (
-                  <ul className="bitacora-detail-tags">
-                    {post.tags.map((tag) => (
-                      <li key={tag}>#{tag}</li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                <ImageGalleryCarousel gallery={post.gallery} />
-              </article>
-            ) : (
-              <div className="bitacora-detail-empty">
-                <p>{t("bitacora.notFound")}</p>
-                <Link to="/noticias" className="bitacora-register-btn">
+      <PageEnter className="flex flex-col flex-1">
+        <main className="bitacora-page-main">
+          <section className="bitacora-detail-section">
+            <div className="bitacora-detail-container">
+              <Reveal onMount emphasis delay={90}>
+                <Link to="/noticias" className="bitacora-detail-back">
+                  <i className="bi bi-arrow-left" />
                   {t("bitacora.backToList")}
                 </Link>
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
-      <FooterComponent />
+              </Reveal>
+
+              {loading ? (
+                <p className="bitacora-state-message">{t("bitacora.loading")}</p>
+              ) : post ? (
+                <article key={slug} className="bitacora-detail-article">
+                  <Reveal
+                    onMount
+                    emphasis
+                    delay={180}
+                    className="bitacora-detail-header motion-section-header"
+                  >
+                    <span className={`bitacora-entry-category ${categoryClass}`}>
+                      {categoryLabel}
+                    </span>
+                    <h1>{title}</h1>
+                    {subtitle ? (
+                      <p className="bitacora-detail-subtitle">{subtitle}</p>
+                    ) : null}
+                    {formattedDate || author ? (
+                      <p className="bitacora-detail-meta">
+                        {formattedDate
+                          ? t("bitacora.publishedOn", { date: formattedDate })
+                          : null}
+                        {formattedDate && author ? " • " : null}
+                        {author ? t("bitacora.byAuthor", { author }) : null}
+                      </p>
+                    ) : null}
+                  </Reveal>
+
+                  {post.coverImage ? (
+                    <Reveal onMount emphasis delay={320}>
+                      <figure
+                        className={`bitacora-detail-hero bitacora-detail-hero--${coverOrientation || "auto"}`}
+                      >
+                        <img
+                          src={post.coverImage}
+                          alt={title}
+                          onLoad={onCoverImageLoad}
+                        />
+                        {coverCaption ? (
+                          <figcaption>{coverCaption}</figcaption>
+                        ) : null}
+                      </figure>
+                    </Reveal>
+                  ) : null}
+
+                  <Reveal onMount emphasis delay={460}>
+                    <LocalizedHtml
+                      value={body}
+                      className="bitacora-detail-body bitacora-body"
+                    />
+                  </Reveal>
+
+                  {aboutEvent ? (
+                    <Reveal emphasis className="bitacora-detail-block">
+                      <h2 className="bitacora-detail-section-title">
+                        {t("bitacora.aboutEvent")}
+                      </h2>
+                      <LocalizedHtml
+                        value={aboutEvent}
+                        className="bitacora-detail-body bitacora-body"
+                      />
+                      {highlightFact ? (
+                        <p className="bitacora-detail-highlight">
+                          <strong>{t("bitacora.highlightFact")}</strong>{" "}
+                          {highlightFact}
+                        </p>
+                      ) : null}
+                    </Reveal>
+                  ) : null}
+
+                  {eventDates || eventLocation || eventEntry ? (
+                    <Reveal emphasis className="bitacora-detail-block">
+                      <h2 className="bitacora-detail-section-title">
+                        {t("bitacora.eventDetails")}
+                      </h2>
+                      <dl className="bitacora-detail-dl">
+                        {eventDates ? (
+                          <>
+                            <dt>{t("bitacora.dates")}</dt>
+                            <dd>{eventDates}</dd>
+                          </>
+                        ) : null}
+                        {eventLocation ? (
+                          <>
+                            <dt>{t("bitacora.location")}</dt>
+                            <dd>{eventLocation}</dd>
+                          </>
+                        ) : null}
+                        {eventEntry ? (
+                          <>
+                            <dt>{t("bitacora.entry")}</dt>
+                            <dd>{eventEntry}</dd>
+                          </>
+                        ) : null}
+                      </dl>
+                    </Reveal>
+                  ) : null}
+
+                  {organization || post.collaborators?.length ? (
+                    <Reveal emphasis className="bitacora-detail-block">
+                      <h2 className="bitacora-detail-section-title">
+                        {t("bitacora.organization")}
+                      </h2>
+                      <LocalizedHtml
+                        value={organization}
+                        className="bitacora-detail-body bitacora-body"
+                      />
+                      {post.collaborators?.length ? (
+                        <div className="bitacora-detail-collaborators">
+                          <h3>{t("bitacora.collaborators")}</h3>
+                          <ul>
+                            {post.collaborators.map((name) => (
+                              <li key={name}>{name}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                    </Reveal>
+                  ) : null}
+
+                  {regionalImpact ? (
+                    <Reveal emphasis className="bitacora-detail-block">
+                      <h2 className="bitacora-detail-section-title">
+                        {t("bitacora.regionalImpact")}
+                      </h2>
+                      <p className="bitacora-detail-impact">{regionalImpact}</p>
+                    </Reveal>
+                  ) : null}
+
+                  {post.tags?.length ? (
+                    <Reveal emphasis>
+                      <ul className="bitacora-detail-tags">
+                        {post.tags.map((tag) => (
+                          <li key={tag}>#{tag}</li>
+                        ))}
+                      </ul>
+                    </Reveal>
+                  ) : null}
+
+                  <Reveal emphasis>
+                    <ImageGalleryCarousel gallery={post.gallery} />
+                  </Reveal>
+                </article>
+              ) : (
+                <Reveal onMount emphasis delay={180}>
+                  <div className="bitacora-detail-empty">
+                    <p>{t("bitacora.notFound")}</p>
+                    <Link to="/noticias" className="bitacora-register-btn">
+                      {t("bitacora.backToList")}
+                    </Link>
+                  </div>
+                </Reveal>
+              )}
+            </div>
+          </section>
+        </main>
+        <FooterComponent />
+      </PageEnter>
     </div>
   );
 };
