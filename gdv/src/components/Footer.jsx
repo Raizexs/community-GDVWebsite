@@ -75,6 +75,12 @@ export const FooterComponent = ({ homeContent }) => {
                       {t("footer.videoGames")}
                     </Link>
                     <Link
+                      to={"/noticias"}
+                      className="text-white py-2 block vg-link vgvalpo-textcolor6 text-ms"
+                    >
+                      {t("footer.bitacora")}
+                    </Link>
+                    <Link
                       to={"/contact"}
                       className="text-white py-2 block vg-link vgvalpo-textcolor6 text-ms"
                     >

@@ -12,6 +12,11 @@ const RATE_LIMITS = {
   media: { windowMs: 60_000, max: 41 },
   partners: { windowMs: 60_000, max: 12 },
   partnersMedia: { windowMs: 60_000, max: 41 },
+  bitacora: { windowMs: 60_000, max: 12 },
+  bitacoraMedia: { windowMs: 60_000, max: 41 },
+  providers: { windowMs: 60_000, max: 12 },
+  providersMedia: { windowMs: 60_000, max: 20 },
+  events: { windowMs: 60_000, max: 12 },
   contact: { windowMs: 60_000, max: 3 },
 };
 

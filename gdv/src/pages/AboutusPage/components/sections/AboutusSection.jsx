@@ -68,7 +68,7 @@ export const AboutusSection = ({ content }) => {
             className="rounded-lg md:w-1/3"
             onError={() => setHeroImageSrc(aboutus)}
           />
-          <div className="flex flex-col md:w-4/12">
+          <div className="flex flex-col md:w-4/12 select-text">
             <div className="p-4">
               <h5 className="text-black font-bold text-3xl mb-2 vgvalpo-textcolor3">
                 {whoWeAreTitle}
@@ -91,22 +91,24 @@ export const AboutusSection = ({ content }) => {
 
       <div className="flex justify-center items-center mb-8">
         <div className="grid md:grid-cols-3 grid-cols-1 gap-20">
-          <div className="w-60 flex items-center text-center flex-col">
+          <div className="w-60 flex items-center text-center flex-col select-text">
             <img
               src={icon1}
               alt=""
-              className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4"
+              className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4 pointer-events-none"
+              draggable={false}
             />
             <h5 className="vgvalpo-textcolor5 font-bold mb-2 text-xl">
               {valuesTitle}
             </h5>
             <p className="text-sm vgvalpo-textcolor6">{valuesDescription}</p>
           </div>
-          <div className="w-60 flex items-center text-center flex-col">
+          <div className="w-60 flex items-center text-center flex-col select-text">
             <img
               src={icon2}
               alt=""
-              className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4"
+              className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4 pointer-events-none"
+              draggable={false}
             />
             <h5 className="vgvalpo-textcolor5 font-bold mb-2 text-xl">
               {objectivesTitle}
@@ -115,11 +117,12 @@ export const AboutusSection = ({ content }) => {
               {objectivesDescription}
             </p>
           </div>
-          <div className="w-60 flex items-center text-center flex-col">
+          <div className="w-60 flex items-center text-center flex-col select-text">
             <img
               src={icon3}
               alt=""
-              className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4"
+              className="w-4/12 vgvalpo-gradient p-5 rounded-full mb-4 pointer-events-none"
+              draggable={false}
             />
             <h5 className="vgvalpo-textcolor5 font-bold mb-2 text-xl">
               {visionTitle}

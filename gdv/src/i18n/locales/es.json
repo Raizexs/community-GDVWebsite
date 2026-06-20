@@ -5,6 +5,7 @@
     "aboutUs": "Sobre nosotros",
     "ourPartners": "Nuestros socios",
     "videoGames": "Videojuegos",
+    "bitacora": "Noticias",
     "contact": "Contacto",
     "membership": "Membresía"
   },
@@ -16,6 +17,7 @@
     "aboutUsLink": "Sobre nosotros",
     "ourPartners": "Nuestros socios",
     "videoGames": "Videojuegos",
+    "bitacora": "Noticias",
     "contact": "Contacto",
     "socialNetworks": "Nuestras redes",
     "poweredBy": "Desarrollado por"
@@ -120,12 +122,95 @@
     "searchPlaceholder": "buscar un juego"
   },
   "partners": {
-    "label": "— Nuestros socios —",
-    "title": "Desarrolladores de videojuegos de la región de Valparaíso",
+    "studios": {
+      "label": "— Nuestros socios —",
+      "title": "Desarrolladores de videojuegos de la región de Valparaíso"
+    },
+    "providers": {
+      "label": "— Nuestros partners —",
+      "title": "Aliados estratégicos del gremio",
+      "subtitle": "Organizaciones, plataformas e instituciones que apoyan la visibilidad, articulación, internacionalización y crecimiento del ecosistema de videojuegos de Valparaíso.",
+      "loading": "Cargando proveedores...",
+      "empty": "No hay proveedores disponibles por ahora.",
+      "categories": {
+        "all": "Todos",
+        "audio": "Audio",
+        "cloud": "Nube y DevOps",
+        "training": "Formación y capacitación",
+        "devTools": "Herramientas de desarrollo",
+        "legalAccounting": "Legal y contabilidad",
+        "marketing": "Marketing",
+        "qa": "QA y testing"
+      }
+    },
     "header": {
       "title": "Nuestros Socios",
-      "description": "Nuestra asociación, junto con grandes empresas socias, impulsará el talento chileno a los más altos niveles de la industria de los videojuegos",
+      "description": "Nuestra asociación reúne estudios miembros y aliados que proveen servicios para impulsar el talento chileno en la industria de los videojuegos",
       "joinButton": "¡Únete al Gremio!"
+    }
+  },
+  "bitacora": {
+    "label": "Noticias",
+    "pageTitle": "Noticias",
+    "pageSubtitle": "Noticias, actividades, travesías, hitos y eventos del Gremio de Desarrolladores de Videojuegos de Valparaíso.",
+    "title": "Novedades del gremio",
+    "subtitle": "Noticias y avances del Gremio de Desarrolladores de Valparaíso.",
+    "homeTitle": "Conoce las últimas actividades y avances del gremio",
+    "homeSubtitle": "Mantente informado sobre eventos, travesías, hitos y actividades que impulsan el desarrollo de videojuegos en Valparaíso.",
+    "filterBy": "Filtrar por:",
+    "featured": "Destacado",
+    "readMore": "Leer más",
+    "viewAll": "Ver todas las noticias",
+    "backToList": "Volver a noticias",
+    "publishedOn": "Publicado el {{date}}",
+    "byAuthor": "por {{author}}",
+    "aboutEvent": "Sobre el evento",
+    "highlightFact": "Dato destacado:",
+    "eventDetails": "Detalles del evento",
+    "dates": "Fechas",
+    "location": "Lugar",
+    "entry": "Entrada",
+    "organization": "Organización y colaboración",
+    "collaborators": "Colaboradores",
+    "regionalImpact": "Impacto regional",
+    "galleryTitle": "Galería de Imágenes",
+    "galleryPrev": "Imagen anterior",
+    "galleryNext": "Imagen siguiente",
+    "galleryGoTo": "Ir a imagen {{index}}",
+    "galleryCounter": "{{current}} de {{total}}",
+    "galleryImageAlt": "Imagen de la noticia",
+    "galleryZoom": "Ver imagen completa",
+    "galleryClose": "Cerrar imagen ampliada",
+    "loading": "Cargando entradas...",
+    "empty": "Aún no hay entradas publicadas.",
+    "notFound": "No encontramos esta noticia.",
+    "categories": {
+      "all": "Todas",
+      "actividades": "Actividades",
+      "travesia": "Travesías",
+      "hito": "Hitos",
+      "evento": "Eventos",
+      "gremio": "Actividades"
+    },
+    "agenda": {
+      "label": "Agenda de Eventos",
+      "title": "Próximos eventos de la comunidad de videojuegos",
+      "subtitle": "Revisa las próximas actividades, workshops y encuentros para no perderte ninguna instancia de la comunidad.",
+      "nextEvent": "Próximo evento",
+      "register": "Inscribirse",
+      "registrationPending": "Inscripción pendiente",
+      "registrationPendingHint": "El gremio debe confirmar este evento antes de abrir inscripciones.",
+      "viewCalendar": "Ver calendario completo",
+      "hideCalendar": "Ocultar calendario",
+      "allUpcoming": "Todos los eventos futuros",
+      "loading": "Cargando agenda...",
+      "defaultAction": "Más información",
+      "followNetworksBadge": "Próximamente",
+      "followNetworksTitle": "¡No te pierdas lo que viene!",
+      "followNetworks": "Sigue las redes de GDV Valparaíso: ahí anunciaremos inscripciones y nuevos eventos de la comunidad.",
+      "instagram": "Instagram",
+      "discord": "Discord",
+      "noMoreEvents": "No hay más eventos programados por ahora. Revisa las redes para enterarte de las próximas actividades."
     }
   },
   "membresia": {
@@ -213,6 +298,9 @@
   },
   "gameCard": {
     "seeMore": "Ver más"
+  },
+  "providerCard": {
+    "visit": "Visitar"
   },
   "gamesData": {
     "tormentedSouls": {

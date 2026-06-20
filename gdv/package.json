@@ -18,6 +18,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "generate:bitacora-feed": "node scripts/generate-bitacora-feed.js",
+    "prebuild": "node scripts/generate-bitacora-feed.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

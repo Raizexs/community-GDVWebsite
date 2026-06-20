@@ -18,6 +18,9 @@ const DEFAULT_TABLE_NAMES = {
   stores: "VIDEOGAMES-STORES",
   partners: "PARTNERS",
   contact: "CONTACT",
+  bitacora: "BITACORA",
+  providers: "PROVIDERS",
+  events: "EVENTS",
 };
 
 const LEGACY_ENV_BY_MODULE = {
@@ -40,6 +43,18 @@ const LEGACY_ENV_BY_MODULE = {
   contact: {
     ref: "REACT_APP_PRAXSUITE_CONTACT_REF",
     key: "REACT_APP_PRAXSUITE_CONTACT_PUBLIC_KEY",
+  },
+  bitacora: {
+    ref: "REACT_APP_PRAXSUITE_BITACORA_REF",
+    key: "REACT_APP_PRAXSUITE_BITACORA_PUBLIC_KEY",
+  },
+  providers: {
+    ref: "REACT_APP_PRAXSUITE_PROVIDERS_REF",
+    key: "REACT_APP_PRAXSUITE_PROVIDERS_PUBLIC_KEY",
+  },
+  events: {
+    ref: "REACT_APP_PRAXSUITE_EVENTS_REF",
+    key: "REACT_APP_PRAXSUITE_EVENTS_PUBLIC_KEY",
   },
 };
 
@@ -76,7 +91,16 @@ function parseModulesFromEnv() {
   const fromRefs = parseJsonEnv("REACT_APP_PRAXSUITE_REFS");
   const sharedKey = env("REACT_APP_PRAXSUITE_PUBLIC_KEY");
 
-  const moduleNames = ["games", "platform", "stores", "partners", "contact"];
+  const moduleNames = [
+    "games",
+    "platform",
+    "stores",
+    "partners",
+    "contact",
+    "bitacora",
+    "providers",
+    "events",
+  ];
 
   cachedModules = {};
   for (const name of moduleNames) {
@@ -174,6 +198,36 @@ export function getPraxsuiteContactConfig() {
   };
 }
 
+export function getPraxsuiteBitacoraConfig() {
+  const bitacora = getModule("bitacora");
+  return {
+    queryUrl: getPraxsuiteQueryUrl(),
+    ref: bitacora.ref,
+    apiKey: bitacora.key,
+    table: bitacora.table,
+  };
+}
+
+export function getPraxsuiteProvidersConfig() {
+  const providers = getModule("providers");
+  return {
+    queryUrl: getPraxsuiteQueryUrl(),
+    ref: providers.ref,
+    apiKey: providers.key,
+    table: providers.table,
+  };
+}
+
+export function getPraxsuiteEventsConfig() {
+  const events = getModule("events");
+  return {
+    queryUrl: getPraxsuiteQueryUrl(),
+    ref: events.ref,
+    apiKey: events.key,
+    table: events.table,
+  };
+}
+
 export function isPraxsuiteGamesReady() {
   const c = getPraxsuiteGamesConfig();
   return Boolean(
@@ -213,6 +267,42 @@ export function shouldLoadPartnersFromPraxsuite() {
   if (mode === "static") return false;
   if (mode === "praxsuite") return isPraxsuitePartnersReady();
   return isPraxsuitePartnersReady();
+}
+
+export function isPraxsuiteBitacoraReady() {
+  const c = getPraxsuiteBitacoraConfig();
+  return Boolean(c.queryUrl && c.ref && c.apiKey);
+}
+
+export function isPraxsuiteProvidersReady() {
+  const c = getPraxsuiteProvidersConfig();
+  return Boolean(c.queryUrl && c.ref && c.apiKey);
+}
+
+export function shouldLoadBitacoraFromPraxsuite() {
+  const mode = getDataSource();
+  if (mode === "static") return false;
+  if (mode === "praxsuite") return isPraxsuiteBitacoraReady();
+  return isPraxsuiteBitacoraReady();
+}
+
+export function shouldLoadProvidersFromPraxsuite() {
+  const mode = getDataSource();
+  if (mode === "static") return false;
+  if (mode === "praxsuite") return isPraxsuiteProvidersReady();
+  return isPraxsuiteProvidersReady();
+}
+
+export function isPraxsuiteEventsReady() {
+  const c = getPraxsuiteEventsConfig();
+  return Boolean(c.queryUrl && c.ref && c.apiKey);
+}
+
+export function shouldLoadEventsFromPraxsuite() {
+  const mode = getDataSource();
+  if (mode === "static") return false;
+  if (mode === "praxsuite") return isPraxsuiteEventsReady();
+  return isPraxsuiteEventsReady();
 }
 
 export function getTurnstileSiteKey() {

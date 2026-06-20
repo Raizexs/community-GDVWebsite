@@ -5,7 +5,7 @@ import Gudhar from "../../img/partners/GUDHAR.png";
 import RamCandy from "../../img/partners/RAMCANDY.png";
 import SlimeTeam from "../../img/partners/SLIMETEAM.png";
 import TaeLao from "../../img/partners/TAE-LAO.png";
-import ChileGamesDatabase from "../../img/partners/CHILEGAMESDATABASE.png";
+import Panpipe from "../../img/partners/panpipe.png";
 import TangaraStudio from "../../img/partners/TANGARASTUDIO.png";
 import TesseractLogo from "../../img/partners/TESSERACT.png";
 import { shouldLoadPartnersFromPraxsuite } from "../../config/appConfig";
@@ -42,9 +42,9 @@ const staticPartners = [
   },
   { logo: TaeLao, website: "https://tae-lao.itch.io/", name: "Tae Lao" },
   {
-    logo: ChileGamesDatabase,
-    website: "https://chilegamesdatabase.com/",
-    name: "ChileGamesDatabase",
+    logo: Panpipe,
+    website: "https://panpipestudio.com/",
+    name: "Panpipe Studio",
   },
   {
     logo: TangaraStudio,

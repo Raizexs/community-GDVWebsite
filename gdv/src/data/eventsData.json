@@ -1,0 +1,54 @@
+[
+  {
+    "id": "networking-junio-2026",
+    "title": {
+      "es": "Networking Abierto de la Comunidad GDV",
+      "en": "GDV Community Open Networking"
+    },
+    "description": {
+      "es": "Encuentro mensual para conectar desarrolladores, artistas y aliados del ecosistema valparaíso.",
+      "en": "Monthly meetup to connect developers, artists, and ecosystem allies in Valparaíso."
+    },
+    "startsAt": "2026-06-20T19:00:00-04:00",
+    "location": {
+      "es": "Valparaíso, Hub Creativo",
+      "en": "Valparaíso, Creative Hub"
+    },
+    "registrationUrl": "https://www.gdvalparaiso.com/contact",
+    "isOnline": false
+  },
+  {
+    "id": "workshop-portfolio-julio",
+    "title": {
+      "es": "Workshop: Portafolio para Publishers",
+      "en": "Workshop: Portfolio for Publishers"
+    },
+    "description": {
+      "es": "Taller práctico para preparar pitch decks y materiales de presentación ante publishers.",
+      "en": "Hands-on workshop to prepare pitch decks and presentation materials for publishers."
+    },
+    "startsAt": "2026-07-18T18:30:00-04:00",
+    "location": {
+      "es": "Online",
+      "en": "Online"
+    },
+    "isOnline": true
+  },
+  {
+    "id": "meetup-funding-agosto",
+    "title": {
+      "es": "Meetup GDV: Funding para Estudios Indie",
+      "en": "GDV Meetup: Funding for Indie Studios"
+    },
+    "description": {
+      "es": "Charla sobre financiamiento y oportunidades para estudios independientes de la región.",
+      "en": "Talk on funding and opportunities for independent studios in the region."
+    },
+    "startsAt": "2026-08-08T19:00:00-04:00",
+    "location": {
+      "es": "Valparaíso",
+      "en": "Valparaíso"
+    },
+    "isOnline": false
+  }
+]

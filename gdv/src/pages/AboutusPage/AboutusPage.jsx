@@ -1,4 +1,5 @@
 import { NavbarComponent } from "../../components/Navbar";
+import { PageEnter } from "../../components/PageEnter";
 import { FooterComponent } from "../../components/Footer";
 import { useEffect, useState } from "react";
 import { AboutusSection } from "./components/sections/AboutusSection";
@@ -37,12 +38,14 @@ export const AboutusPage = () => {
   return (
     <div className="">
       <NavbarComponent />
-      <main>
-        <AboutusSection content={aboutUsContent} />
-        <Members membersData={aboutUsContent?.members} />
-        <Jointheguild />
-      </main>
-      <FooterComponent />
+      <PageEnter>
+        <main>
+          <AboutusSection content={aboutUsContent} />
+          <Members membersData={aboutUsContent?.members} />
+          <Jointheguild />
+        </main>
+        <FooterComponent />
+      </PageEnter>
     </div>
   );
 };

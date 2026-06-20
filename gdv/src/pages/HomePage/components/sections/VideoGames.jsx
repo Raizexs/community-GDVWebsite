@@ -26,7 +26,12 @@ export const VideoGames = ({ homeContent }) => {
 
     fetchGames()
       .then((result) => {
-        if (mounted) setGames(Array.isArray(result) && result.length ? result : getStaticGamesFallback());
+        if (mounted)
+          setGames(
+            Array.isArray(result) && result.length
+              ? result
+              : getStaticGamesFallback(),
+          );
       })
       .catch((error) => {
         console.error("Error loading home games:", error);

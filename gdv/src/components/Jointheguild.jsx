@@ -6,9 +6,12 @@ import { resolveMembershipJoinUrl } from "../utils/membershipRoute";
 export const Jointheguild = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage || i18n.language || "es";
-  const title = resolveLocalizedValue(homeContent?.joinCta?.title, language) || t("joinGuild.title");
+  const title =
+    resolveLocalizedValue(homeContent?.joinCta?.title, language) ||
+    t("joinGuild.title");
   const description =
-    resolveLocalizedValue(homeContent?.joinCta?.description, language) || t("joinGuild.description");
+    resolveLocalizedValue(homeContent?.joinCta?.description, language) ||
+    t("joinGuild.description");
   const joinUrl = resolveMembershipJoinUrl(homeContent?.joinCta?.url || "...");
 
   return (

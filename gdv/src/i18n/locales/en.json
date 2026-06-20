@@ -5,6 +5,7 @@
     "aboutUs": "About us",
     "ourPartners": "Our partners",
     "videoGames": "Video games",
+    "bitacora": "News",
     "contact": "Contact",
     "membership": "Membership"
   },
@@ -16,6 +17,7 @@
     "aboutUsLink": "About us",
     "ourPartners": "Our partners",
     "videoGames": "Video games",
+    "bitacora": "News",
     "contact": "Contact",
     "socialNetworks": "Social networks",
     "poweredBy": "Powered by"
@@ -120,12 +122,95 @@
     "searchPlaceholder": "search for a game"
   },
   "partners": {
-    "label": "— Our partners —",
-    "title": "Game developers from the Valparaíso region",
+    "studios": {
+      "label": "— Our members —",
+      "title": "Game developers from the Valparaíso region"
+    },
+    "providers": {
+      "label": "— Our partners —",
+      "title": "Strategic allies of the guild",
+      "subtitle": "Organizations, platforms, and institutions that support visibility, articulation, internationalization, and growth of the Valparaíso video game ecosystem.",
+      "loading": "Loading providers...",
+      "empty": "No providers available at the moment.",
+      "categories": {
+        "all": "All",
+        "audio": "Audio",
+        "cloud": "Cloud and DevOps",
+        "training": "Training and education",
+        "devTools": "Development tools",
+        "legalAccounting": "Legal and accounting",
+        "marketing": "Marketing",
+        "qa": "QA and testing"
+      }
+    },
     "header": {
       "title": "Our Partners",
-      "description": "Our association, together with great partner companies, will propel Chilean talent to the highest levels of the video game industry",
+      "description": "Our association brings together member studios and allies who provide services to propel Chilean talent in the video game industry",
       "joinButton": "Join the Guild!"
+    }
+  },
+  "bitacora": {
+    "label": "News",
+    "pageTitle": "News",
+    "pageSubtitle": "News, activities, journeys, milestones, and events from the Game Developers Guild of Valparaíso.",
+    "title": "Guild news",
+    "subtitle": "News and updates from the Game Developers Guild of Valparaíso.",
+    "homeTitle": "See the guild's latest activities and progress",
+    "homeSubtitle": "Stay informed about events, journeys, milestones, and activities driving game development in Valparaíso.",
+    "filterBy": "Filter by:",
+    "featured": "Featured",
+    "readMore": "Read more",
+    "viewAll": "View all news",
+    "backToList": "Back to news",
+    "publishedOn": "Published on {{date}}",
+    "byAuthor": "by {{author}}",
+    "aboutEvent": "About the event",
+    "highlightFact": "Highlighted fact:",
+    "eventDetails": "Event details",
+    "dates": "Dates",
+    "location": "Location",
+    "entry": "Admission",
+    "organization": "Organization and collaboration",
+    "collaborators": "Collaborators",
+    "regionalImpact": "Regional impact",
+    "galleryTitle": "Image gallery",
+    "galleryPrev": "Previous image",
+    "galleryNext": "Next image",
+    "galleryGoTo": "Go to image {{index}}",
+    "galleryCounter": "{{current}} of {{total}}",
+    "galleryImageAlt": "News image",
+    "galleryZoom": "View full image",
+    "galleryClose": "Close enlarged image",
+    "loading": "Loading entries...",
+    "empty": "No published entries yet.",
+    "notFound": "We could not find this news article.",
+    "categories": {
+      "all": "All",
+      "actividades": "Activities",
+      "travesia": "Journeys",
+      "hito": "Milestones",
+      "evento": "Events",
+      "gremio": "Activities"
+    },
+    "agenda": {
+      "label": "Events Agenda",
+      "title": "Upcoming community video game events",
+      "subtitle": "Check upcoming activities, workshops, and meetups so you do not miss any community gathering.",
+      "nextEvent": "Next event",
+      "register": "Register",
+      "registrationPending": "Registration pending",
+      "registrationPendingHint": "The guild must confirm this event before registrations open.",
+      "viewCalendar": "View full calendar",
+      "hideCalendar": "Hide calendar",
+      "allUpcoming": "All upcoming events",
+      "loading": "Loading agenda...",
+      "defaultAction": "More information",
+      "followNetworksBadge": "Coming soon",
+      "followNetworksTitle": "Don't miss what's next!",
+      "followNetworks": "Follow GDV Valparaíso on social media: we announce registrations and new community events there.",
+      "instagram": "Instagram",
+      "discord": "Discord",
+      "noMoreEvents": "No more events are scheduled right now. Check our social channels for upcoming activities."
     }
   },
   "membresia": {
@@ -213,6 +298,9 @@
   },
   "gameCard": {
     "seeMore": "See more"
+  },
+  "providerCard": {
+    "visit": "Visit"
   },
   "gamesData": {
     "tormentedSouls": {

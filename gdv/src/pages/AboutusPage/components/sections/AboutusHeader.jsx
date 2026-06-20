@@ -12,7 +12,7 @@ export const AboutusHeader = () => {
           Juntos apoyamos el talento chileno en los{" "}
           <b className="font-bold vgvalpo-textcolor4">videojuegos</b>
         </h1>
-        <p className="md:w-7/12 mb-8">
+        <p className="md:w-7/12 mb-8 select-text">
           ¡Somos un gremio dedicado apoyar el talento chileno en videojuegos!
           Descubre experiencias únicas que reflejan nuestra cultura y pasión por
           lo videojuegos y mucho más.

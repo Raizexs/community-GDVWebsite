@@ -27,12 +27,42 @@ export const SuccessStoriesSection = ({ homeContent }) => {
       image: Gameimg1,
       info: "https://pqube.co.uk/games/tormented-souls/",
       plataforms: [
-        { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/1367590/Tormented_Souls/", platform: "Steam" },
-        { name: "Nintendo", iconUrl: iconNintendo, url: "https://www.nintendo.com/store/products/tormented-souls-switch/", platform: "Nintendo" },
-        { name: "PlayStation", iconUrl: iconPlaystation, url: "https://store.playstation.com/en-us/product/UP4293-PPSA02525_00-TORMENTEDSIEAPS5/", platform: "PlayStation" },
-        { name: "Xbox", iconUrl: iconXbox, url: "https://www.xbox.com/en-us/games/store/tormented-souls/9mwz8jv5tsqg", platform: "Xbox" },
-        { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/tormented-souls", platform: "Epic" },
-        { name: "GOG", iconUrl: iconGOG, url: "https://www.gog.com/en/game/tormented_souls", platform: "GOG" },
+        {
+          name: "Steam",
+          iconUrl: iconSteam,
+          url: "https://store.steampowered.com/app/1367590/Tormented_Souls/",
+          platform: "Steam",
+        },
+        {
+          name: "Nintendo",
+          iconUrl: iconNintendo,
+          url: "https://www.nintendo.com/store/products/tormented-souls-switch/",
+          platform: "Nintendo",
+        },
+        {
+          name: "PlayStation",
+          iconUrl: iconPlaystation,
+          url: "https://store.playstation.com/en-us/product/UP4293-PPSA02525_00-TORMENTEDSIEAPS5/",
+          platform: "PlayStation",
+        },
+        {
+          name: "Xbox",
+          iconUrl: iconXbox,
+          url: "https://www.xbox.com/en-us/games/store/tormented-souls/9mwz8jv5tsqg",
+          platform: "Xbox",
+        },
+        {
+          name: "Epic",
+          iconUrl: iconEpic,
+          url: "https://store.epicgames.com/en-US/p/tormented-souls",
+          platform: "Epic",
+        },
+        {
+          name: "GOG",
+          iconUrl: iconGOG,
+          url: "https://www.gog.com/en/game/tormented_souls",
+          platform: "GOG",
+        },
       ],
     },
     {
@@ -47,8 +77,18 @@ export const SuccessStoriesSection = ({ homeContent }) => {
       image: Gameimg2,
       info: "https://whitethorngames.com/colorbound",
       plataforms: [
-        { name: "Steam", iconUrl: iconSteam, url: "https://store.steampowered.com/app/3778610/Colorbound/", platform: "Steam" },
-        { name: "Epic", iconUrl: iconEpic, url: "https://store.epicgames.com/en-US/p/colorbound-1c5e30", platform: "Epic" },
+        {
+          name: "Steam",
+          iconUrl: iconSteam,
+          url: "https://store.steampowered.com/app/3778610/Colorbound/",
+          platform: "Steam",
+        },
+        {
+          name: "Epic",
+          iconUrl: iconEpic,
+          url: "https://store.epicgames.com/en-US/p/colorbound-1c5e30",
+          platform: "Epic",
+        },
       ],
     },
   ].map((story) => ({

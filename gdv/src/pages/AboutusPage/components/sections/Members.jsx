@@ -31,19 +31,26 @@ export const Members = ({ membersData }) => {
       emaillink: "secretaria@gdvalparaiso.com",
     },
   ];
-  const i18nLanguage = (i18n?.resolvedLanguage || i18n?.language || "").toLowerCase();
+  const i18nLanguage = (
+    i18n?.resolvedLanguage ||
+    i18n?.language ||
+    ""
+  ).toLowerCase();
   const lang = i18nLanguage.startsWith("en") ? "en" : "es";
 
-  const members = Array.isArray(membersData) && membersData.length
-    ? membersData.map((member) => ({
-      id: member.id ?? member.email ?? member.name,
-      profile: member.profile || profile1,
-      name: member.name,
-      rol: lang === "en" ? member.roleEn : member.roleEs,
-      linkedinlink: member.linkedInUrl,
-      emaillink: member.email ? `mailto:${member.email}` : "mailto:contacto@gdvalparaiso.com",
-    }))
-    : staticMembers;
+  const members =
+    Array.isArray(membersData) && membersData.length
+      ? membersData.map((member) => ({
+          id: member.id ?? member.email ?? member.name,
+          profile: member.profile || profile1,
+          name: member.name,
+          rol: lang === "en" ? member.roleEn : member.roleEs,
+          linkedinlink: member.linkedInUrl,
+          emaillink: member.email
+            ? `mailto:${member.email}`
+            : "mailto:contacto@gdvalparaiso.com",
+        }))
+      : staticMembers;
 
   return (
     <section className="py-20 px-4 games-bg">
@@ -70,14 +77,19 @@ export const Members = ({ membersData }) => {
                   className="rounded-full w-80 h-60 md:w-32 md:h-32 border-4"
                 />
               </div>
-              <h5 className="text-black font-bold mb-1 text-xl">{m.name}</h5>
-              <p className="text-lg vgvalpo-textcolor5 mb-3">{m.rol}</p>
-              <div className="flex justify-center items-center gap-2">
+              <h5 className="text-black font-bold mb-1 text-xl select-text">
+                {m.name}
+              </h5>
+              <p className="text-lg vgvalpo-textcolor5 mb-3 select-text">
+                {m.rol}
+              </p>
+              <div className="flex justify-center items-center gap-2 relative z-10">
                 <a
                   href={m.linkedinlink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-linkedin flex items-center justify-center w-9 h-9 rounded-lg transition duration-500 hover:-translate-y-1"
+                  className="social-link bg-linkedin flex items-center justify-center w-9 h-9 rounded-lg transition duration-500 hover:-translate-y-1"
+                  aria-label={`LinkedIn ${m.name}`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -85,13 +97,19 @@ export const Members = ({ membersData }) => {
                     height="20"
                     viewBox="0 0 32 32"
                     fill="white"
+                    className="pointer-events-none"
                   >
                     <path d="M27 0H5C2.2 0 0 2.2 0 5v22c0 2.8 2.2 5 5 5h22c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5zM9.4 27H5.7V12.1h3.7V27zm-1.9-17.1c-1.2 0-2.1-.9-2.1-2.1s.9-2.1 2.1-2.1c1.2 0 2.1.9 2.1 2.1s-.9 2.1-2.1 2.1zm19.5 17.1h-3.7v-7.2c0-1.7-.6-2.8-2.1-2.8-1.1 0-1.7.7-2 1.4-.1.3-.1.7-.1 1.1V27h-3.7s.1-12.3 0-13.9h3.7v2c.5-.8 1.4-2 3.5-2 2.6 0 4.5 1.7 4.5 5.4V27z" />
                   </svg>
                 </a>
                 <a
-                  href={m.emaillink?.startsWith('mailto:') ? m.emaillink : `mailto:${m.emaillink}`}
-                  className="bg-gray-800 flex items-center justify-center w-9 h-9 rounded-lg transition duration-500 hover:-translate-y-1"
+                  href={
+                    m.emaillink?.startsWith("mailto:")
+                      ? m.emaillink
+                      : `mailto:${m.emaillink}`
+                  }
+                  className="social-link bg-gray-800 flex items-center justify-center w-9 h-9 rounded-lg transition duration-500 hover:-translate-y-1"
+                  aria-label={`Email ${m.name}`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -99,6 +117,7 @@ export const Members = ({ membersData }) => {
                     height="20"
                     viewBox="0 0 24 24"
                     fill="white"
+                    className="pointer-events-none"
                   >
                     <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" />
                   </svg>

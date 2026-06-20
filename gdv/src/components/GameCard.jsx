@@ -33,7 +33,7 @@ export const GameCard = ({
     (descriptionKey ? t(descriptionKey) : "");
 
   return (
-    <div className="w-72 bg-white card-shadow rounded-lg">
+    <div className="game-card w-72 max-w-full bg-white card-shadow rounded-lg overflow-hidden">
       {imageUrl ? (
         <>
           <img
@@ -57,23 +57,23 @@ export const GameCard = ({
       )}
 
       <div className="flex justify-center text-white flex-col">
-        <div className="p-4">
-          <h5 className="text-black font-bold mb-2">{titleText}</h5>
-          <p className="text-black text-xs vgvalpo-textcolor6">
+        <div className="p-4 min-w-0">
+          <h5 className="game-card-title text-black font-bold mb-2 select-text">
+            {titleText}
+          </h5>
+          <p className="game-card-description text-black text-xs vgvalpo-textcolor6 select-text">
             {descriptionText}
           </p>
-          <div className="flex justify-between mt-4">
+          <div className="game-card-footer">
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className={
-                "vgvalpo-bgcolor5 rounded-md px-6 text-sm py-2 flex justify-center items-center"
-              }
+              className="game-card-see-more vgvalpo-bgcolor5"
             >
               {t("gameCard.seeMore")}
             </a>
-            <div className="flex justify-center items-center gap-1">
+            <div className="game-card-platforms">
               {(gameplataforms || []).map((p, idx) => {
                 const icon = p?.iconUrl || p?.icon || p?.name;
                 const url = p?.url;
@@ -85,18 +85,18 @@ export const GameCard = ({
                   <img
                     src={icon}
                     alt={p?.label || p?.platform || "Platform"}
-                    style={{
-                      width: "22px",
-                      height: "22px",
-                      borderRadius: "9999px",
-                      objectFit: "cover",
-                    }}
+                    className="game-card-platform-icon pointer-events-none"
                     loading="lazy"
+                    draggable={false}
                   />
                 );
 
                 if (!url || url === "#") {
-                  return <span key={key}>{img}</span>;
+                  return (
+                    <span key={key} className="inline-flex">
+                      {img}
+                    </span>
+                  );
                 }
 
                 return (
@@ -105,6 +105,8 @@ export const GameCard = ({
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="platform-link inline-flex shrink-0"
+                    aria-label={p?.label || p?.platform || "Platform"}
                   >
                     {img}
                   </a>

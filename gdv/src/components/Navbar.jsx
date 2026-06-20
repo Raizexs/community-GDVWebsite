@@ -61,6 +61,9 @@ export const NavbarComponent = () => {
             <Link to={"/videogames"} className="text-white vg-link">
               {t("navbar.videoGames")}
             </Link>
+            <Link to={"/noticias"} className="text-white vg-link">
+              {t("navbar.bitacora")}
+            </Link>
             <Link to={"/contact"} className="text-white vg-link">
               {t("navbar.contact")}
             </Link>
@@ -119,6 +122,9 @@ export const NavbarComponent = () => {
           )}
           <Link to={"/videogames"} className="text-white py-4 block vg-link">
             {t("navbar.videoGames")}
+          </Link>
+          <Link to={"/noticias"} className="text-white py-4 block vg-link">
+            {t("navbar.bitacora")}
           </Link>
           <Link to={"/contact"} className="text-white py-4 mb-4 block vg-link">
             {t("navbar.contact")}

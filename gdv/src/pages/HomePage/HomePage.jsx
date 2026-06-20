@@ -1,13 +1,14 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { NavbarComponent } from "../../components/Navbar";
+import { PageEnter } from "../../components/PageEnter";
 import { FooterComponent } from "../../components/Footer";
 import { VideoGames } from "./components/sections/VideoGames";
 import { HomeHeader } from "./components/sections/HomeHeader";
 import { SuccessStoriesSection } from "./components/sections/SuccessStoriesSection";
 import { Benefits } from "./components/sections/Benefits";
+import { BitacoraPreviewSection } from "./components/sections/BitacoraPreviewSection";
 import { Jointheguild } from "../../components/Jointheguild";
 import { useScrollRestoration } from "../../hooks/useScrollRestoration";
-import { useEffect, useState } from "react";
 import {
   fetchHomeContent,
   getCachedHomeContent,
@@ -35,16 +36,19 @@ export const HomePage = () => {
   return (
     <div className="relative">
       <NavbarComponent />
-      <header>
-        <HomeHeader homeContent={homeContent} />
-      </header>
-      <main>
-        <VideoGames homeContent={homeContent} />
-        <SuccessStoriesSection homeContent={homeContent} />
-        <Benefits homeContent={homeContent} />
-        <Jointheguild homeContent={homeContent} />
-      </main>
-      <FooterComponent homeContent={homeContent} />
+      <PageEnter>
+        <header>
+          <HomeHeader homeContent={homeContent} />
+        </header>
+        <main>
+          <VideoGames homeContent={homeContent} />
+          <SuccessStoriesSection homeContent={homeContent} />
+          <BitacoraPreviewSection />
+          <Benefits homeContent={homeContent} />
+          <Jointheguild homeContent={homeContent} />
+        </main>
+        <FooterComponent homeContent={homeContent} />
+      </PageEnter>
     </div>
   );
 };

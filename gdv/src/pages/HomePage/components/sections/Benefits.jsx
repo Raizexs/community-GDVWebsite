@@ -10,12 +10,14 @@ import icon6 from "../../../../img/icons/Tear-Off Calendar.png";
 export const Benefits = ({ homeContent }) => {
   const { t, i18n } = useTranslation();
   const language = i18n.resolvedLanguage || i18n.language || "es";
-  const dynamicBenefits = (homeContent?.benefitItems || []).map((item, index) => ({
-    key: `dynamic-${index}`,
-    icon: item.icon,
-    title: resolveLocalizedValue(item.title, language),
-    description: resolveLocalizedValue(item.description, language),
-  }));
+  const dynamicBenefits = (homeContent?.benefitItems || []).map(
+    (item, index) => ({
+      key: `dynamic-${index}`,
+      icon: item.icon,
+      title: resolveLocalizedValue(item.title, language),
+      description: resolveLocalizedValue(item.description, language),
+    }),
+  );
   const staticBenefits = [
     { key: "press", icon: icon1 },
     { key: "networking", icon: icon2 },
@@ -30,9 +32,13 @@ export const Benefits = ({ homeContent }) => {
   }));
   const benefits = dynamicBenefits.length ? dynamicBenefits : staticBenefits;
   const sectionLabel =
-    resolveLocalizedValue(homeContent?.benefitsSection?.title, language) || t("home.benefits.label");
+    resolveLocalizedValue(homeContent?.benefitsSection?.title, language) ||
+    t("home.benefits.label");
   const sectionTitle =
-    resolveLocalizedValue(homeContent?.benefitsSection?.description, language) || t("home.benefits.title");
+    resolveLocalizedValue(
+      homeContent?.benefitsSection?.description,
+      language,
+    ) || t("home.benefits.title");
 
   return (
     <section className="py-20 px-4 section-bg mt-12">

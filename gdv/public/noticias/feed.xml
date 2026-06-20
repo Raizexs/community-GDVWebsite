@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Noticias GDV</title>
+    <link>https://www.gdvalparaiso.com/noticias</link>
+    <description>Noticias del Gremio de Desarrolladores de Valparaíso</description>
+    <language>es-cl</language>
+    <lastBuildDate>Tue, 02 Jun 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>LAGS Summer Game Fest Edition llega a Valparaíso</title>
+      <link>https://www.gdvalparaiso.com/noticias/lags-summer-game-fest-watch-party-valparaiso</link>
+      <guid isPermaLink="true">https://www.gdvalparaiso.com/noticias/lags-summer-game-fest-watch-party-valparaiso</guid>
+      <pubDate>Tue, 02 Jun 2026 12:00:00 GMT</pubDate>
+      <description>GDV junto a 4HA Games Studio, Abstract Digital, Cangrejo Ideas y Panpipe Studio invita a una watch party gratuita del showcase latinoamericano en Cine Insomnia, Valparaíso.</description>
+    </item>
+    <item>
+      <title>Convocatoria: Competencia de Contenidos Interactivos del 15º Festival Ojo de Pescado</title>
+      <link>https://www.gdvalparaiso.com/noticias/convocatoria-ojo-de-pescado-videojuegos-2026</link>
+      <guid isPermaLink="true">https://www.gdvalparaiso.com/noticias/convocatoria-ojo-de-pescado-videojuegos-2026</guid>
+      <pubDate>Wed, 20 May 2026 12:00:00 GMT</pubDate>
+      <description>Postulaciones abiertas del 20 de mayo al 22 de junio para estudiantes, independientes y empresas desarrolladoras. Dos categorías con inscripción en itch.io y ojodepescado.cl.</description>
+    </item>
+    <item>
+      <title>FECICH PLAY: Nuevas Experiencias Narrativas</title>
+      <link>https://www.gdvalparaiso.com/noticias/fecich-play-nuevas-experiencias-narrativas</link>
+      <guid isPermaLink="true">https://www.gdvalparaiso.com/noticias/fecich-play-nuevas-experiencias-narrativas</guid>
+      <pubDate>Fri, 30 Jan 2026 12:00:00 GMT</pubDate>
+      <description>Una selección de más de 20 videojuegos chilenos históricos, estrenos 2025 y demos jugables, con más de la mitad de títulos de la región de Valparaíso.</description>
+    </item>
+    <item>
+      <title>Webinar Internacional: Consideraciones legales y comerciales del rol de la Propiedad Intelectual en los videojuegos</title>
+      <link>https://www.gdvalparaiso.com/noticias/webinar-ompi-propiedad-intelectual</link>
+      <guid isPermaLink="true">https://www.gdvalparaiso.com/noticias/webinar-ompi-propiedad-intelectual</guid>
+      <pubDate>Wed, 17 Dec 2025 12:00:00 GMT</pubDate>
+      <description>Webinar virtual de 2,5 horas con panelistas internacionales sobre el estatus jurídico, desafíos legales y consideraciones comerciales de la PI en videojuegos. Miércoles 17 de diciembre a las 10:00 hrs.</description>
+    </item>
+    <item>
+      <title>Level Up 2025: jornada para potenciar la industria de videojuegos en Mendoza</title>
+      <link>https://www.gdvalparaiso.com/noticias/level-up-2025-mendoza</link>
+      <guid isPermaLink="true">https://www.gdvalparaiso.com/noticias/level-up-2025-mendoza</guid>
+      <pubDate>Fri, 12 Dec 2025 12:00:00 GMT</pubDate>
+      <description>GDV participó el 12 de diciembre en Level Up 2025 con charlas de guiones, gestión creativa y showcase de videojuegos locales. Entrada gratuita en Nave IDITS, Polo TIC.</description>
+    </item>
+    <item>
+      <title>Taller online: Cine, videojuegos y formación</title>
+      <link>https://www.gdvalparaiso.com/noticias/taller-cine-videojuegos-quilpue-2025</link>
+      <guid isPermaLink="true">https://www.gdvalparaiso.com/noticias/taller-cine-videojuegos-quilpue-2025</guid>
+      <pubDate>Wed, 03 Dec 2025 12:00:00 GMT</pubDate>
+      <description>Taller virtual desde cualquier parte de Chile, 3 al 18 de diciembre, 19:00 a 21:00 hrs. Inscripción en quilpueaudiovisual.cl. Colaboran GDV, Videojuegos Chile y AEVG Chile.</description>
+    </item>
+  </channel>
+</rss>
