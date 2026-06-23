@@ -42,8 +42,8 @@ export async function fetchProvidersRows({ force = false } = {}) {
       { skipRateLimit: true },
     );
 
-    providersRowsCache = { rows, timestamp: now };
-    return rows;
+    providersRowsCache = { rows: Array.isArray(rows) ? rows : [], timestamp: now };
+    return providersRowsCache.rows;
   } catch (error) {
     logPraxsuiteError("fetchProvidersRows", error);
 

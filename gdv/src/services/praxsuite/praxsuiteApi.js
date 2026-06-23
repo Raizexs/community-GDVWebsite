@@ -47,6 +47,14 @@ export async function fetchPraxsuiteTable(
     data = { raw: text };
   }
 
+  if (data && typeof data === "object" && data.error) {
+    throwPraxsuiteApiError(
+      "fetchPraxsuiteTable",
+      response.status,
+      String(data.error),
+    );
+  }
+
   return extractRows(data);
 }
 

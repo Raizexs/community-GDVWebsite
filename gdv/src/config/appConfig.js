@@ -2,6 +2,8 @@
  * Variables de entorno (3 para producción):
  *   REACT_APP_PRAXSUITE_QUERY_URL
  *   REACT_APP_PRAXSUITE_TABLES   JSON: ref + key por módulo (no commitear)
+ *     partners  → tabla PARTNERS (aliados, sección inferior /socios)
+ *     members   → tabla MEMBERS (estudios socios, sección superior /socios)
  *   REACT_APP_TURNSTILE_SITE_KEY
  *
  * Opcionales (hardening cliente):
@@ -16,10 +18,13 @@ const DEFAULT_TABLE_NAMES = {
   games: "VIDEOGAMES",
   platform: "VIDEOGAMES-PLATFORM",
   stores: "VIDEOGAMES-STORES",
+  /** Sección superior en /socios: logos de estudios miembros */
+  members: "MEMBERS",
+  /** Sección inferior en /socios: aliados estratégicos (env key: partners) */
   partners: "PARTNERS",
   contact: "CONTACT",
   bitacora: "BITACORA",
-  providers: "PROVIDERS",
+  providers: "PARTNERS",
   events: "EVENTS",
 };
 
@@ -39,6 +44,10 @@ const LEGACY_ENV_BY_MODULE = {
   partners: {
     ref: "REACT_APP_PRAXSUITE_PARTNERS_REF",
     key: "REACT_APP_PRAXSUITE_PARTNERS_PUBLIC_KEY",
+  },
+  members: {
+    ref: "REACT_APP_PRAXSUITE_MEMBERS_REF",
+    key: "REACT_APP_PRAXSUITE_MEMBERS_PUBLIC_KEY",
   },
   contact: {
     ref: "REACT_APP_PRAXSUITE_CONTACT_REF",
@@ -95,6 +104,7 @@ function parseModulesFromEnv() {
     "games",
     "platform",
     "stores",
+    "members",
     "partners",
     "contact",
     "bitacora",
@@ -179,8 +189,34 @@ export function getPraxsuiteGamesConfig() {
   };
 }
 
+function resolveModuleConfig(name) {
+  const configured = getModule(name);
+
+  if (name === "providers") {
+    const partnersEnv = getModule("partners");
+    if (!configured.ref && partnersEnv.ref) {
+      return {
+        ...partnersEnv,
+        table: DEFAULT_TABLE_NAMES.partners,
+      };
+    }
+  }
+
+  return configured;
+}
+
+export function getPraxsuiteMembersConfig() {
+  const members = resolveModuleConfig("members");
+  return {
+    queryUrl: getPraxsuiteQueryUrl(),
+    ref: members.ref,
+    apiKey: members.key,
+    table: members.table,
+  };
+}
+
 export function getPraxsuitePartnersConfig() {
-  const partners = getModule("partners");
+  const partners = resolveModuleConfig("partners");
   return {
     queryUrl: getPraxsuiteQueryUrl(),
     ref: partners.ref,
@@ -209,7 +245,7 @@ export function getPraxsuiteBitacoraConfig() {
 }
 
 export function getPraxsuiteProvidersConfig() {
-  const providers = getModule("providers");
+  const providers = resolveModuleConfig("providers");
   return {
     queryUrl: getPraxsuiteQueryUrl(),
     ref: providers.ref,
@@ -241,6 +277,11 @@ export function isPraxsuiteGamesReady() {
   );
 }
 
+export function isPraxsuiteMembersReady() {
+  const c = getPraxsuiteMembersConfig();
+  return Boolean(c.queryUrl && c.ref && c.apiKey);
+}
+
 export function isPraxsuitePartnersReady() {
   const c = getPraxsuitePartnersConfig();
   return Boolean(c.queryUrl && c.ref && c.apiKey);
@@ -265,8 +306,8 @@ export function shouldLoadGamesFromPraxsuite() {
 export function shouldLoadPartnersFromPraxsuite() {
   const mode = getDataSource();
   if (mode === "static") return false;
-  if (mode === "praxsuite") return isPraxsuitePartnersReady();
-  return isPraxsuitePartnersReady();
+  if (mode === "praxsuite") return isPraxsuiteMembersReady();
+  return isPraxsuiteMembersReady();
 }
 
 export function isPraxsuiteBitacoraReady() {

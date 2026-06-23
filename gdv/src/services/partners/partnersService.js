@@ -106,9 +106,17 @@ function resolvePartnerWebsite(name, rawUrl) {
 
 async function normalizePartner(raw, apiKeys) {
   const name =
-    raw?.Partner || raw?.name || raw?.Name || raw?.Title || raw?.title || "";
+    raw?.Partner ||
+    raw?.Miembro ||
+    raw?.["Nombre (ES)"] ||
+    raw?.name ||
+    raw?.Name ||
+    raw?.Title ||
+    raw?.title ||
+    "";
   const rawWebsite =
     raw?.["Partner URL"] ||
+    raw?.["Miembro URL"] ||
     raw?.website ||
     raw?.Website ||
     raw?.url ||
@@ -120,6 +128,8 @@ async function normalizePartner(raw, apiKeys) {
 
   const imageField =
     raw?.["Image Partner"] ||
+    raw?.["Image Miembro"] ||
+    raw?.["Logo Miembro"] ||
     raw?.logo ||
     raw?.Logo ||
     raw?.image ||
@@ -128,7 +138,7 @@ async function normalizePartner(raw, apiKeys) {
     raw?.Icon;
 
   const logo = await resolveDisplayableMediaUrl(imageField, apiKeys, {
-    rateLimitBucket: "partnersMedia",
+    rateLimitBucket: "membersMedia",
   });
 
   return { name, website, logo };
@@ -166,7 +176,7 @@ export async function fetchPartners({ force = false } = {}) {
     return partnersUiCache.data;
   }
 
-  if (!canLoadFromPraxsuite("partners")) {
+  if (!canLoadFromPraxsuite("members")) {
     return getStaticPartnersFallback();
   }
 

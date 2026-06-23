@@ -102,8 +102,8 @@ export const staticProviders = [
     headerClass: "provider-header-devtools",
     logo: PROVIDER_IMAGES.praxsuite,
     name: {
-      es: "PraxSuite",
-      en: "PraxSuite",
+      es: "Praxsuite",
+      en: "Praxsuite",
     },
     tag: {
       es: "Plataforma / tecnología",

@@ -16,7 +16,7 @@ export function ProvidersSection() {
     const loadProviders = async () => {
       try {
         const data = await fetchProviders();
-        setProviders(data?.length ? data : getStaticProvidersFallback());
+        setProviders(Array.isArray(data) ? data : []);
       } catch {
         setProviders(getStaticProvidersFallback());
       } finally {

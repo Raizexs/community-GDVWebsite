@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
+import { isEventRegistrationActive } from "../../../services/events/eventsService";
 
 export function EventRegisterButton({ event, className = "" }) {
   const { t } = useTranslation();
 
-  if (!event?.registrationUrl) {
+  if (!isEventRegistrationActive(event)) {
     return null;
   }
 

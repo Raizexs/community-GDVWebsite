@@ -1,3 +1,4 @@
+import { isEventRegistrationActive } from "../../../services/events/eventsService";
 import { EventCalendarSecondaryAction } from "./EventCalendarSecondaryAction";
 import { EventRegisterButton } from "./EventRegisterButton";
 
@@ -7,7 +8,7 @@ export function EventAgendaActions({
   showSocialCta = false,
   className = "",
 }) {
-  const showRegister = Boolean(event?.registrationUrl);
+  const showRegister = isEventRegistrationActive(event);
   const showSocial = showSocialCta && !showRegister;
 
   if (!showRegister && !showSocial) {

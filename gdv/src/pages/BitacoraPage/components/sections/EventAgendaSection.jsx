@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { formatEventDateTime } from "../../../../utils/bitacoraFormat";
-import { fetchUpcomingEvents } from "../../../../services/events/eventsService";
+import {
+  fetchUpcomingEvents,
+  getStaticUpcomingEvents,
+} from "../../../../services/events/eventsService";
 import { Reveal } from "../../../../components/Reveal";
 import { EventAgendaActions } from "../EventAgendaActions";
 import { EventAgendaCard } from "../EventAgendaCard";
@@ -16,12 +19,12 @@ export function EventAgendaSection() {
   useEffect(() => {
     let mounted = true;
 
-    const loadEvents = async () => {
+    const loadEvents = async ({ force = false } = {}) => {
       try {
-        const data = await fetchUpcomingEvents({ language });
+        const data = await fetchUpcomingEvents({ language, force });
         if (mounted) setUpcomingEvents(data || []);
       } catch {
-        if (mounted) setUpcomingEvents([]);
+        if (mounted) setUpcomingEvents(getStaticUpcomingEvents(language));
       } finally {
         if (mounted) setLoading(false);
       }
@@ -29,8 +32,19 @@ export function EventAgendaSection() {
 
     loadEvents();
 
+    const refreshOnFocus = () => {
+      if (document.visibilityState === "visible") {
+        loadEvents({ force: true });
+      }
+    };
+
+    document.addEventListener("visibilitychange", refreshOnFocus);
+    window.addEventListener("focus", refreshOnFocus);
+
     return () => {
       mounted = false;
+      document.removeEventListener("visibilitychange", refreshOnFocus);
+      window.removeEventListener("focus", refreshOnFocus);
     };
   }, [language]);
 

@@ -9,7 +9,6 @@ import {
   getTurnstileAction,
   getTurnstileSiteKey,
   getTurnstileTheme,
-  isPraxsuiteContactReady,
 } from "../../config/appConfig";
 import { insertPraxsuiteContact } from "../../services/praxsuite/praxsuiteApi";
 import {
@@ -31,7 +30,6 @@ export const ContactPage = () => {
   });
 
   const contactConfig = getPraxsuiteContactConfig();
-  const contactReady = isPraxsuiteContactReady();
   const turnstileSiteKey = getTurnstileSiteKey();
   const captchaTheme = getTurnstileTheme();
   const turnstileAction = getTurnstileAction();
@@ -98,14 +96,6 @@ export const ContactPage = () => {
         subject: "",
         message: "",
         website: "",
-      });
-      return;
-    }
-
-    if (!contactReady) {
-      setAlert({
-        type: "error",
-        message: t("contact.form.notConfigured"),
       });
       return;
     }
@@ -308,12 +298,6 @@ export const ContactPage = () => {
                   />
                 </div>
 
-                {!contactReady ? (
-                  <p className="mb-5 text-amber-700 text-sm">
-                    {t("contact.form.notConfigured")}
-                  </p>
-                ) : null}
-
                 {alert.message ? (
                   <p
                     className={`mb-5 ${
@@ -334,7 +318,7 @@ export const ContactPage = () => {
 
                 <button
                   type="submit"
-                  disabled={isSubmitting || !captchaToken || !contactReady}
+                  disabled={isSubmitting || !captchaToken}
                   className="text-white vgvalpo-bgcolor5 rounded-md px-10 text-base py-2 flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting

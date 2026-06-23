@@ -1,7 +1,6 @@
 import { shouldLoadProvidersFromPraxsuite } from "../../config/appConfig";
 import {
   getStaticProviders,
-  getProviderImage,
   resolveProviderHeaderClass,
   staticProviders,
 } from "../../data/providersData";
@@ -76,6 +75,52 @@ function pickField(raw, keys) {
     }
   }
   return "";
+}
+
+function pickFieldByPattern(raw, pattern) {
+  if (!raw || typeof raw !== "object") return "";
+
+  for (const key of Object.keys(raw)) {
+    if (!pattern.test(key)) continue;
+    const value = raw[key];
+    if (value != null && String(value).trim() !== "") {
+      return value;
+    }
+  }
+
+  return "";
+}
+
+function normalizeProviderTag(raw) {
+  const es =
+    pickField(raw, [
+      "Tags (ES)",
+      "Tag (ES)",
+      "Tags ES",
+      "Tag ES",
+      "tagsEs",
+      "tagEs",
+      "tags_es",
+      "tag_es",
+    ]) || pickFieldByPattern(raw, /^tags?\s*\(?\s*es\s*\)?$/i);
+
+  const en =
+    pickField(raw, [
+      "Tags (EN)",
+      "Tag (EN)",
+      "Tags EN",
+      "Tag EN",
+      "tagsEn",
+      "tagEn",
+      "tags_en",
+      "tag_en",
+    ]) || pickFieldByPattern(raw, /^tags?\s*\(?\s*en\s*\)?$/i);
+
+  if (es || en) {
+    return { es: es || en, en: en || es };
+  }
+
+  return { es: "", en: "" };
 }
 
 function normalizeLocalizedField(raw, esKeys, enKeys) {
@@ -160,11 +205,7 @@ function normalizeProvider(raw, logo = "") {
     ["Description (ES)", "Description ES", "descriptionEs", "description_es"],
     ["Description (EN)", "Description EN", "descriptionEn", "description_en"],
   );
-  const tag = normalizeLocalizedField(
-    raw,
-    ["Tag (ES)", "Tag ES", "tagEs", "tag_es"],
-    ["Tag (EN)", "Tag EN", "tagEn", "tag_en"],
-  );
+  const tag = normalizeProviderTag(raw);
 
   const category = normalizeCategory(raw);
   const headerClass = resolveProviderHeaderClass(
@@ -227,28 +268,16 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function applyProviderImageFallback(provider) {
-  return {
-    ...provider,
-    logo: provider.logo || getProviderImage(provider.id) || "",
-  };
-}
-
 async function loadProvidersFromPraxsuite({ force = false } = {}) {
   const apiKeys = getProvidersApiKeys();
   const rows = await fetchProvidersRows({ force });
   const normalized = await Promise.all(
     rows.map((raw) => normalizeProviderRow(raw, apiKeys)),
   );
-  const withImages = normalized.map(applyProviderImageFallback);
-  const active = withImages.filter(
+  const active = normalized.filter(
     (provider) =>
       (provider.name.es || provider.name.en) && provider.isActive !== false,
   );
-
-  if (!active.length) {
-    return getStaticProviders();
-  }
 
   return active;
 }

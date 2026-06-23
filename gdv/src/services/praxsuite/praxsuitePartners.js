@@ -1,10 +1,10 @@
-import { getPraxsuitePartnersConfig } from "../../config/appConfig";
+import { getPraxsuiteMembersConfig } from "../../config/appConfig";
 import { fetchPraxsuiteTable } from "./praxsuiteApi";
 import { assertClientRateLimit, logPraxsuiteError } from "./praxsuiteSecurity";
 
-const PARTNERS_ROWS_CACHE_TTL_MS = 4000;
+const MEMBERS_ROWS_CACHE_TTL_MS = 4000;
 
-let partnersRowsCache = {
+let membersRowsCache = {
   rows: null,
   timestamp: 0,
 };
@@ -14,24 +14,24 @@ function env(name) {
 }
 
 export function getPartnersApiKeys() {
-  const cfg = getPraxsuitePartnersConfig();
+  const cfg = getPraxsuiteMembersConfig();
   const sharedKey = env("REACT_APP_PRAXSUITE_PUBLIC_KEY");
   return [...new Set([cfg.apiKey, sharedKey].filter(Boolean))];
 }
 
 export async function fetchPartnersRows({ force = false } = {}) {
-  const cfg = getPraxsuitePartnersConfig();
+  const cfg = getPraxsuiteMembersConfig();
   const now = Date.now();
 
   if (
     !force &&
-    partnersRowsCache.rows &&
-    now - partnersRowsCache.timestamp < PARTNERS_ROWS_CACHE_TTL_MS
+    membersRowsCache.rows &&
+    now - membersRowsCache.timestamp < MEMBERS_ROWS_CACHE_TTL_MS
   ) {
-    return partnersRowsCache.rows;
+    return membersRowsCache.rows;
   }
 
-  assertClientRateLimit("partners");
+  assertClientRateLimit("members");
 
   try {
     const rows = await fetchPraxsuiteTable(
@@ -42,13 +42,13 @@ export async function fetchPartnersRows({ force = false } = {}) {
       { skipRateLimit: true },
     );
 
-    partnersRowsCache = { rows, timestamp: now };
+    membersRowsCache = { rows, timestamp: now };
     return rows;
   } catch (error) {
-    logPraxsuiteError("fetchPartnersRows", error);
+    logPraxsuiteError("fetchMembersRows", error);
 
-    if (partnersRowsCache.rows) {
-      return partnersRowsCache.rows;
+    if (membersRowsCache.rows) {
+      return membersRowsCache.rows;
     }
 
     throw error;
@@ -56,5 +56,5 @@ export async function fetchPartnersRows({ force = false } = {}) {
 }
 
 export function clearPartnersRowsCache() {
-  partnersRowsCache = { rows: null, timestamp: 0 };
+  membersRowsCache = { rows: null, timestamp: 0 };
 }
